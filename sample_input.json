@@ -1,0 +1,18 @@
+[
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.8 },
+      { "region": "amygdala", "intensity": 0.6 },
+      { "region": "occipital_lobe", "intensity": 0.9 }
+    ],
+    "timestamp_ms": 0
+  },
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.5 },
+      { "region": "amygdala", "intensity": 0.3 },
+      { "region": "occipital_lobe", "intensity": 0.2 }
+    ],
+    "timestamp_ms": 66
+  }
+]

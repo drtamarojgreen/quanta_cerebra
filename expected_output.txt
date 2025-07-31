@@ -1,0 +1,9 @@
+[Time: 0 ms]
+[prefrontal_cortex] XXXXXXXX
+[amygdala] ++++++
+[occipital_lobe] @@@@@@@@@
+
+[Time: 66 ms]
+[prefrontal_cortex] +++++
+[amygdala] ...
+[occipital_lobe] ..
