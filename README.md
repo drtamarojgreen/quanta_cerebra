@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
-**QuantaCerebra** is a high-performance C++17 console application designed to simulate and visualize brain activity through lightweight ASCII-based video generation. Built without external dependencies, it provides real-time frame-by-frame visualizations of neural activity patterns from structured JSON input data.
+**QuantaCerebra** is a high-performance C++17 console application designed to simulate and visualize brain activity through lightweight ASCII-based video generation. Built without external dependencies, it provides real-time frame-by-frame visualizations of neural activity patterns from structured JSON input data, while also serving as a foundation for experimenting with advanced graphics modeling, such as video diffusion, on limited resources.
 
 ---
 
@@ -15,7 +15,7 @@
 - **Dynamic Brain Activity Modeling**: Simulate neural activity as temporal sequences of region-based intensity readings
 - **ASCII Visualization Engine**: Generate real-time frame-by-frame animations reflecting regional intensity changes
 - **Zero-Dependency Architecture**: Maintain strict portability using only standard C++17 libraries
-- **Extensible Foundation**: Provide a robust base for future generative video integrations (GANs, interpolation, diffusion models)
+- **Extensible Foundation**: Provide a robust base for future integrations of advanced graphics modeling, such as video diffusion, to enhance visualizations and explore novel representations of brain activity on resource-constrained hardware.
 
 ### Key Features
 
