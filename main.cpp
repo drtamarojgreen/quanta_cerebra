@@ -14,7 +14,8 @@ int main() {
     inputFile.close();
 
     std::vector<BrainFrame> frames = parseBrainActivityJSON(jsonData);
-    std::vector<std::string> visualFrames = generateFrames(frames);
+    std::vector<BrainFrame> interpolatedFrames = interpolateFrames(frames, 4);
+    std::vector<std::string> visualFrames = generateFrames(interpolatedFrames);
 
     for (const std::string& frame : visualFrames) {
         std::cout << frame << "\n";
