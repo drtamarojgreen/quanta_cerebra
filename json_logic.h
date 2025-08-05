@@ -14,5 +14,6 @@ struct BrainFrame {
 };
 
 std::vector<BrainFrame> parseBrainActivityJSON(const std::string& json);
+std::string trim(const std::string& s);
 
 #endif
