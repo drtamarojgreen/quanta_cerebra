@@ -1,11 +1,16 @@
 [
   {
     "brain_activity": [
-      { "region": "prefrontal_cortex", "intensity": 0.8 },
+      {
+        "region": "prefrontal_cortex",
+        "intensity": 0.8,
+        "subregions": [
+          { "region": "anterior_cingulate", "intensity": 0.7 },
+          { "region": "orbitofrontal_cortex", "intensity": 0.9 }
+        ]
+      },
       { "region": "amygdala", "intensity": 0.6 },
-      { "region": "occipital_lobe", "intensity": 0.9 },
-      { "region": "hippocampus", "intensity": 0.7 },
-      { "region": "hypothalamus", "intensity": 0.5 }
+      { "region": "occipital_lobe", "intensity": 0.9 }
     ],
     "timestamp_ms": 0
   },
@@ -13,30 +18,8 @@
     "brain_activity": [
       { "region": "prefrontal_cortex", "intensity": 0.5 },
       { "region": "amygdala", "intensity": 0.3 },
-      { "region": "occipital_lobe", "intensity": 0.2 },
-      { "region": "cerebellar_cortex", "intensity": 0.4 },
-      { "region": "pons", "intensity": 0.2 }
+      { "region": "occipital_lobe", "intensity": 0.2 }
     ],
     "timestamp_ms": 66
-  },
-  {
-    "brain_activity": [
-      { "region": "prefrontal_cortex", "intensity": 0.7 },
-      { "region": "amygdala", "intensity": 0.5 },
-      { "region": "occipital_lobe", "intensity": 0.8 },
-      { "region": "medulla_oblongata", "intensity": 0.3 },
-      { "region": "somatosensory_cortex", "intensity": 0.6 }
-    ],
-    "timestamp_ms": 132
-  },
-  {
-    "brain_activity": [
-      { "region": "prefrontal_cortex", "intensity": 0.4 },
-      { "region": "amygdala", "intensity": 0.2 },
-      { "region": "occipital_lobe", "intensity": 0.1 },
-      { "region": "auditory_cortex", "intensity": 0.9 },
-      { "region": "wernickes_area", "intensity": 0.8 }
-    ],
-    "timestamp_ms": 198
   }
 ]

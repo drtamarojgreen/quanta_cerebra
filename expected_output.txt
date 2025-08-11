@@ -1,9 +1,11 @@
 [Time: 0 ms]
 [prefrontal_cortex] XXXXXXXX
+  [anterior_cingulate] +++++++
+  [orbitofrontal_cortex] @@@@@@@@@
 [amygdala] ++++++
 [occipital_lobe] @@@@@@@@@
 
 [Time: 66 ms]
-[prefrontal_cortex] +++++
+[prefrontal_cortex] :::::
 [amygdala] ...
 [occipital_lobe] ..

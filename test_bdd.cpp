@@ -1,5 +1,6 @@
 #include "json_logic.h"
 #include "video_logic.h"
+#include "config.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -17,7 +18,10 @@ int main() {
     std::string expectedOut((std::istreambuf_iterator<char>(expected)), {});
 
     auto frames = parseBrainActivityJSON(json);
-    auto visuals = generateFrames(frames);
+
+    // Use default config for testing to ensure colors are off, matching the expected output
+    AppConfig test_config;
+    auto visuals = generateFrames(frames, test_config);
 
     std::ostringstream combined;
     for (const auto& f : visuals) combined << f << "\n";
