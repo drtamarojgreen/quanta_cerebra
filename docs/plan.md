@@ -1,48 +1,78 @@
-# QuantaCerebra Strategic Improvement Plan
+# QuantaCerebra Detailed Development Plan
 
-This document outlines the strategic roadmap for the development and enhancement of the QuantaCerebra project. The plan is divided into four distinct phases, each focusing on a specific area of improvement.
+This document outlines the detailed development plan for QuantaCerebra, breaking down the strategic roadmap into actionable steps.
 
 ---
 
-## Phase 1: Enhanced Modeling
+## Phase 1: Core Functionality Enhancement
 
-This phase focuses on improving the core data modeling capabilities of the simulation.
+This phase focuses on enhancing the core modeling and data processing capabilities of the application.
 
--   [ ] **Hierarchical Brain Region Support**: Implement support for nested subregions to create more detailed and accurate brain models.
--   [ ] **Temporal Smoothing and Decay Models**: Introduce models for temporal smoothing and activity decay to create more realistic animations.
--   [ ] **Real-time Data Stream Processing**: Adapt the application to process real-time data streams instead of static files.
--   [ ] **Configuration File Support**: Allow users to configure simulation parameters through an external file.
+### 1.1 Hierarchical Brain Region Support
+
+**Objective**: Implement support for nested subregions to create more detailed brain models.
+
+-   **Step 1: Update Data Structures**:
+    -   Modify the `BrainRegion` struct in `video_logic.h` to recursively support subregions.
+    -   `struct BrainRegion { std::string name; double intensity; std::vector<BrainRegion> subregions; };`
+-   **Step 2: Enhance JSON Parser**:
+    -   Update `json_logic.cpp` to parse a nested `subregions` array within each brain region object in the input JSON.
+-   **Step 3: Refine Visualization Logic**:
+    -   Modify `video_logic.cpp` to recursively process and render hierarchical regions.
+    -   Subregions should be indented in the output to represent the hierarchy visually.
+-   **Step 4: Update Sample Data**:
+    -   Update `sample_input.json` and `expected_output.txt` to include and reflect hierarchical data for testing purposes.
+
+### 1.2 Configuration File Support
+
+**Objective**: Allow users to configure simulation parameters via an external file.
+
+-   **Step 1: Design Configuration System**:
+    -   Create `config.h` and `config.cpp` to manage loading and accessing configuration settings.
+    -   The configuration will be a simple key-value format (e.g., `parameter=value`).
+-   **Step 2: Implement Configuration Loading**:
+    -   In `main.cpp`, add logic to load a `config.ini` file at startup.
+    -   If the file doesn't exist, use default values.
+-   **Step 3: Integrate Configuration Parameters**:
+    -   Initial parameters will include `enable_color`, `smoothing_window_size`, and `layout_mode` (list/grid).
 
 ---
 
 ## Phase 2: Advanced Visualization
 
-This phase aims to enhance the visual output of the application.
+This phase aims to improve the visual output and user interaction.
 
--   [ ] **Grid/Matrix Brain Map Layouts**: Develop new layout options for visualizing brain regions, such as a 2D grid or matrix.
--   [ ] **ANSI Color-Coded Terminal Output**: Add support for ANSI escape codes to introduce color into the terminal output.
--   [ ] **Export Capabilities**: Implement functionality to export visualizations as images (e.g., PNG/JPEG) without adding external library dependencies.
--   [ ] **Interactive Visualization Controls**: Add controls to pause, rewind, and step through the visualization in real-time.
+### 2.1 ANSI Color-Coded Terminal Output
+
+**Objective**: Add color to the terminal output for a richer visualization.
+
+-   **Step 1: Define ANSI Color Codes**:
+    -   Add a header file or constants within `video_logic.h` for ANSI color escape codes.
+-   **Step 2: Implement Color Mapping**:
+    -   In `video_logic.cpp`, modify the frame generation logic to map intensity values to specific colors.
+-   **Step 3: Add Configuration Flag**:
+    -   Use the `enable_color` parameter from the configuration file to toggle this feature on or off.
+
+### 2.2 Grid/Matrix Brain Map Layouts
+
+**Objective**: Implement a 2D grid layout for visualizing brain regions.
+
+-   **Step 1: Design Grid Layout**:
+    -   Conceptualize how brain regions will be mapped onto a 2D grid.
+    -   The grid dimensions could be fixed or configurable.
+-   **Step 2: Update Rendering Logic**:
+    -   Create a new rendering function in `video_logic.cpp` for the grid layout.
+    -   The function will take the list of brain regions and arrange them in the grid.
+-   **Step 3: Add Layout Switching**:
+    -   Use the `layout_mode` configuration parameter to switch between the default list view and the new grid view.
 
 ---
 
-## Phase 3: AI Integration
+## Phase 3: Future Development (High-Level)
 
-This phase will explore the integration of AI and machine learning models to enhance the visualization capabilities.
+This section outlines future work that will be detailed in subsequent planning sessions.
 
--   [ ] **Frame Interpolation**: Use models like RIFE or FILM for smoother frame blending and animation.
--   [ ] **Dynamic Panning**: Implement Ken Burns-style dynamic panning effects for ASCII animations.
--   [ ] **GAN Integration**: Explore the use of StyleGAN or VQGAN for generating more sophisticated and visually rich graphics.
--   [ ] **Neural Radiance Fields (NeRF)**: Investigate the use of NeRF models like Instant-NGP for 3D rendering of the cortex.
--   [ ] **Diffusion Models**: Integrate state-of-the-art diffusion models such as VideoCrafter2, PixArt-α, or LCM for advanced video generation.
-
----
-
-## Phase 4: Ecosystem Development
-
-This final phase focuses on building a broader ecosystem around the QuantaCerebra project.
-
--   [ ] **LLM-Driven Input Generation**: Integrate with models like `llama.cpp` to generate brain activity data from natural language prompts.
--   [ ] **Natural Language Configuration Templating**: Allow users to configure the simulation using natural language templates.
--   [ ] **Feedback Loop Systems**: Develop systems that use feedback to adapt and evolve the visualizations over time.
--   [ ] **Plugin Architecture for Custom Renderers**: Create a plugin architecture that allows developers to add new custom renderers.
+-   **Temporal Smoothing and Decay Models**: Introduce more realistic temporal dynamics.
+-   **Real-time Data Stream Processing**: Adapt the application for real-time data sources.
+-   **Export Capabilities**: Allow exporting visualizations to common formats like PNG/JPEG without external libraries.
+-   **AI/ML Integration**: Explore advanced AI-driven features like frame interpolation and generative visuals.

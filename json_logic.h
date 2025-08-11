@@ -6,6 +6,7 @@
 struct BrainRegion {
     std::string region_name;
     double intensity;
+    std::vector<BrainRegion> subregions;
 };
 
 struct BrainFrame {
