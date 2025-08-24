@@ -1,5 +1,5 @@
-#include "json_logic.h"
-#include "video_logic.h"
+#include "../src/json_logic.h"
+#include "../src/video_logic.h"
 #include <iostream>
 
 void testParsing() {
