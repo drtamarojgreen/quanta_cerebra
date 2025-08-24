@@ -29,16 +29,28 @@
 
 ## 🏗️ Architecture
 
+The project is organized into `src`, `tests`, and `docs` directories, separating core logic, testing, and documentation.
+
 ```
 QuantaCerebra/
-├── 📄 main.cpp                    # Application entry point
-├── 🔧 json_logic.h/.cpp          # Custom JSON parser implementation
-├── 🎥 video_logic.h/.cpp         # Frame generation and visualization
-├── 🧪 test_unit.cpp              # Unit test suite
-├── 🧪 test_bdd.cpp               # BDD integration tests
-├── 📊 sample_input.json          # Sample brain activity data
-├── 📋 expected_output.json       # Expected visualization output
-└── 📖 README.md                  # Project documentation
+├── src/
+│   ├── 📄 main.cpp               # Application entry point
+│   ├── 🔧 config.h/.cpp          # Configuration management
+│   ├── 🔧 json_logic.h/.cpp     # Custom JSON parser
+│   └── 🎥 video_logic.h/.cpp     # Frame generation and visualization
+├── tests/
+│   ├── 🧪 test_unit.cpp          # Unit test suite
+│   └── 🧪 test_bdd.cpp           # BDD integration tests
+├── docs/
+│   ├── 📄 enhancements.md       # Notes on future enhancements
+│   └── 📄 plan.md               # Development plan
+├── 📊 sample_input.json          # Sample brain activity data for testing
+├── 📋 expected_output.txt        # Expected visualization output for tests
+├── 📄 BUILD_INSTRUCTIONS.md     # Detailed build instructions
+├── 📄 simple_build.cpp          # A single-file build version for convenience
+├── 📄 config.ini                # Configuration file
+├── 📄 build.bat                 # Windows build script
+└── 📖 README.md                 # Project documentation
 ```
 
 ---
@@ -115,16 +127,16 @@ The visualization engine maps neural activity intensities to ASCII characters:
 
 #### Compile Main Application
 ```bash
-g++ main.cpp json_logic.cpp video_logic.cpp -std=c++17 -o QuantaCerebra
+g++ src/main.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o QuantaCerebra
 ```
 
 #### Compile Test Suites
 ```bash
 # Unit tests
-g++ test_unit.cpp json_logic.cpp video_logic.cpp -std=c++17 -o test_unit
+g++ tests/test_unit.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o test_unit
 
 # BDD integration tests
-g++ test_bdd.cpp json_logic.cpp video_logic.cpp -std=c++17 -o test_bdd
+g++ tests/test_bdd.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o test_bdd
 ```
 
 ### Execution
