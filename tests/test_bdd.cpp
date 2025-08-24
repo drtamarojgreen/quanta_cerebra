@@ -1,6 +1,6 @@
-#include "json_logic.h"
-#include "video_logic.h"
-#include "config.h"
+#include "../src/json_logic.h"
+#include "../src/video_logic.h"
+#include "../src/config.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
