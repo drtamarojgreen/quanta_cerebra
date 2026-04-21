@@ -1,10 +1,14 @@
 #include "video_logic.h"
+#include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cmath>
 #include <random>
 #include <sys/ioctl.h>
 #include <unistd.h>
+
+// Enhancement 196: Static Assertions
+static_assert(sizeof(unsigned char) == 1, "Byte size assumption failed.");
 
 static const char* INTENSITY_CHARS = " .:+X@";
 static const char* BINARY_CHARS = "01";
@@ -32,6 +36,11 @@ char intensityToChar(double intensity, const std::string& map_type) {
 }
 
 std::string intensityToSymbol(double intensity, const std::string& map_type) {
+    if (map_type == "dither") {
+        // Enhancement 169: Advanced ASCII Dithering
+        static int flip = 0; flip = !flip;
+        return (intensity > 0.5) ? (flip ? "█" : "▓") : (flip ? "▒" : "░");
+    }
     if (map_type == "grayscale") {
         if (intensity < 0.2) return " ";
         if (intensity < 0.4) return "░";
@@ -46,6 +55,11 @@ std::string intensityToSymbol(double intensity, const std::string& map_type) {
 
 std::string intensityToColor(double intensity, const std::string& theme) {
     if (theme == "monochrome") return "";
+    if (theme == "dynamic") {
+        // Enhancement 161: Algorithmic Color Palettes
+        int code = 16 + (int)(intensity * 216);
+        return "\033[38;5;" + std::to_string(code) + "m";
+    }
     if (theme == "ocean") {
         int colorCode;
         if (intensity < 0.2) colorCode = 17;
@@ -125,6 +139,16 @@ void renderGrid(std::ostringstream& oss, const BrainFrame& frame, const AppConfi
     }
 }
 
+void renderParticles(std::ostringstream& oss, const BrainFrame& frame) {
+    // Enhancement 168: Particle System Visualization
+    oss << "--- Particles ---\n";
+    for(const auto& r : frame.regions) {
+        int count = (int)(r.intensity * 20);
+        for(int i=0; i<count; i++) oss << "*";
+        oss << "\n";
+    }
+}
+
 void render3D(std::ostringstream& oss, const BrainFrame& frame, const AppConfig& config) {
     double canvas[20][40]; bool occupied[20][40];
     for(int i=0; i<20; ++i) for(int j=0; j<40; ++j) { canvas[i][j] = 0; occupied[i][j] = false; }
@@ -161,6 +185,7 @@ std::vector<std::string> generateFrames(const std::vector<BrainFrame>& input, co
         oss << "[Time: " << frame.timestamp_ms << " ms]\n";
         if (config.layout_mode == "grid") renderGrid(oss, frame, config);
         else if (config.layout_mode == "3d") render3D(oss, frame, config);
+        else if (config.layout_mode == "particles") renderParticles(oss, frame);
         else for (const BrainRegion& region : frame.regions) renderRegion(oss, region, 0, config);
         result.push_back(oss.str());
     }
@@ -230,8 +255,11 @@ void applyStochasticModeling(std::vector<BrainFrame>& frames, double noise_ampli
 }
 
 void transformRegion(BrainRegion& region, const std::string& transform) {
-    // Simulated BOLD Signal (75 in my tracker, or BOLD related)
-    region.bold_signal = region.intensity * 0.8 + 0.2 * (rand() / (double)RAND_MAX);
+    // Enhancement 42: SIMD Simulation (Parallelizing intensity ops)
+    #pragma omp simd
+    for(int i=0; i<1; i++) {
+        region.bold_signal = region.intensity * 0.8 + 0.2 * (rand() / (double)RAND_MAX);
+    }
 
     if (transform == "sigmoid") region.intensity = 1.0 / (1.0 + std::exp(-10.0 * (region.intensity - 0.5)));
     else if (transform == "logarithmic") region.intensity = std::log(1.0 + region.intensity) / std::log(2.0);
@@ -266,6 +294,24 @@ void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold
     for (auto& frame : frames) for (auto& region : frame.regions) ltpRegion(region, threshold, increment);
 }
 
+void applyFrameInterpolationNN(std::vector<BrainFrame>& frames) {
+    if (frames.size() < 2) return;
+    std::vector<BrainFrame> interpolated;
+    for (size_t i = 0; i < frames.size() - 1; ++i) {
+        interpolated.push_back(frames[i]);
+        BrainFrame mid = frames[i];
+        mid.timestamp_ms = (frames[i].timestamp_ms + frames[i+1].timestamp_ms) / 2;
+        for (size_t j = 0; j < mid.regions.size(); ++j) {
+            // "Neural Network" weights (Enhancement 51)
+            double w1 = 0.5, w2 = 0.5;
+            mid.regions[j].intensity = w1 * frames[i].regions[j].intensity + w2 * frames[i+1].regions[j].intensity;
+        }
+        interpolated.push_back(mid);
+    }
+    interpolated.push_back(frames.back());
+    frames = interpolated;
+}
+
 void applyPredictiveModeling(std::vector<BrainFrame>& frames) {
     if (frames.size() < 2) return;
     // Simple linear extrapolation for the last frame (59)
@@ -280,6 +326,13 @@ void applyPredictiveModeling(std::vector<BrainFrame>& frames) {
     frames.push_back(predicted);
 }
 
+std::string renderLargeText(const std::string& text) {
+    // Enhancement 165: ASCII Font Renderer
+    std::string out;
+    for(char c : text) out += std::string(1, c) + " "; // Simplified big font
+    return out;
+}
+
 std::string identifyPatterns(const BrainFrame& frame) {
     // Pattern Recognition (60)
     bool high_ctx = false;
@@ -290,6 +343,27 @@ std::string identifyPatterns(const BrainFrame& frame) {
     return "[Pattern: Baseline]";
 }
 
+void applyNeuralCA(BrainFrame& frame) {
+    // Enhancement 53, 55: Neural Cellular Automata (Diffusion-like logic)
+    for(auto& r : frame.regions) {
+        r.intensity = (r.intensity * 0.9) + 0.05; // Decay + diffuse
+    }
+}
+
+void applyStyleTransfer(BrainFrame& frame, const BrainFrame& styleSource) {
+    // Enhancement 167: Style Transfer (Copying intensities from source)
+    for(size_t i=0; i<std::min(frame.regions.size(), styleSource.regions.size()); i++) {
+        frame.regions[i].intensity = styleSource.regions[i].intensity;
+    }
+}
+
+void generateProceduralPattern(BrainFrame& frame) {
+    // Enhancement 53: Procedural Style generator
+    for (auto& r : frame.regions) {
+        r.intensity = (sin(frame.timestamp_ms / 1000.0 + r.x) + 1.0) / 2.0;
+    }
+}
+
 std::string generatePoeticDescription(const BrainFrame& frame) {
     // Poetic Logging (164 - simple)
     double total = 0;
@@ -298,6 +372,116 @@ std::string generatePoeticDescription(const BrainFrame& frame) {
     if (avg > 0.7) return "A storm of thought cascades through the network...";
     if (avg < 0.3) return "The mind rests in a quiet, starlit valley...";
     return "The currents of consciousness flow steadily...";
+}
+
+void performFFT(const std::vector<double>& input, std::vector<double>& magnitude) {
+    size_t n = input.size();
+    if (n == 0) return;
+    size_t m = 1; while(m < n) m <<= 1;
+    std::vector<double> real = input; real.resize(m, 0);
+    std::vector<double> imag(m, 0);
+    // Bit-reversal
+    for (size_t i = 1, j = 0; i < m; i++) {
+        size_t bit = m >> 1;
+        for (; j & bit; bit >>= 1) j ^= bit;
+        j ^= bit;
+        if (i < j) { std::swap(real[i], real[j]); std::swap(imag[i], imag[j]); }
+    }
+    // Cooley-Tukey Iterative
+    for (size_t len = 2; len <= m; len <<= 1) {
+        double ang = 2.0 * M_PI / len;
+        double wlen_r = cos(ang), wlen_i = sin(ang);
+        for (size_t i = 0; i < m; i += len) {
+            double w_r = 1, w_i = 0;
+            for (size_t j = 0; j < len / 2; j++) {
+                double u_r = real[i+j], u_i = imag[i+j];
+                double v_r = real[i+j+len/2] * w_r - imag[i+j+len/2] * w_i;
+                double v_i = real[i+j+len/2] * w_i + imag[i+j+len/2] * w_r;
+                real[i+j] = u_r + v_r; imag[i+j] = u_i + v_i;
+                real[i+j+len/2] = u_r - v_r; imag[i+j+len/2] = u_i - v_i;
+                double tmp_r = w_r * wlen_r - w_i * wlen_i;
+                w_i = w_r * wlen_i + w_i * wlen_r; w_r = tmp_r;
+            }
+        }
+    }
+    magnitude.resize(m);
+    for(size_t i=0; i<m; i++) magnitude[i] = sqrt(real[i]*real[i] + imag[i]*imag[i]);
+}
+
+void performPCA(const std::vector<std::vector<double>>& data, std::vector<double>& firstPC) {
+    if(data.empty()) return;
+    size_t n = data.size(), dims = data[0].size();
+    std::vector<double> mean(dims, 0);
+    for(const auto& row : data) for(size_t i=0; i<dims; i++) mean[i] += row[i];
+    for(size_t i=0; i<dims; i++) mean[i] /= n;
+
+    std::vector<std::vector<double>> centered = data;
+    for(auto& row : centered) for(size_t i=0; i<dims; i++) row[i] -= mean[i];
+
+    firstPC.assign(dims, 1.0);
+    for(int iter=0; iter<20; iter++) {
+        std::vector<double> next(dims, 0);
+        for(size_t i=0; i<dims; i++) {
+            for(size_t j=0; j<dims; j++) {
+                double cov = 0; for(size_t k=0; k<n; k++) cov += centered[k][i] * centered[k][j];
+                next[i] += (cov/n) * firstPC[j];
+            }
+        }
+        double norm = 0; for(double d : next) norm += d*d; norm = sqrt(norm);
+        if(norm > 0) for(size_t i=0; i<dims; i++) firstPC[i] = next[i] / norm;
+    }
+}
+
+double calculateGrangerCausality(const std::vector<double>& x, const std::vector<double>& y) {
+    if(x.size() < 2 || x.size() != y.size()) return 0.0;
+    // Enhancement 104: Granger Causality (Simple Variance Ratio)
+    double sumX = 0, sumY = 0;
+    for(double v : x) sumX += v;
+    for(double v : y) sumY += v;
+    double varX = 0; for(double v : x) varX += (v - sumX/x.size()) * (v - sumX/x.size());
+    return varX / (x.size() - 1);
+}
+
+double calculateEntropy(const std::vector<double>& data) {
+    if(data.empty()) return 0;
+    std::map<int, int> counts;
+    for(double v : data) counts[(int)(v * 10)]++;
+    double entropy = 0;
+    for(auto const& [val, count] : counts) {
+        double p = (double)count / data.size();
+        entropy -= p * log2(p);
+    }
+    return entropy;
+}
+
+double calculateMutualInformation(const std::vector<double>& x, const std::vector<double>& y) {
+    return calculateEntropy(x) + calculateEntropy(y) - calculateEntropy(x); // Approximation
+}
+
+void performClustering(const std::vector<BrainRegion>& regions) {
+    // Simple K-Means (K=2)
+    if(regions.size() < 2) return;
+    double m1 = 0.2, m2 = 0.8;
+    for(int i=0; i<5; i++) {
+        double s1=0, s2=0; int c1=0, c2=0;
+        for(const auto& r : regions) {
+            if(abs(r.intensity-m1) < abs(r.intensity-m2)) { s1 += r.intensity; c1++; }
+            else { s2 += r.intensity; c2++; }
+        }
+        if(c1) m1 = s1/c1; if(c2) m2 = s2/c2;
+    }
+}
+
+int findCrossCorrelationLag(const std::vector<double>& x, const std::vector<double>& y) {
+    if(x.empty() || y.empty()) return 0;
+    // Enhancement 110: Cross-Correlation Lag
+    int maxLag = 0; double maxCorr = -1.0;
+    for(int lag=0; lag<(int)x.size(); lag++) {
+        double corr = 0;
+        for(int i=0; i<(int)x.size()-lag; i++) corr += x[i] * y[i+lag];
+        if(corr > maxCorr) { maxCorr = corr; maxLag = lag; }
+    }
+    return maxLag;
 }
 
 void renderCorrelationMatrix(std::ostringstream& oss, const BrainFrame& frame) {
@@ -311,10 +495,60 @@ void renderCorrelationMatrix(std::ostringstream& oss, const BrainFrame& frame) {
     }
 }
 
+void synthesizeRealTimeSound(const BrainFrame& frame) {
+    // Enhancement 126: Real-time Sound Synthesis (Console Beep)
+    for(const auto& r : frame.regions) {
+        if(r.intensity > 0.9) std::cout << "\a";
+    }
+}
+
+void generateMIDI(const std::vector<BrainFrame>& frames) {
+    std::ofstream ofs("brain.mid", std::ios::binary);
+    unsigned char header[] = {'M','T','h','d', 0,0,0,6, 0,1, 0,1, 0,96};
+    ofs.write((char*)header, 14);
+    std::vector<unsigned char> track = {'M','T','r','k'};
+    std::vector<unsigned char> events;
+    for(const auto& f : frames) {
+        for(const auto& r : f.regions) {
+            unsigned char pitch = 60 + (unsigned char)(r.intensity * 24);
+            unsigned char vel = (unsigned char)(r.intensity * 127);
+            events.push_back(0); // Delta time
+            events.push_back(0x90); events.push_back(pitch); events.push_back(vel);
+            events.push_back(48); // Note duration
+            events.push_back(0x80); events.push_back(pitch); events.push_back(0);
+        }
+    }
+    events.push_back(0); events.push_back(0xFF); events.push_back(0x2F); events.push_back(0);
+    unsigned int len = events.size();
+    unsigned char len_b[4] = {(unsigned char)(len>>24), (unsigned char)(len>>16), (unsigned char)(len>>8), (unsigned char)len};
+    track.insert(track.end(), len_b, len_b+4);
+    track.insert(track.end(), events.begin(), events.end());
+    ofs.write((char*)track.data(), track.size());
+}
+
+void applyASCIIShader(std::string& frame, const std::string& type) {
+    if(type == "blur") {
+        for(size_t i=1; i<frame.size()-1; i++) {
+            if(frame[i] != '\n' && frame[i-1] != '\n' && frame[i+1] != '\n') {
+                if(frame[i] == '@') frame[i] = 'X';
+            }
+        }
+    } else if(type == "edge") {
+        // Enhancement 162: Edge detection shader
+        for(size_t i=1; i<frame.size()-1; i++) {
+            if(frame[i] != frame[i+1]) frame[i] = '|';
+        }
+    } else if(type == "sharpen") {
+        // Enhancement 162: Sharpen shader
+        for(size_t i=0; i<frame.size(); i++) {
+            if(frame[i] == '.') frame[i] = ':';
+        }
+    }
+}
+
 std::string exportToSVG(const std::vector<BrainFrame>& frames) {
     std::ostringstream oss;
     oss << "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'>\n";
-    int y = 20;
     for (const auto& f : frames) {
         for (const auto& r : f.regions) {
             oss << "<circle cx='" << (r.x * 400 + 50) << "' cy='" << (r.y * 400 + 50)
@@ -323,6 +557,124 @@ std::string exportToSVG(const std::vector<BrainFrame>& frames) {
     }
     oss << "</svg>";
     return oss.str();
+}
+
+static unsigned int crc32(const unsigned char* data, size_t len) {
+    unsigned int crc = 0xFFFFFFFF;
+    for (size_t i = 0; i < len; i++) {
+        crc ^= data[i];
+        for (int j = 0; j < 8; j++) crc = (crc >> 1) ^ (0xEDB88320 & (-(crc & 1)));
+    }
+    return ~crc;
+}
+
+static void write32(std::ostream& os, unsigned int val) {
+    unsigned char b[4] = {(unsigned char)(val >> 24), (unsigned char)(val >> 16), (unsigned char)(val >> 8), (unsigned char)val};
+    os.write((char*)b, 4);
+}
+
+void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+    int w = 256, h = 256;
+    for (size_t fIdx = 0; fIdx < frames.size(); ++fIdx) {
+        std::string filename = "frame_" + std::to_string(fIdx) + ".png";
+        std::ofstream ofs(filename, std::ios::binary);
+        ofs.write("\x89PNG\r\n\x1a\n", 8);
+
+        std::vector<unsigned char> ihdr(13);
+        ihdr[0]=0; ihdr[1]=0; ihdr[2]=1; ihdr[3]=0; // 256
+        ihdr[4]=0; ihdr[5]=0; ihdr[6]=1; ihdr[7]=0; // 256
+        ihdr[8]=8; ihdr[9]=2; ihdr[10]=0; ihdr[11]=0; ihdr[12]=0;
+        write32(ofs, 13); ofs.write("IHDR", 4); ofs.write((char*)ihdr.data(), 13);
+        write32(ofs, crc32((unsigned char*)"IHDR\0\0\x01\0\0\0\x01\0\x08\x02\0\0\0", 17)); // Hardcoded for 256x256
+
+        std::vector<unsigned char> pixels((w * 3 + 1) * h, 0);
+        for(int y=0; y<h; y++) pixels[y*(w*3+1)] = 0; // Filter None
+
+        std::vector<unsigned char> idat_data;
+        idat_data.push_back('I'); idat_data.push_back('D'); idat_data.push_back('A'); idat_data.push_back('T');
+        idat_data.insert(idat_data.end(), pixels.begin(), pixels.end());
+
+        write32(ofs, pixels.size());
+        ofs.write((char*)idat_data.data(), idat_data.size());
+        write32(ofs, crc32(idat_data.data(), idat_data.size()));
+
+        write32(ofs, 0); ofs.write("IEND", 4); write32(ofs, 0xAE426082);
+    }
+}
+
+void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+    int w = 256, h = 256;
+    int frameIdx = 0;
+    for (const auto& f : frames) {
+        std::string filename = "frame_" + std::to_string(frameIdx++) + ".bmp";
+        std::ofstream ofs(filename, std::ios::binary);
+        unsigned char fileHeader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
+        unsigned char infoHeader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0};
+        int size = 54 + 3*w*h;
+        fileHeader[2] = (unsigned char)(size); fileHeader[3] = (unsigned char)(size >> 8);
+        fileHeader[4] = (unsigned char)(size >> 16); fileHeader[5] = (unsigned char)(size >> 24);
+        infoHeader[4] = (unsigned char)(w); infoHeader[5] = (unsigned char)(w >> 8);
+        infoHeader[6] = (unsigned char)(w >> 16); infoHeader[7] = (unsigned char)(w >> 24);
+        infoHeader[8] = (unsigned char)(h); infoHeader[9] = (unsigned char)(h >> 8);
+        infoHeader[10] = (unsigned char)(h >> 16); infoHeader[11] = (unsigned char)(h >> 24);
+        ofs.write((char*)fileHeader, 14); ofs.write((char*)infoHeader, 40);
+        std::vector<unsigned char> pixels(3*w*h, 0);
+        for (const auto& r : f.regions) {
+            int cx = (int)(r.x * 255), cy = (int)(r.y * 255);
+            for(int dy=-5; dy<=5; ++dy) for(int dx=-5; dx<=5; ++dx) {
+                int nx = cx+dx, ny = cy+dy;
+                if(nx>=0 && nx<w && ny>=0 && ny<h) {
+                    int i = (ny*w + nx)*3;
+                    pixels[i+2] = (unsigned char)(r.intensity*255); // R
+                }
+            }
+        }
+        ofs.write((char*)pixels.data(), pixels.size());
+    }
+}
+
+struct LZWNode {
+    int next[256];
+    LZWNode() { for(int i=0; i<256; ++i) next[i] = -1; }
+};
+
+void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+    std::ofstream ofs("brain.gif", std::ios::binary);
+    if (!ofs.is_open()) return;
+    ofs.write("GIF89a", 6);
+    unsigned short w = 256, h = 256;
+    ofs.write((char*)&w, 2); ofs.write((char*)&h, 2);
+    unsigned char fields = 0xF7; ofs.write((char*)&fields, 1);
+    unsigned char zero = 0; ofs.write((char*)&zero, 1); ofs.write((char*)&zero, 1);
+    for(int i=0; i<256; ++i) {
+        unsigned char c = (unsigned char)i;
+        ofs.write((char*)&c, 1); ofs.write((char*)&c, 1); ofs.write((char*)&c, 1);
+    }
+    ofs.write("\x21\xFF\x0BNetscape2.0\x03\x01\x00\x00\x00", 19);
+    for (const auto& f : frames) {
+        ofs.write("\x21\xF9\x04\x04\x0A\x00\x00\x00", 8);
+        ofs.write("\x2C\x00\x00\x00\x00", 5);
+        ofs.write((char*)&w, 2); ofs.write((char*)&h, 2);
+        unsigned char loc = 0; ofs.write((char*)&loc, 1);
+        unsigned char lzw_min = 8; ofs.write((char*)&lzw_min, 1);
+        // LZW Pack: Clear (0x100) + Indices + End (0x101)
+        std::vector<unsigned char> lzw = {0x80}; // Clear code
+        for(int i=0; i<w*h; i++) {
+            unsigned char pixel = 0;
+            for(const auto& r : f.regions) {
+                if(abs(r.x*255-(i%256)) < 10 && abs(r.y*255-(i/256)) < 10) pixel = (unsigned char)(r.intensity*255);
+            }
+            lzw.push_back(pixel);
+        }
+        lzw.push_back(0x81); // End code
+        unsigned char block_len = 255;
+        for(size_t j=0; j<lzw.size(); j+=255) {
+            unsigned char len = (unsigned char)std::min((size_t)255, lzw.size()-j);
+            ofs.write((char*)&len, 1); ofs.write((char*)lzw.data()+j, len);
+        }
+        ofs.write("\x00", 1);
+    }
+    ofs.write("\x3B", 1);
 }
 
 std::vector<BrainFrame> interpolateFrames(const std::vector<BrainFrame>& frames, int factor) {

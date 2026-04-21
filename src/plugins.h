@@ -11,11 +11,19 @@ public:
     virtual void render(const BrainFrame& frame) = 0;
 };
 
+enum class EventType { Render, Peak, Error };
+
 class PluginManager {
     std::vector<std::unique_ptr<IRendererPlugin>> plugins;
 public:
     void registerPlugin(std::unique_ptr<IRendererPlugin> p) { plugins.push_back(std::move(p)); }
-    void notifyRender(const BrainFrame& frame) { for(auto& p : plugins) p->render(frame); }
+    // Enhancement 156: Event-Driven Architecture
+    void emitEvent(EventType type, const BrainFrame& frame) {
+        if(type == EventType::Render) {
+            for(auto& p : plugins) p->render(frame);
+        }
+    }
+    void notifyRender(const BrainFrame& frame) { emitEvent(EventType::Render, frame); }
 };
 
 #endif

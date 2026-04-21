@@ -20,6 +20,7 @@ std::string intensityToColor(double intensity, const std::string& theme = "defau
 char intensityToChar(double intensity, const std::string& map_type = "default");
 std::string intensityToSymbol(double intensity, const std::string& map_type = "default");
 std::vector<std::string> generateFrames(const std::vector<BrainFrame>& input, const AppConfig& config);
+void renderParticles(std::ostringstream& oss, const BrainFrame& frame);
 std::vector<BrainFrame> interpolateFrames(const std::vector<BrainFrame>& frames, int factor);
 void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size);
 void applyActivityDecayModel(std::vector<BrainFrame>& frames, double decay_rate);
@@ -30,9 +31,27 @@ void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std
 void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames);
 void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold, double increment);
 void applyPredictiveModeling(std::vector<BrainFrame>& frames);
+void applyFrameInterpolationNN(std::vector<BrainFrame>& frames);
 std::string identifyPatterns(const BrainFrame& frame);
 void renderCorrelationMatrix(std::ostringstream& oss, const BrainFrame& frame);
+void performFFT(const std::vector<double>& input, std::vector<double>& magnitude);
+void performPCA(const std::vector<std::vector<double>>& data, std::vector<double>& firstPC);
+double calculateGrangerCausality(const std::vector<double>& x, const std::vector<double>& y);
+int findCrossCorrelationLag(const std::vector<double>& x, const std::vector<double>& y);
+double calculateEntropy(const std::vector<double>& data);
+double calculateMutualInformation(const std::vector<double>& x, const std::vector<double>& y);
+void performClustering(const std::vector<BrainRegion>& regions);
+std::string renderLargeText(const std::string& text);
 std::string generatePoeticDescription(const BrainFrame& frame);
+void applyNeuralCA(BrainFrame& frame);
+void generateProceduralPattern(BrainFrame& frame);
+void applyStyleTransfer(BrainFrame& frame, const BrainFrame& styleSource);
 std::string exportToSVG(const std::vector<BrainFrame>& frames);
+void applyASCIIShader(std::string& frame, const std::string& type);
+void generateMIDI(const std::vector<BrainFrame>& frames);
+void synthesizeRealTimeSound(const BrainFrame& frame);
+void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& config);
+void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config);
+void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& config);
 
 #endif

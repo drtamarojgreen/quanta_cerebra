@@ -70,6 +70,8 @@ AppConfig loadConfig(const std::string& filename) {
                 try { config.zoom = std::stod(value); } catch (...) {}
             } else if (key == "enable_anomaly_detection") {
                 config.enable_anomaly_detection = (value == "true");
+            } else if (key == "encryption_key") {
+                if (!value.empty()) config.encryption_key = value;
             }
         }
     }
@@ -132,6 +134,7 @@ AppConfig loadConfigJSON(const std::string& filename) {
     parse_string("theme", config.theme);
     parse_double("zoom", config.zoom);
     parse_bool("enable_anomaly_detection", config.enable_anomaly_detection);
+    parse_string("encryption_key", config.encryption_key);
 
     return config;
 }

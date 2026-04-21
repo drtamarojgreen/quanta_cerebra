@@ -22,6 +22,7 @@ struct AppConfig {
     double offset_x = 0.0;
     double offset_y = 0.0;
     bool enable_anomaly_detection = false;
+    std::string encryption_key = "";
 };
 
 // Loads configuration from a file, applying defaults if the file is not found
