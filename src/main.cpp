@@ -40,28 +40,30 @@ bool kbhit() {
 }
 
 void startAPIServer(int port, bool dashboard = false) {
-    // Enhancement 134: Web Dashboard
-    int server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    int opt = 1; setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-    struct sockaddr_in address;
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
-    if(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) return;
-    listen(server_fd, 3);
+    std::thread([=]() {
+        int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+        int opt = 1; setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+        struct sockaddr_in address;
+        address.sin_family = AF_INET;
+        address.sin_addr.s_addr = INADDR_ANY;
+        address.sin_port = htons(port);
+        if(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) { close(server_fd); return; }
+        listen(server_fd, 3);
 
-    // Enhancement 151: Functional minimal API response
-    struct sockaddr_in client_addr; socklen_t addrlen = sizeof(client_addr);
-    int new_socket = accept(server_fd, (struct sockaddr *)&client_addr, &addrlen);
-    if(new_socket >= 0) {
-        char buffer[1024] = {0}; read(new_socket, buffer, 1024);
-        const char* msg = dashboard ?
-            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<h1>QuantaCerebra Dashboard</h1>" :
-            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nQuantaCerebra API Active";
-        send(new_socket, msg, strlen(msg), 0);
-        close(new_socket);
-    }
-    close(server_fd);
+        while(true) {
+            struct sockaddr_in client_addr; socklen_t addrlen = sizeof(client_addr);
+            int new_socket = accept(server_fd, (struct sockaddr *)&client_addr, &addrlen);
+            if(new_socket >= 0) {
+                char buffer[1024] = {0}; read(new_socket, buffer, 1024);
+                const char* msg = dashboard ?
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<h1>QuantaCerebra Dashboard</h1>" :
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nQuantaCerebra API Active";
+                send(new_socket, msg, strlen(msg), 0);
+                close(new_socket);
+            }
+        }
+        close(server_fd);
+    }).detach();
 }
 
 std::string base64_encode(const std::string& in) {
@@ -172,6 +174,10 @@ int main(int argc, char* argv[]) {
         }
         else if (arg == "--cloud-ml") { // (138)
              std::cout << "Cloud ML: Outsourcing pattern analysis to Vertex AI...\n";
+        }
+        else if (arg == "--binary") { // (30)
+             std::cout << "Binary: Exporting state to simulation.bin...\n";
+             saveSimulationState(interpolatedFrames, "simulation.bin");
         }
         else if (arg == "--compliance") { // (148)
              std::cout << "Compliance: Disabling all logging (GDPR).\n";
@@ -316,10 +322,13 @@ int main(int argc, char* argv[]) {
     }
 
     if (isCompressed) {
-        // Enhancement 26: Use filesystem to validate path before execution (Mitigate Command Injection)
+        // Enhancement 26: Command Injection Mitigation using shell escaping
         std::filesystem::path p(inputSource);
         if (std::filesystem::exists(p)) {
-            std::string cmd = "gunzip -c \"" + p.string() + "\"";
+            std::string safePath = p.string();
+            // Basic escaping for popen
+            for(size_t pos = 0; (pos = safePath.find('"', pos)) != std::string::npos; pos += 2) safePath.insert(pos, "\\");
+            std::string cmd = "gunzip -c \"" + safePath + "\"";
             std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
             if (pipe) { char buffer[128]; while (fgets(buffer, sizeof(buffer), pipe.get())) jsonData += buffer; }
         }
@@ -469,7 +478,8 @@ int main(int argc, char* argv[]) {
             }
 
             if (is_paused) {
-                i--;
+                if (i > 0) i--; // Prevent underflow
+                else i = (size_t)-1; // Reset to loop start
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
             }

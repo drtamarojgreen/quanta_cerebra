@@ -573,6 +573,10 @@ static void write32(std::ostream& os, unsigned int val) {
     os.write((char*)b, 4);
 }
 
+static void adler32(const unsigned char* data, size_t len, unsigned int& a, unsigned int& b) {
+    for (size_t i = 0; i < len; i++) { a = (a + data[i]) % 65521; b = (b + a) % 65521; }
+}
+
 void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config) {
     int w = 256, h = 256;
     for (size_t fIdx = 0; fIdx < frames.size(); ++fIdx) {
@@ -580,23 +584,38 @@ void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config)
         std::ofstream ofs(filename, std::ios::binary);
         ofs.write("\x89PNG\r\n\x1a\n", 8);
 
-        std::vector<unsigned char> ihdr(13);
-        ihdr[0]=0; ihdr[1]=0; ihdr[2]=1; ihdr[3]=0; // 256
-        ihdr[4]=0; ihdr[5]=0; ihdr[6]=1; ihdr[7]=0; // 256
-        ihdr[8]=8; ihdr[9]=2; ihdr[10]=0; ihdr[11]=0; ihdr[12]=0;
+        std::vector<unsigned char> ihdr = {0,0,1,0, 0,0,1,0, 8,2,0,0,0};
         write32(ofs, 13); ofs.write("IHDR", 4); ofs.write((char*)ihdr.data(), 13);
-        write32(ofs, crc32((unsigned char*)"IHDR\0\0\x01\0\0\0\x01\0\x08\x02\0\0\0", 17)); // Hardcoded for 256x256
+        std::vector<unsigned char> ihdr_chunk = {'I','H','D','R'}; ihdr_chunk.insert(ihdr_chunk.end(), ihdr.begin(), ihdr.end());
+        write32(ofs, crc32(ihdr_chunk.data(), ihdr_chunk.size()));
 
         std::vector<unsigned char> pixels((w * 3 + 1) * h, 0);
-        for(int y=0; y<h; y++) pixels[y*(w*3+1)] = 0; // Filter None
+        for(int y=0; y<h; y++) {
+            pixels[y*(w*3+1)] = 0; // Filter
+            for(const auto& r : frames[fIdx].regions) {
+                int cx = (int)(r.x * 255), cy = (int)(r.y * 255);
+                if(abs(cy-y) < 10) {
+                    for(int x=std::max(0,cx-10); x<std::min(256,cx+10); x++) {
+                        pixels[y*(w*3+1) + 1 + x*3] = (unsigned char)(r.intensity*255);
+                    }
+                }
+            }
+        }
 
-        std::vector<unsigned char> idat_data;
-        idat_data.push_back('I'); idat_data.push_back('D'); idat_data.push_back('A'); idat_data.push_back('T');
-        idat_data.insert(idat_data.end(), pixels.begin(), pixels.end());
+        // ZLIB-lite (uncompressed)
+        std::vector<unsigned char> zlib = {0x78, 0x01};
+        unsigned int a = 1, b = 0; adler32(pixels.data(), pixels.size(), a, b);
+        zlib.push_back(0x01); // Last block
+        unsigned short len = (unsigned short)pixels.size(), nlen = ~len;
+        zlib.push_back(len & 0xFF); zlib.push_back(len >> 8);
+        zlib.push_back(nlen & 0xFF); zlib.push_back(nlen >> 8);
+        zlib.insert(zlib.end(), pixels.begin(), pixels.end());
+        zlib.push_back(b >> 8); zlib.push_back(b & 0xFF);
+        zlib.push_back(a >> 8); zlib.push_back(a & 0xFF);
 
-        write32(ofs, pixels.size());
-        ofs.write((char*)idat_data.data(), idat_data.size());
-        write32(ofs, crc32(idat_data.data(), idat_data.size()));
+        std::vector<unsigned char> idat_chunk = {'I','D','A','T'}; idat_chunk.insert(idat_chunk.end(), zlib.begin(), zlib.end());
+        write32(ofs, zlib.size()); ofs.write((char*)idat_chunk.data(), idat_chunk.size());
+        write32(ofs, crc32(idat_chunk.data(), idat_chunk.size()));
 
         write32(ofs, 0); ofs.write("IEND", 4); write32(ofs, 0xAE426082);
     }
@@ -657,16 +676,20 @@ void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& config)
         ofs.write((char*)&w, 2); ofs.write((char*)&h, 2);
         unsigned char loc = 0; ofs.write((char*)&loc, 1);
         unsigned char lzw_min = 8; ofs.write((char*)&lzw_min, 1);
-        // LZW Pack: Clear (0x100) + Indices + End (0x101)
-        std::vector<unsigned char> lzw = {0x80}; // Clear code
+        // Enhancement 19: Functional LZW Pack (Minimal bit-packing)
+        std::vector<unsigned char> lzw;
+        auto pack = [&](int code, int size) {
+            static int buf=0, bits=0;
+            buf |= (code << bits); bits += size;
+            while(bits >= 8) { lzw.push_back(buf & 0xFF); buf >>= 8; bits -= 8; }
+        };
+        pack(0x80, 9); // Clear
         for(int i=0; i<w*h; i++) {
-            unsigned char pixel = 0;
-            for(const auto& r : f.regions) {
-                if(abs(r.x*255-(i%256)) < 10 && abs(r.y*255-(i/256)) < 10) pixel = (unsigned char)(r.intensity*255);
-            }
-            lzw.push_back(pixel);
+            unsigned char p = 0;
+            for(const auto& r : f.regions) if(abs(r.x*255-(i%256))<10 && abs(r.y*255-(i/256))<10) p=(unsigned char)(r.intensity*255);
+            pack(p, 9);
         }
-        lzw.push_back(0x81); // End code
+        pack(0x81, 9); // End
         unsigned char block_len = 255;
         for(size_t j=0; j<lzw.size(); j+=255) {
             unsigned char len = (unsigned char)std::min((size_t)255, lzw.size()-j);

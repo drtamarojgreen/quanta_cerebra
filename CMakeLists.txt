@@ -25,6 +25,31 @@ target_link_libraries(QuantaCerebra PRIVATE quantacerebra_lib)
 add_executable(benchmark_suite src/main.cpp) # Use main as benchmark for now
 target_link_libraries(benchmark_suite PRIVATE quantacerebra_lib)
 
+# Category-based Unit Tests
+add_executable(test_core tests/test_core.cpp)
+target_link_libraries(test_core PRIVATE quantacerebra_lib)
+
+add_executable(test_visualization tests/test_visualization.cpp)
+target_link_libraries(test_visualization PRIVATE quantacerebra_lib)
+
+add_executable(test_data_io tests/test_data_io.cpp)
+target_link_libraries(test_data_io PRIVATE quantacerebra_lib)
+
+add_executable(test_ux_perf tests/test_ux_perf.cpp)
+target_link_libraries(test_ux_perf PRIVATE quantacerebra_lib)
+
+add_executable(test_ai_integration tests/test_ai_integration.cpp)
+target_link_libraries(test_ai_integration PRIVATE quantacerebra_lib)
+
+add_executable(test_port_docs_analytics tests/test_port_docs_analytics.cpp)
+target_link_libraries(test_port_docs_analytics PRIVATE quantacerebra_lib)
+
+add_executable(test_access_cloud_security tests/test_access_cloud_security.cpp)
+target_link_libraries(test_access_cloud_security PRIVATE quantacerebra_lib)
+
+add_executable(test_advanced_features tests/test_advanced_features.cpp)
+target_link_libraries(test_advanced_features PRIVATE quantacerebra_lib)
+
 # Enhancement 66: Sanitizer Support
 option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
 if(ENABLE_ASAN)
