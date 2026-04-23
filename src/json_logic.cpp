@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <cstddef>
 #include <set>
+#include <cctype>
+#include <cstdlib>
+#include <cstring>
 
 // Forward declarations
 std::vector<BrainRegion> parseRegions(const std::string& arr_str);
@@ -20,22 +23,32 @@ std::string trim(const std::string& s) {
     return (start == std::string::npos) ? "" : out.substr(start, end - start + 1);
 }
 
-const std::string& internString(const std::string& s) {
+std::string internString(const std::string& s) {
     static std::set<std::string> pool;
     if(pool.size() > 1000) pool.clear(); // Enhancement 45: Managed string pool to prevent leak
-    return *pool.insert(s).first;
+    auto it = pool.insert(s).first;
+    return *it;
 }
 
-// Enhancement 43: Memory Pooling for BrainRegions
-class RegionPool {
-    std::vector<BrainRegion*> pool;
-public:
-    BrainRegion* acquire() {
-        if(pool.empty()) return new BrainRegion();
-        BrainRegion* r = pool.back(); pool.pop_back(); return r;
+RegionPool::~RegionPool() {
+    for (BrainRegion* r : pool) delete r;
+    pool.clear();
+}
+
+BrainRegion* RegionPool::acquire() {
+    if(pool.empty()) return new BrainRegion();
+    BrainRegion* r = pool.back(); pool.pop_back(); return r;
+}
+void RegionPool::release(BrainRegion* r) {
+    if (r) {
+        r->subregions.clear();
+        r->intensity_history.clear();
+        r->synaptic_buffer.clear();
+        r->neurotransmitters.clear();
+        r->synapses.clear();
+        pool.push_back(r);
     }
-    void release(BrainRegion* r) { pool.push_back(r); }
-};
+}
 
 BrainRegion parseRegion(const std::string& obj_str) {
     BrainRegion region;
@@ -353,8 +366,11 @@ void* qc_init_simulation(const char* config_path) {
 
 void qc_process_frame(void* handle, const char* json_data) {
     if (!handle || !json_data) return;
-    AppConfig* config = (AppConfig*)handle;
     std::vector<BrainFrame> frames = parseBrainActivityJSON(json_data);
+    if(!frames.empty()) {
+        // In a real lib, this would update a global state or handle-specific state
+        saveSimulationState(frames, "qc_last_processed.bin");
+    }
 }
 
 const char* qc_get_state(void* handle) {
