@@ -23,11 +23,13 @@ std::string trim(const std::string& s) {
     return (start == std::string::npos) ? "" : out.substr(start, end - start + 1);
 }
 
-std::string internString(const std::string& s) {
+const std::string& internString(const std::string& s) {
     static std::set<std::string> pool;
-    if(pool.size() > 1000) pool.clear(); // Enhancement 45: Managed string pool to prevent leak
-    auto it = pool.insert(s).first;
-    return *it;
+    if(pool.size() > 5000) {
+        // We can't clear if we return references.
+        // For interning to work with refs, the pool must persist.
+    }
+    return *pool.insert(s).first;
 }
 
 RegionPool::~RegionPool() {

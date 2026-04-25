@@ -165,17 +165,22 @@ std::vector<std::string> generateFrames(const std::vector<BrainFrame>& input, co
     return result;
 }
 
-void smoothRegion(BrainRegion& region, int window_size) {
-    region.intensity_history.push_back(region.intensity);
-    if (region.intensity_history.size() > static_cast<size_t>(window_size)) region.intensity_history.pop_front();
-    double sum = 0; for (double val : region.intensity_history) sum += val;
-    region.intensity = sum / region.intensity_history.size();
-    for (auto& sub : region.subregions) smoothRegion(sub, window_size);
-}
-
 void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
-    if (window_size <= 1) return;
-    for (auto& frame : frames) for (auto& region : frame.regions) smoothRegion(region, window_size);
+    if (window_size <= 1 || frames.empty()) return;
+    // Enhancement 2: Temporal Smoothing (Moving Average across frames)
+    for (size_t i = 0; i < frames.size(); ++i) {
+        for (size_t r = 0; r < frames[i].regions.size(); ++r) {
+            double sum = 0;
+            int count = 0;
+            for (int w = 0; w < window_size; ++w) {
+                if ((int)i - w >= 0 && r < frames[i - w].regions.size()) {
+                    sum += frames[i - w].regions[r].intensity;
+                    count++;
+                }
+            }
+            frames[i].regions[r].intensity = sum / count;
+        }
+    }
 }
 
 void decayRegion(BrainRegion& region, double decay_rate, int dt_ms) {

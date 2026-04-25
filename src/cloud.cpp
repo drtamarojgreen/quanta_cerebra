@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <cstring>
+#include <algorithm>
 
 bool CloudSystem::syncToS3(const std::string& bucket, const std::string& data) {
     std::filesystem::create_directories("cloud/s3/" + bucket);
@@ -20,7 +21,6 @@ bool CloudSystem::triggerLambda(const std::string& func, const std::string& payl
 }
 
 std::string CloudSystem::fetchRemoteConfig(const std::string& url) {
-    // Simulated remote fetch
     return "{\"theme\": \"ocean\", \"layout_mode\": \"3d\"}";
 }
 
@@ -66,11 +66,29 @@ std::vector<unsigned char> GRPCInterface::serialize(const BrainFrame& frame) {
     size_t sz = frame.regions.size();
     res.insert(res.end(), (unsigned char*)&frame.timestamp_ms, (unsigned char*)&frame.timestamp_ms + sizeof(int));
     res.insert(res.end(), (unsigned char*)&sz, (unsigned char*)&sz + sizeof(size_t));
+    for(const auto& r : frame.regions) {
+        double i = r.intensity;
+        res.insert(res.end(), (unsigned char*)&i, (unsigned char*)&i + sizeof(double));
+    }
     return res;
 }
 
 BrainFrame GRPCInterface::deserialize(const std::vector<unsigned char>& data) {
     BrainFrame f;
-    if(data.size() >= sizeof(int)) std::memcpy(&f.timestamp_ms, data.data(), sizeof(int));
+    if(data.size() < sizeof(int) + sizeof(size_t)) return f;
+    std::memcpy(&f.timestamp_ms, data.data(), sizeof(int));
+    size_t sz; std::memcpy(&sz, data.data() + sizeof(int), sizeof(size_t));
+    size_t offset = sizeof(int) + sizeof(size_t);
+    for(size_t i=0; i<sz && offset + sizeof(double) <= data.size(); i++) {
+        BrainRegion r; std::memcpy(&r.intensity, data.data() + offset, sizeof(double));
+        f.regions.push_back(r); offset += sizeof(double);
+    }
     return f;
+}
+
+// Simulated P2P Swarm
+void P2PSystem::broadcast(const std::string& data) {
+    std::filesystem::create_directories("cloud/p2p");
+    std::ofstream ofs("cloud/p2p/broadcast.dat", std::ios::app);
+    ofs << data << "\n";
 }

@@ -27,4 +27,9 @@ public:
     static BrainFrame deserialize(const std::vector<unsigned char>& data);
 };
 
+class P2PSystem {
+public:
+    static void broadcast(const std::string& data);
+};
+
 #endif

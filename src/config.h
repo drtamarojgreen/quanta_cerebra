@@ -23,6 +23,14 @@ struct AppConfig {
     double offset_y = 0.0;
     bool enable_anomaly_detection = false;
     std::string encryption_key = "";
+
+    // Integration States
+    bool gpu_enabled = false;
+    bool tpu_enabled = false;
+    bool distributed_mode = false;
+    bool hardware_eeg_connected = false;
+    bool haptic_feedback_active = false;
+    bool vr_streaming_active = false;
 };
 
 // Loads configuration from a file, applying defaults if the file is not found

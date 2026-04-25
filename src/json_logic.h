@@ -26,7 +26,7 @@ struct BrainFrame {
 
 std::vector<BrainFrame> parseBrainActivityJSON(const std::string& json);
 bool validateBrainActivityJSON(const std::string& json);
-std::string internString(const std::string& s);
+const std::string& internString(const std::string& s);
 std::vector<BrainFrame> parseBrainActivityXML(const std::string& xml);
 std::vector<BrainFrame> parseBrainActivityYAML(const std::string& yaml);
 std::vector<BrainFrame> parseBrainActivityCSV(const std::string& csv);
