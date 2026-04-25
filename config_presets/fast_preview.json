@@ -1,0 +1,10 @@
+{
+    "simulation": {
+        "enable_color": false,
+        "smoothing_window_size": 1,
+        "layout_mode": "list",
+        "theme": "monochrome",
+        "intensity_map": "default",
+        "zoom": 1.0
+    }
+}
