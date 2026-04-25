@@ -1,6 +1,8 @@
 #include "../src/analytics.h"
 #include "../src/ai.h"
 #include "test_harness.h"
+#include <sstream>
+#include <cmath>
 
 void test_forecasting_logic_check() {
     std::vector<BrainFrame> fs = {{0,{{"R",0.1}}}, {10,{{"R",0.2}}}};

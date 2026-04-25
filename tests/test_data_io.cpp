@@ -1,4 +1,5 @@
 #include "../src/json_logic.h"
+#include "../src/config.h"
 #include "test_harness.h"
 #include <fstream>
 #include <filesystem>

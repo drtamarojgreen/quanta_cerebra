@@ -1,5 +1,6 @@
 #include "../src/cloud.h"
 #include "test_harness.h"
+#include <filesystem>
 
 void test_s3_sync_logic() {
     CloudSystem::syncToS3("x","d");

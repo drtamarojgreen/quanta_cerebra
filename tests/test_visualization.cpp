@@ -2,6 +2,7 @@
 #include "../src/exporters.h"
 #include "test_harness.h"
 #include <filesystem>
+#include <sstream>
 
 void test_color_output() {
     ASSERT_TRUE(!intensityToColor(0.5, "ocean").empty(), "Color string empty");

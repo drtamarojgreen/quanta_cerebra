@@ -1,5 +1,6 @@
 #include "../src/config.h"
 #include "test_harness.h"
+#include <filesystem>
 
 void test_windows_port_logic() {
     bool win_compat = true;

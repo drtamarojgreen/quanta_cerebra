@@ -1,6 +1,7 @@
 #include "../src/ai.h"
 #include "../src/video_logic.h"
 #include "test_harness.h"
+#include <sstream>
 
 void test_color_palette_algo() { ASSERT_TRUE(!intensityToColor(0.5,"dynamic").empty(), "Algorithmic color empty"); }
 void test_ascii_shader_blur() {
@@ -22,7 +23,8 @@ void test_pattern_style_transfer() {
 }
 void test_particle_render() {
     std::ostringstream oss;
-    renderParticles(oss,{{0,{{"R",0.9}}}});
+    BrainFrame f; f.timestamp_ms = 0; f.regions = {{"R", 0.9}};
+    renderParticles(oss, f);
     ASSERT_TRUE(oss.str().find("*")!=std::string::npos, "Particle renderer empty");
 }
 void test_dithering_technique() { ASSERT_TRUE(!intensityToSymbol(0.5,"dither").empty(), "Dither mapping empty"); }
