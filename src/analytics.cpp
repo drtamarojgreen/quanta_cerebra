@@ -65,7 +65,7 @@ void performPCA(const std::vector<std::vector<double>>& data, std::vector<double
 
 double calculateGrangerCausality(const std::vector<double>& x, const std::vector<double>& y) {
     if(x.size() < 10 || x.size() != y.size()) return 0.0;
-    double sXX = 0, sX_prevX = 0, sX_prevX_prev = 0;
+    double sX_prevX = 0, sX_prevX_prev = 0;
     size_t n = x.size();
     for(size_t i=1; i<n; i++) {
         sX_prevX += x[i-1] * x[i-1];
