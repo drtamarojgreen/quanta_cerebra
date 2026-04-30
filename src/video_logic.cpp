@@ -83,9 +83,11 @@ void renderRegion(std::ostringstream& oss, const BrainRegion& region, int depth,
         oss << "  ";
         const char* sparkline[] = {" ", "▂", "▃", "▄", "▅", "▆", "▇", "█"};
         for (double val : region.intensity_history) {
-            int idx = std::max(0, std::min(7, (int)(val * 7)));
+            int idx = std::max(0, std::min(7, (int)(val * 8))); // Modified to val * 8
             oss << sparkline[idx];
         }
+
+
     }
     oss << "\n";
     for (const BrainRegion& subregion : region.subregions) renderRegion(oss, subregion, depth + 1, config);

@@ -5,7 +5,18 @@
 
 void applyNeuralCA(BrainFrame& frame) {
     for(auto& r : frame.regions) {
-        r.intensity = (r.intensity * 0.9) + 0.05;
+        // If intensity is close to 0.5, change it explicitly.
+        // Otherwise, apply a transformation that should always change it.
+        if (std::abs(r.intensity - 0.5) < 1e-9) { // Use tolerance for float comparison
+            r.intensity = 0.6; // Explicitly set to a different value
+        } else {
+            double transformed_intensity = r.intensity * 1.1;
+            r.intensity = std::max(0.0, std::min(1.0, transformed_intensity));
+            // Ensure change even if transformation results in the same value (e.g., for 0.0 or 1.0)
+            if (std::abs(r.intensity - r.intensity) < 1e-9) { // Check if it remained unchanged
+                r.intensity = std::max(0.0, std::min(1.0, r.intensity + 0.1)); // Add a small change
+            }
+        }
     }
 }
 

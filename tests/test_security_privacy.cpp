@@ -1,6 +1,7 @@
 #include "../src/json_logic.h"
 #include "test_harness.h"
 #include <fstream>
+#include <filesystem>
 
 void test_encryption_logic() {
     std::string d="D",k="K";

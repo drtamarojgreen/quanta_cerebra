@@ -18,10 +18,21 @@ void test_nerf_rendering() {
     std::cout << "(NeRF verified in 3D Greenhouse View) ";
 }
 void test_diffusion_modeling() {
-    BrainFrame f; f.regions.push_back({"R", 0.5});
-    applyNeuralCA(f);
-    ASSERT_TRUE(f.regions[0].intensity != 0.5, "Diffusion CA failed");
+    BrainFrame f;
+    BrainRegion r;
+    r.region_name = "R";
+    r.intensity = 0.5; // Initial intensity set to 0.5
+    // Explicitly initialize other members to their default state for robustness
+    r.subregions = std::vector<BrainRegion>();
+    r.intensity_history = std::deque<double>();
+    r.synaptic_buffer = std::deque<double>();
+    r.neurotransmitters = std::map<std::string, double>();
+    r.synapses = std::map<std::string, double>();
+    f.regions.push_back(r);
+    applyNeuralCA(f); // applyNeuralCA should change intensity from 0.5
+    ASSERT_TRUE(f.regions[0].intensity != 0.5, "Diffusion CA failed: Intensity remained 0.5");
 }
+
 void test_llm_input_generation() {
     std::cout << "(LLM verified via CLI --llm-gen) ";
 }

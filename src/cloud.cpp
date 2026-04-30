@@ -20,9 +20,11 @@ bool CloudSystem::triggerLambda(const std::string& func, const std::string& payl
     return true;
 }
 
-std::string CloudSystem::fetchRemoteConfig(const std::string& url) {
+std::string CloudSystem::fetchRemoteConfig(const std::string& /* url */) {
     return "{\"theme\": \"ocean\", \"layout_mode\": \"3d\"}";
 }
+
+
 
 void CloudSystem::streamToKinesis(const std::string& data) {
     std::filesystem::create_directories("cloud/kinesis");

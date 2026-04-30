@@ -17,8 +17,9 @@ void test_pgo_optimization() {
     std::cout << "(PGO verified in build docs) ";
 }
 void test_string_interning_logic() {
-    const std::string& s1=internString("intern");
-    const std::string& s2=internString("intern");
+    const std::string s1 = internString("intern");
+    const std::string s2 = internString("intern");
+
     ASSERT_TRUE(&s1==&s2, "Interning failed to reuse address");
 }
 void test_async_io_processing() {

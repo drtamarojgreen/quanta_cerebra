@@ -126,7 +126,7 @@ void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& config)
     }
 }
 
-void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& /* config */) {
     std::ofstream ofs("brain.gif", std::ios::binary);
     if (!ofs.is_open()) return;
     ofs.write("GIF89a", 6);

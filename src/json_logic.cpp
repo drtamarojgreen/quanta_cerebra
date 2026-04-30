@@ -375,15 +375,16 @@ void qc_process_frame(void* handle, const char* json_data) {
     }
 }
 
-const char* qc_get_state(void* handle) {
+const char* qc_get_state(void* /* handle */) {
     // Enhancement 159: Simulation State API
     return "{\"status\": \"active\"}";
 }
 
-const char* qc_render_headless(void* handle, const char* json_data) {
+const char* qc_render_headless(void* /* handle */, const char* /* json_data */) {
     // Enhancement 158: Headless Rendering API
     return "RENDER_OK";
 }
+
 
 void qc_cleanup(void* handle) {
     if (handle) delete (AppConfig*)handle;

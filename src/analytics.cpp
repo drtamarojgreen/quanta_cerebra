@@ -118,7 +118,10 @@ void performClustering(const std::vector<BrainRegion>& regions) {
             if(std::abs(r.intensity-m1) < std::abs(r.intensity-m2)) { s1 += r.intensity; c1++; }
             else { s2 += r.intensity; c2++; }
         }
-        if(c1) m1 = s1/c1; if(c2) m2 = s2/c2;
+        if(c1) m1 = s1/c1;
+        if(c2) m2 = s2/c2;
+
+
     }
 }
 

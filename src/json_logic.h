@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 #include <deque>
-#include <map>
+#include <map> // Added missing include for std::map
 
 struct BrainRegion {
-    std::string region_name;
-    double intensity;
+    std::string region_name = ""; // Added default initializer
+    double intensity = 0.0;       // Added default initializer
     std::vector<BrainRegion> subregions;
     std::deque<double> intensity_history;
     std::deque<double> synaptic_buffer;
@@ -15,7 +15,7 @@ struct BrainRegion {
     std::map<std::string, double> neurotransmitters;
     double plasticity_factor = 1.0;
     double x = 0.0, y = 0.0, z = 0.0;
-    std::map<std::string, double> synapses; // Hebbian connections (71)
+    std::map<std::string, double> synapses;
     double bold_signal = 0.0; // Simulated BOLD signal (75)
 };
 
@@ -48,11 +48,11 @@ public:
 extern "C" {
     void* qc_init_simulation(const char* config_path);
     void qc_process_frame(void* handle, const char* json_data);
-    const char* qc_get_state(void* handle);
-    const char* qc_render_headless(void* handle, const char* json_data);
+    const char* qc_get_state(void* /* handle */);
+    const char* qc_render_headless(void* /* handle */, const char* /* json_data */);
     void qc_cleanup(void* handle);
 }
 
 std::string trim(const std::string& s);
 
-#endif
+#endif // JSON_LOGIC_H

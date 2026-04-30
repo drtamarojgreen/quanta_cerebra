@@ -26,7 +26,14 @@ void test_grayscale_block_map() {
     ASSERT_TRUE(intensityToSymbol(0.9, "grayscale") == "█", "Grayscale 0.9 should be full block");
 }
 void test_sparkline_generation() {
-    BrainRegion r; r.intensity_history={0.1, 0.9};
+    BrainRegion r;
+    r.region_name = "SparkRegion";
+    r.intensity = 0.5; // Default intensity
+    r.intensity_history={0.1, 0.9};
+    r.subregions = std::vector<BrainRegion>();
+    r.synaptic_buffer = std::deque<double>();
+    r.neurotransmitters = std::map<std::string, double>();
+    r.synapses = std::map<std::string, double>();
     std::ostringstream oss; AppConfig c;
     renderRegion(oss, r, 0, c);
     ASSERT_TRUE(oss.str().find("█") != std::string::npos, "Sparkline missing peak");
