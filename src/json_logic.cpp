@@ -287,10 +287,10 @@ std::vector<BrainFrame> getBrainStateTemplate(const std::string& state_name) {
     BrainFrame frame;
     frame.timestamp_ms = 0;
     if (state_name == "focused") {
-        frame.regions.push_back({"Prefrontal Cortex", 0.9});
-        frame.regions.push_back({"Amygdala", 0.1});
+        frame.regions.push_back(BrainRegion("Prefrontal Cortex", 0.9));
+        frame.regions.push_back(BrainRegion("Amygdala", 0.1));
     } else if (state_name == "relaxed") {
-        frame.regions.push_back({"Default Mode Network", 0.8});
+        frame.regions.push_back(BrainRegion("Default Mode Network", 0.8));
     }
     frames.push_back(frame);
     return frames;

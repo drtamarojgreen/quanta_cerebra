@@ -6,6 +6,9 @@
 #include <map> // Added missing include for std::map
 
 struct BrainRegion {
+    BrainRegion() = default;
+    BrainRegion(std::string name, double intens) : region_name(name), intensity(intens) {}
+
     std::string region_name = ""; // Added default initializer
     double intensity = 0.0;       // Added default initializer
     std::vector<BrainRegion> subregions;

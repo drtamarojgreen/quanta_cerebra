@@ -5,7 +5,7 @@
 #include <cmath>
 
 void test_forecasting_logic_check() {
-    std::vector<BrainFrame> fs = {{0,{{"R",0.1}}}, {10,{{"R",0.2}}}};
+    std::vector<BrainFrame> fs = {{0,{BrainRegion("R",0.1)}}, {10,{BrainRegion("R",0.2)}}};
     applyPredictiveModeling(fs);
     ASSERT_EQ(fs.size(), 3, "Prediction failed");
 }

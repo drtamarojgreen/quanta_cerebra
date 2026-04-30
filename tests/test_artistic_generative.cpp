@@ -44,8 +44,6 @@ void test_particle_render() {
 void test_dithering_technique() { ASSERT_TRUE(!intensityToSymbol(0.5,"dither").empty(), "Dither mapping empty"); }
 void test_sonification_profiles() { std::cout << "(Sonify verified) "; }
 
-void test_sonification_profiles() { std::cout << "(Sonify verified) "; }
-
 int main() {
     std::cout << "Tests: Artistic\n";
     run_test("Palettes", test_color_palette_algo);

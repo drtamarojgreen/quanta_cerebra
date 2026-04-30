@@ -59,7 +59,7 @@ std::string exportToSVG(const std::vector<BrainFrame>& frames) {
     return oss.str();
 }
 
-void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& /*config*/) {
     int w = 256, h = 256;
     for (size_t fIdx = 0; fIdx < frames.size(); ++fIdx) {
         std::string filename = "frame_" + std::to_string(fIdx) + ".png";
@@ -95,7 +95,7 @@ void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& config)
     }
 }
 
-void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& config) {
+void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& /*config*/) {
     int w = 256, h = 256;
     int frameIdx = 0;
     for (const auto& f : frames) {
