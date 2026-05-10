@@ -1,0 +1,2 @@
+required_methods=applyStyleTransfer,generateProceduralPattern,generatePoeticDescription,applyStyleGAN,applyVideoDiffusion,render3DCortexNeRF
+required_files=src/ai/ai.cpp,src/ai/ai.h

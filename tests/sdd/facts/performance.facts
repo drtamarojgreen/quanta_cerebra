@@ -1,0 +1,2 @@
+required_methods=useMemoryPool,internStrings,useLookupTable,enableMultithreading,enableSIMDOptimizations,enablePGO,enableAsyncIO,useCacheFriendlyStructures,precomputeVisualization,optimizeJSONParser
+required_files=src/core/json_logic.cpp,src/core/json_logic.h

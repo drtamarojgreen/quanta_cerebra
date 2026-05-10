@@ -1,0 +1,2 @@
+required_methods=calculatePCA,calculateFFT,calculateEntropy,calculateCrossCorrelation,calculateConnectivityMatrix,applyClustering,generateStatisticsSummary,detectEvents
+required_files=src/analytics/analytics.cpp,src/analytics/analytics.h

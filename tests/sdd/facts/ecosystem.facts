@@ -1,0 +1,2 @@
+required_methods=qc_init_simulation,qc_process_frame
+required_files=src/core/json_logic.h,src/cloud/cloud.h

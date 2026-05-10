@@ -1,0 +1,2 @@
+required_methods=toggleVerboseMode,toggleQuietMode,displayProgressBar,setTheme,handleMouseClick
+required_files=src/ui/ui_controller.cpp,src/ui/ui_controller.h

@@ -1,0 +1,2 @@
+required_methods=encryptData,authenticateVault,validateInputSchema
+required_files=src/core/json_logic.cpp,src/cloud/cloud.cpp

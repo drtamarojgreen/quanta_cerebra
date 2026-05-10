@@ -1,0 +1,2 @@
+required_methods=validateBrainActivityJSON,validateInputSchema
+required_files=src/core/json_logic.cpp,src/core/json_logic.h

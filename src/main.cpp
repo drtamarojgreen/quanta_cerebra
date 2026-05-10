@@ -21,13 +21,13 @@
 #include <netinet/in.h>
 #endif
 
-#include "json_logic.h"
-#include "video_logic.h"
-#include "analytics.h"
-#include "exporters.h"
-#include "ai.h"
-#include "cloud.h"
-#include "config.h"
+#include "core/json_logic.h"
+#include "visualization/video_logic.h"
+#include "analytics/analytics.h"
+#include "ui/ui_controller.h"
+#include "ai/ai.h"
+#include "cloud/cloud.h"
+#include "io/config.h"
 #include "i18n.h"
 #include "plugins.h"
 
@@ -56,9 +56,7 @@ void startAPIServer(int port, bool dashboard = false) {
             }
         }
     }).detach();
-#else
-    (void)port; (void)dashboard;
-#endif
+    // API Server not supported on Windows in this implementation
 }
 
 bool kbhit() {

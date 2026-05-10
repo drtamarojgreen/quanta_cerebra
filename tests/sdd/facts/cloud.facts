@@ -1,0 +1,2 @@
+required_methods=syncToS3,triggerLambda,fetchRemoteConfig,streamToKinesis,publishToQueue,authenticateVault,broadcast
+required_files=src/cloud/cloud.cpp,src/cloud/cloud.h

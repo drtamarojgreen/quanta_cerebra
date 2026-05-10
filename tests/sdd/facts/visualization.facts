@@ -1,0 +1,2 @@
+required_methods=intensityToColor,intensityToChar,intensityToSymbol,generateFrames,renderParticles,renderLargeText,applyASCIIShader,renderRegion
+required_files=src/visualization/video_logic.cpp,src/visualization/video_logic.h

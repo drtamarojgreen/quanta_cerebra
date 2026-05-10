@@ -1,0 +1,2 @@
+required_methods=broadcast,publishToQueue
+required_files=src/cloud/cloud.cpp,src/cloud/cloud.h

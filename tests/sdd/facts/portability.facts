@@ -1,0 +1,2 @@
+required_methods=parseBrainActivityJSON,parseBrainActivityXML,parseBrainActivityYAML,parseBrainActivityCSV
+required_files=src/core/json_logic.cpp,src/core/json_logic.h
