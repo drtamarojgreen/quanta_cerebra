@@ -1,4 +1,5 @@
 #include "ui_controller.h"
+#include "core/json_logic.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -81,38 +82,29 @@ void MenuManager::renderMenu() {
     std::cout << "\033[2J\033[H"; // Clear screen and move cursor to top-left
     std::cout << "=============================" << std::endl;
     std::cout << "     QuantaCerebra CLI" << std::endl;
-    std::cout << "=============================
-" << std::endl;
+    std::cout << "=============================\n" << std::endl;
 
     switch(current_state) {
-        case MenuState::STARTUP_MENU: std::cout << "Welcome! Please choose an option:
-"; break;
-        case MenuState::MAIN_MENU: std::cout << "Main Menu:
-"; break;
-        case MenuState::LOAD_FILE: std::cout << "Load Data File:
-"; break;
-        case MenuState::RUN_TESTS: std::cout << "Running Tests...
-"; break;
-        case MenuState::CONFIG_VIEW: std::cout << "Settings:
-"; break;
-        case MenuState::RUN_SIMULATION: std::cout << "Starting Simulation...
-"; break;
+        case MenuState::STARTUP_MENU: std::cout << "Welcome! Please choose an option:\n"; break;
+        case MenuState::MAIN_MENU: std::cout << "Main Menu:\n"; break;
+        case MenuState::LOAD_FILE: std::cout << "Load Data File:\n"; break;
+        case MenuState::RUN_TESTS: std::cout << "Running Tests...\n"; break;
+        case MenuState::CONFIG_VIEW: std::cout << "Settings:\n"; break;
+        case MenuState::RUN_SIMULATION: std::cout << "Starting Simulation...\n"; break;
         case MenuState::QUIT: break;
     }
 
     for (const auto& item : current_menu_items) {
         std::cout << "  " << item.shortcut << ") " << item.description << std::endl;
     }
-    std::cout << "
-Enter your choice: ";
+    std::cout << "\nEnter your choice: ";
 }
 
 void MenuManager::handleInput() {
     char choice;
     std::cin >> choice;
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '
-');
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     bool valid_choice = false;
     for (const auto& item : current_menu_items) {
@@ -124,8 +116,7 @@ void MenuManager::handleInput() {
     }
 
     if (!valid_choice) {
-        std::cout << "Invalid choice. Please try again.
-";
+        std::cout << "Invalid choice. Please try again.\n";
     }
 }
 
