@@ -12,6 +12,7 @@ void test_config_parsing_ext() {
     ofs.close();
 
     AppConfig config = loadConfigJSON("test_config_ext.json");
+    std::remove("test_config_ext.json");
     ASSERT_TRUE(config.multithreading_enabled == true, "Multithreading flag mismatch");
     ASSERT_TRUE(config.simd_enabled == false, "SIMD flag mismatch");
     ASSERT_TRUE(config.verbose_mode == true, "Verbose flag mismatch");

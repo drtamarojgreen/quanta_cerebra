@@ -50,12 +50,16 @@ void test_dynamic_bar_scaling() {
 void test_png_export_logic() {
     BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; exportToPNG({f}, c);
-    ASSERT_TRUE(std::filesystem::exists("frame_0.png"), "PNG file not generated");
+    bool exists = std::filesystem::exists("frame_0.png");
+    if (exists) std::filesystem::remove("frame_0.png");
+    ASSERT_TRUE(exists, "PNG file not generated");
 }
 void test_gif_export_logic() {
     BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; exportToGIF({f}, c);
-    ASSERT_TRUE(std::filesystem::exists("brain.gif"), "GIF file not generated");
+    bool exists = std::filesystem::exists("brain.gif");
+    if (exists) std::filesystem::remove("brain.gif");
+    ASSERT_TRUE(exists, "GIF file not generated");
 }
 void test_vsync_logic() {
     auto start = std::chrono::steady_clock::now();
