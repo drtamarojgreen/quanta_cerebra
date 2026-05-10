@@ -7,6 +7,7 @@
 
 void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
     if (frames.size() < 2 || window_size < 2) return;
+    std::vector<BrainFrame> original = frames;
     for (size_t i = 0; i < frames.size(); ++i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
             double sum = 0;
@@ -14,7 +15,7 @@ void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
             for (int j = -(window_size / 2); j <= (window_size / 2); ++j) {
                 int idx = (int)i + j;
                 if (idx >= 0 && idx < (int)frames.size()) {
-                    sum += frames[idx].regions[r].intensity;
+                    sum += original[idx].regions[r].intensity;
                     count++;
                 }
             }
@@ -84,6 +85,10 @@ void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std
 void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
+            if (r.neurotransmitters.empty()) {
+                r.neurotransmitters["Glutamate"] = 0.1;
+                r.neurotransmitters["GABA"] = 0.05;
+            }
             double glutamate = r.neurotransmitters["Glutamate"];
             double gaba = r.neurotransmitters["GABA"];
             r.intensity *= (1.0 + glutamate - gaba);
@@ -97,6 +102,8 @@ void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
             if (frames[i].regions[r].intensity > threshold && frames[i-1].regions[r].intensity > threshold) {
                 frames[i].regions[r].plasticity_factor += increment;
+            } else {
+                // If it's the first frame, we don't have a previous one to check, but this loop starts at i=1
             }
             frames[i].regions[r].intensity *= frames[i].regions[r].plasticity_factor;
             frames[i].regions[r].intensity = std::max(0.0, std::min(1.0, frames[i].regions[r].intensity));

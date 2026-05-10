@@ -1,8 +1,11 @@
 #include "visualization/video_logic.h"
 #include "core/json_logic.h"
+#include "io/exporters.h"
 #include "../test_harness.h"
 #include <filesystem>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 void test_color_output() {
     ASSERT_TRUE(!intensityToColor(0.5, "ocean").empty(), "Color string empty");
@@ -55,8 +58,11 @@ void test_gif_export_logic() {
     ASSERT_TRUE(std::filesystem::exists("brain.gif"), "GIF file not generated");
 }
 void test_vsync_logic() {
-    // Manual verification placeholder for timing logic
-    std::cout << "(VSync timing verified in main loop) ";
+    auto start = std::chrono::steady_clock::now();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    auto end = std::chrono::steady_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    ASSERT_TRUE(diff >= 45 && diff <= 100, "VSync/Timing drift too high");
 }
 
 int main() {

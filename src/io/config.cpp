@@ -8,7 +8,10 @@
 
 // Helper function to trim whitespace from the start and end of a string
 static std::string trim_string(const std::string& s) {
-    return trim(s);
+    auto start = s.find_first_not_of(" \t\r\n");
+    if (start == std::string::npos) return "";
+    auto end = s.find_last_not_of(" \t\r\n");
+    return s.substr(start, end - start + 1);
 }
 
 // Implementation of the configuration loader
@@ -135,6 +138,11 @@ AppConfig loadConfigJSON(const std::string& filename) {
     parse_double("zoom", config.zoom);
     parse_bool("enable_anomaly_detection", config.enable_anomaly_detection);
     parse_string("encryption_key", config.encryption_key);
+
+    parse_bool("multithreading_enabled", config.multithreading_enabled);
+    parse_bool("simd_enabled", config.simd_enabled);
+    parse_bool("async_io_enabled", config.async_io_enabled);
+    parse_bool("verbose_mode", config.verbose_mode);
 
     return config;
 }

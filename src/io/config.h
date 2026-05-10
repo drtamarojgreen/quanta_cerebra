@@ -31,6 +31,12 @@ struct AppConfig {
     bool hardware_eeg_connected = false;
     bool haptic_feedback_active = false;
     bool vr_streaming_active = false;
+
+    // Performance and UX flags
+    bool multithreading_enabled = false;
+    bool simd_enabled = false;
+    bool async_io_enabled = false;
+    bool verbose_mode = false;
 };
 
 // Loads configuration from a file, applying defaults if the file is not found
