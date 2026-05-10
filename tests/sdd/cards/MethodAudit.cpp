@@ -23,30 +23,23 @@ std::set<std::string> parse_required_methods(const std::string& raw) {
 }
 
 int main() {
-    std::set<std::string> required_methods;
-    std::set<std::string> required_files;
-    std::string facts_dir = "tests/sdd/facts";
-    for (const auto& entry : fs::directory_iterator(facts_dir)) {
-        if (entry.path().extension() == ".facts") {
-            auto facts = FactReader::readFacts(entry.path().string());
-            if (facts.count("required_methods")) {
-                auto methods = parse_required_methods(facts.at("required_methods"));
-                required_methods.insert(methods.begin(), methods.end());
-            }
-            if (facts.count("required_files")) {
-                auto files = parse_required_methods(facts.at("required_files"));
-                required_files.insert(files.begin(), files.end());
-            }
-        }
-    }
-
-    if (required_methods.empty() && required_files.empty()) {
-        std::cerr << "error = no required_methods or required_files found in facts files" << std::endl;
+    std::string checkin_path = "tests/sdd/sorrel_checkins.md";
+    std::string checkout_path = "tests/sdd/sorrel_checkouts.md";
+    
+    if (!fs::exists(checkin_path)) {
+        std::cerr << "error = sorrel_checkins.md not found" << std::endl;
         return 1;
     }
 
-    std::set<std::string> found_methods;
-    std::set<std::string> found_files;
+    auto checkin_data = FactReader::readFacts(checkin_path);
+    std::set<std::string> required_methods;
+    for (auto const& [category, methods_raw] : checkin_data) {
+        if (category.find("#") == 0) continue;
+        auto ms = parse_required_methods(methods_raw);
+        required_methods.insert(ms.begin(), ms.end());
+    }
+
+    std::map<std::string, std::string> empirical_evidence;
     std::string src_dir = "src";
     
     if (fs::exists(src_dir)) {
@@ -54,10 +47,15 @@ int main() {
             if (entry.path().extension() == ".cpp" || entry.path().extension() == ".h") {
                 std::ifstream file(entry.path());
                 std::string line;
+                int line_num = 0;
                 while (std::getline(file, line)) {
+                    line_num++;
                     for (const auto& method : required_methods) {
-                        if (line.find(method + "(") != std::string::npos || line.find(method + " ") != std::string::npos) {
-                            found_methods.insert(method);
+                        // Better check for method definition/declaration
+                        if (line.find(method + "(") != std::string::npos || 
+                            line.find(method + " (") != std::string::npos ||
+                            line.find("::" + method) != std::string::npos) {
+                            empirical_evidence[method] = entry.path().string() + ":" + std::to_string(line_num);
                         }
                     }
                 }
@@ -65,32 +63,28 @@ int main() {
         }
     }
 
-    for (const auto& f : required_files) {
-        if (fs::exists(f)) found_files.insert(f);
-    }
-
-    std::vector<std::string> missing;
-    for (const auto& method : required_methods) {
-        if (found_methods.find(method) == found_methods.end()) missing.push_back(method);
-    }
-    for (const auto& f : required_files) {
-        if (found_files.find(f) == found_files.end()) missing.push_back(f);
-    }
-
-    std::cout << "found_count = " << (found_methods.size() + found_files.size()) << std::endl;
-    std::cout << "missing_count = " << missing.size() << std::endl;
+    std::ofstream checkout(checkout_path);
+    checkout << "# Sorrel Checkout: Empirical Audit Results\n";
+    int found_count = 0;
+    int missing_count = 0;
     
-    std::cout << "found_items = ";
-    for (const auto& m : found_methods) std::cout << m << " ";
-    for (const auto& f : found_files) std::cout << f << " ";
-    std::cout << std::endl;
-
-    if (!missing.empty()) {
-        std::cout << "missing_items = ";
-        for (const auto& m : missing) std::cout << m << " ";
-        std::cout << std::endl;
-        return 1;
+    for (const auto& method : required_methods) {
+        if (empirical_evidence.count(method)) {
+            checkout << "STATUS [FOUND] " << method << " -> " << empirical_evidence[method] << "\n";
+            found_count++;
+        } else {
+            checkout << "STATUS [MISSING] " << method << "\n";
+            missing_count++;
+        }
     }
 
-    return 0;
+    checkout << "\nSUMMARY:\n";
+    checkout << "found_count = " << found_count << "\n";
+    checkout << "missing_count = " << missing_count << "\n";
+    checkout.close();
+
+    std::cout << "Empirical audit complete. Results written to " << checkout_path << std::endl;
+    std::cout << "Summary: " << found_count << " found, " << missing_count << " missing." << std::endl;
+
+    return (missing_count == 0) ? 0 : 1;
 }

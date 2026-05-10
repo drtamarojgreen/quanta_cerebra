@@ -73,14 +73,21 @@ sdd-test: directories $(SDD_BINS)
 run: all
 	./$(TARGET)
 
-help:
-	@echo "Available targets:"
-	@echo "  all      - Build the QuantaCerebra application (default)"
-	@echo "  run      - Build and run the QuantaCerebra application"
-	@echo "  test     - Build and run all unit tests"
-	@echo "  sdd-test - Build and run all SDD tests"
-	@echo "  clean    - Remove all built artifacts"
-	@echo "  help     - Show this help message"
-
 clean:
+	@echo "Cleaning up build artifacts and temporary files..."
 	rm -rf $(BUILD_DIR)
+	rm -rf cloud/
+	rm -rf config_presets/
+	rm -f *.mid *.png *.bmp *.gif *.bin debug.log tj.json
+	@echo "Clean complete."
+
+help:
+	@echo "================================================="
+	@echo " QuantaCerebra Build System"
+	@echo "================================================="
+	@echo "  all      : Build the application"
+	@echo "  run      : Build and run the CLI"
+	@echo "  test     : Run functional unit tests"
+	@echo "  sdd-test : Run empirical SDD audits"
+	@echo "  clean    : Purge all binaries and temp data"
+	@echo "================================================="

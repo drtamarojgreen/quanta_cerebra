@@ -2,6 +2,8 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include <ctime>
+#include <cstdlib>
 
 void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
     if (frames.size() < 2 || window_size < 2) return;
@@ -58,9 +60,11 @@ void applyRefractoryPeriodLogic(std::vector<BrainFrame>& frames, int period_ms) 
 }
 
 void applyStochasticModeling(std::vector<BrainFrame>& frames, double noise_amplitude) {
+    static bool seeded = false;
+    if (!seeded) { std::srand(std::time(nullptr)); seeded = true; }
     for (auto& f : frames) {
         for (auto& r : f.regions) {
-            double noise = ((double)rand() / RAND_MAX * 2.0 - 1.0) * noise_amplitude;
+            double noise = ((double)std::rand() / RAND_MAX * 2.0 - 1.0) * noise_amplitude;
             r.intensity = std::max(0.0, std::min(1.0, r.intensity + noise));
         }
     }
@@ -72,6 +76,7 @@ void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std
             if (transform == "square") r.intensity = r.intensity * r.intensity;
             else if (transform == "sqrt") r.intensity = std::sqrt(r.intensity);
             else if (transform == "sin") r.intensity = (std::sin(r.intensity * M_PI) + 1.0) / 2.0;
+            else if (transform == "exp") r.intensity = (std::exp(r.intensity) - 1.0) / (M_E - 1.0);
         }
     }
 }
@@ -79,16 +84,51 @@ void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std
 void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
-            if (r.intensity > 0.5) r.neurotransmitters["Glutamate"] += 0.1;
-            else r.neurotransmitters["GABA"] += 0.1;
+            double glutamate = r.neurotransmitters["Glutamate"];
+            double gaba = r.neurotransmitters["GABA"];
+            r.intensity *= (1.0 + glutamate - gaba);
+            r.intensity = std::max(0.0, std::min(1.0, r.intensity));
         }
     }
 }
 
 void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold, double increment) {
+    for (size_t i = 1; i < frames.size(); ++i) {
+        for (size_t r = 0; r < frames[i].regions.size(); ++r) {
+            if (frames[i].regions[r].intensity > threshold && frames[i-1].regions[r].intensity > threshold) {
+                frames[i].regions[r].plasticity_factor += increment;
+            }
+            frames[i].regions[r].intensity *= frames[i].regions[r].plasticity_factor;
+            frames[i].regions[r].intensity = std::max(0.0, std::min(1.0, frames[i].regions[r].intensity));
+        }
+    }
+}
+
+std::vector<BrainFrame> getBrainStateTemplate(const std::string& state) {
+    std::vector<BrainFrame> frames(10);
+    for (int i = 0; i < 10; ++i) {
+        frames[i].timestamp_ms = i * 100;
+        if (state == "focused") {
+            frames[i].regions.push_back(BrainRegion("Prefrontal Cortex", 0.9));
+            frames[i].regions.push_back(BrainRegion("Parietal Lobe", 0.4));
+        } else if (state == "relaxed") {
+            frames[i].regions.push_back(BrainRegion("Prefrontal Cortex", 0.2));
+            frames[i].regions.push_back(BrainRegion("Occipital Lobe", 0.8));
+        } else {
+            frames[i].regions.push_back(BrainRegion("Default", 0.5));
+        }
+    }
+    return frames;
+}
+
+void processHierarchicalRegions(std::vector<BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
-            if (r.intensity > threshold) r.plasticity_factor += increment;
+            if (!r.subregions.empty()) {
+                double avg = 0;
+                for (const auto& sr : r.subregions) avg += sr.intensity;
+                r.intensity = avg / r.subregions.size();
+            }
         }
     }
 }

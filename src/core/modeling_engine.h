@@ -13,5 +13,7 @@ void applyStochasticModeling(std::vector<BrainFrame>& frames, double noise_ampli
 void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std::string& transform);
 void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames);
 void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold, double increment);
+std::vector<BrainFrame> getBrainStateTemplate(const std::string& state);
+void processHierarchicalRegions(std::vector<BrainFrame>& frames);
 
 #endif
