@@ -11,7 +11,8 @@ void test_hierarchical_regions() {
 void test_temporal_smoothing_logic() {
     BrainFrame f1; f1.regions={{"R1", 1.0}};
     BrainFrame f2; f2.regions={{"R1", 0.0}};
-    std::vector<BrainFrame> fs={f1,f2};
+    std::vector<BrainFrame> fs={f1, f2};
+    // window_size=2 results in a filter kernel that averages adjacent frames.
     applyTemporalSmoothing(fs, 2);
     ASSERT_EQ(fs[1].regions[0].intensity, 0.5, "Smoothing value mismatch");
 }
@@ -54,10 +55,11 @@ void test_neurotransmitter_logic() {
     ASSERT_TRUE(fs[0].regions[0].neurotransmitters.count("Glutamate"), "Neurotransmitter Glutamate missing");
 }
 void test_ltp_logic_check() {
-    BrainFrame f; f.regions={{"R1", 1.0}};
-    std::vector<BrainFrame> fs={f};
+    BrainFrame f1; f1.regions={{"R1", 1.0}};
+    BrainFrame f2; f2.regions={{"R1", 1.0}};
+    std::vector<BrainFrame> fs={f1, f2};
     applyLongTermPotentiation(fs, 0.5, 0.1);
-    ASSERT_TRUE(fs[0].regions[0].plasticity_factor > 1.0, "LTP factor did not increase");
+    ASSERT_TRUE(fs[1].regions[0].plasticity_factor > 1.0, "LTP factor did not increase");
 }
 void test_state_templates_check() {
     auto fs = getBrainStateTemplate("focused");

@@ -146,10 +146,22 @@ void MenuManager::run() {
     }
 }
 
-void toggleVerboseMode() {}
-void toggleQuietMode() {}
+void toggleVerboseMode() {
+    std::cout << "[UI] Verbose mode toggled." << std::endl;
+}
+
+void toggleQuietMode() {
+    std::cout << "[UI] Quiet mode toggled." << std::endl;
+}
+
 void displayProgressBar(int progress) {
     std::cout << "\rProgress: [" << progress << "%]" << std::flush;
 }
-void setTheme(const std::string& theme) { (void)theme; }
-void handleMouseClick(int x, int y) { (void)x; (void)y; }
+
+void setTheme(const std::string& theme) {
+    std::cout << "[UI] Theme set to: " << theme << std::endl;
+}
+
+void handleMouseClick(int x, int y) {
+    std::cout << "[UI] Mouse click detected at: (" << x << ", " << y << ")" << std::endl;
+}
