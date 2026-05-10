@@ -2,7 +2,7 @@
 #define CLOUD_H
 #include <string>
 #include <vector>
-#include "json_logic.h"
+#include "core/json_logic.h"
 
 // Simulated Cloud/Ecosystem Logic
 class CloudSystem {

@@ -2,8 +2,8 @@
 #define VIDEO_LOGIC_H
 #include <vector>
 #include <string>
-#include "json_logic.h"
-#include "config.h"
+#include "core/json_logic.h"
+#include "io/config.h"
 
 std::string intensityToColor(double intensity, const std::string& theme = "default");
 char intensityToChar(double intensity, const std::string& map_type = "default");

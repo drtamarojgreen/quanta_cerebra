@@ -2,8 +2,8 @@
 #define EXPORTERS_H
 #include <vector>
 #include <string>
-#include "json_logic.h"
-#include "config.h"
+#include "core/json_logic.h"
+#include "io/config.h"
 
 void generateMIDI(const std::vector<BrainFrame>& frames);
 std::string exportToSVG(const std::vector<BrainFrame>& frames);

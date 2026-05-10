@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+std::string trim(const std::string& s);
+
 std::vector<BrainFrame> parseBrainActivityJSON(const std::string& json);
 bool validateBrainActivityJSON(const std::string& json);
 const std::string& internString(const std::string& s);

@@ -1,5 +1,5 @@
-#include "config.h"
-#include "json_logic.h"
+#include "io/config.h"
+#include "core/json_logic.h"
 #include <fstream>
 #include <sstream>
 #include <string>

@@ -2,7 +2,7 @@
 #define AI_H
 #include <vector>
 #include <string>
-#include "json_logic.h"
+#include "core/json_logic.h"
 
 void applyNeuralCA(BrainFrame& frame);
 void applyStyleTransfer(BrainFrame& frame, const BrainFrame& styleSource);

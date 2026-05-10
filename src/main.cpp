@@ -28,8 +28,8 @@
 #include "ai/ai.h"
 #include "cloud/cloud.h"
 #include "io/config.h"
-#include "i18n.h"
-#include "plugins.h"
+#include "ui/i18n.h"
+#include "core/plugins.h"
 
 // CLI and Interactive State
 static bool is_paused = false;
