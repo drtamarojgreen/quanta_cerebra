@@ -1,7 +1,7 @@
 #include "visualization/video_logic.h"
 #include "core/json_logic.h"
 #include "io/config.h"
-#include "ai.h"
+#include "ai/ai.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>

@@ -57,6 +57,7 @@ void startAPIServer(int port, bool dashboard = false) {
         }
     }).detach();
     // API Server not supported on Windows in this implementation
+#endif
 }
 
 bool kbhit() {
