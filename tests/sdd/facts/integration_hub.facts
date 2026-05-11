@@ -1,0 +1,5 @@
+required_methods=parse_frames_by_format,parse_frames_json,parse_frames_yaml,parse_frames_xml,parse_frames_csv,save_simulation_state,load_simulation_state,JsonValue::parse,RegionAtlas::builtin,set_current_atlas
+namespace=bm
+resilience_factor=0.95
+reliability_standard=SO-RR-EL-2026
+integrated=true

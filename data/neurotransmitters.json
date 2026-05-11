@@ -1,0 +1,32 @@
+[
+  {
+    "key": "dopamine", "display_name": "Dopamine", "symbol": "DA",
+    "baseline": 0.25, "release_gain": 0.85, "reuptake_rate": 0.22,
+    "metadata": { "class": "monoamine", "role": "reward / motivation" }
+  },
+  {
+    "key": "serotonin", "display_name": "Serotonin", "symbol": "5HT",
+    "baseline": 0.30, "release_gain": 0.55, "reuptake_rate": 0.18,
+    "metadata": { "class": "monoamine", "role": "mood / interoception" }
+  },
+  {
+    "key": "norepinephrine", "display_name": "Norepinephrine", "symbol": "NE",
+    "baseline": 0.20, "release_gain": 0.95, "reuptake_rate": 0.30,
+    "metadata": { "class": "monoamine", "role": "arousal / salience" }
+  },
+  {
+    "key": "acetylcholine", "display_name": "Acetylcholine", "symbol": "ACh",
+    "baseline": 0.22, "release_gain": 0.75, "reuptake_rate": 0.25,
+    "metadata": { "role": "attention / memory encoding" }
+  },
+  {
+    "key": "glutamate", "display_name": "Glutamate", "symbol": "Glu",
+    "baseline": 0.35, "release_gain": 0.90, "reuptake_rate": 0.35,
+    "metadata": { "class": "amino acid", "sign": "excitatory" }
+  },
+  {
+    "key": "gaba", "display_name": "GABA", "symbol": "GABA",
+    "baseline": 0.40, "release_gain": 0.40, "reuptake_rate": 0.20,
+    "metadata": { "class": "amino acid", "sign": "inhibitory" }
+  }
+]

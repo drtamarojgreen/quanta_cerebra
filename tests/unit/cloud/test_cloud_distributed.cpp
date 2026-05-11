@@ -13,7 +13,7 @@ void test_lambda_trigger_logic() {
 }
 void test_dashboard_logic() { std::cout << "[Cloud] Dashboard logic verified." << std::endl; }
 void test_docker_compose_file() { ASSERT_TRUE(std::filesystem::exists("docker-compose.yml"), "Compose file missing"); }
-void test_remote_config_logic() { ASSERT_TRUE(!CloudSystem::fetchRemoteConfig("").empty(), "Remote config mock empty"); }
+void test_remote_config_logic() { ASSERT_TRUE(!CloudSystem::fetchRemoteConfig(").empty(), "Remote config mock empty"); }
 void test_job_queue_logic() {
     CloudSystem::publishToQueue("q","m");
     ASSERT_TRUE(std::filesystem::exists("cloud/queues/q/0.msg"), "Queue local write failed");

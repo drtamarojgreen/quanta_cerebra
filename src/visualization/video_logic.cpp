@@ -50,7 +50,7 @@ std::string intensityToSymbol(double intensity, const std::string& map_type) {
 }
 
 std::string intensityToColor(double intensity, const std::string& theme) {
-    if (theme == "monochrome") return "";
+    if (theme == "monochrome") return ";
     if (theme == "dynamic") {
         int code = 16 + (int)(intensity * 216);
         return "\033[38;5;" + std::to_string(code) + "m";

@@ -10,7 +10,7 @@ struct BrainRegion {
     BrainRegion() = default;
     BrainRegion(std::string name, double intens) : region_name(name), intensity(intens) {}
 
-    std::string region_name = "";
+    std::string region_name = ";
     double intensity = 0.0;
     std::vector<BrainRegion> subregions;
     std::deque<double> intensity_history;

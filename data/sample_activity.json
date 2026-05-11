@@ -1,0 +1,70 @@
+[
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.80 },
+      { "region": "anterior_cingulate_cortex", "intensity": 0.55 },
+      { "region": "amygdala", "intensity": 0.60 },
+      { "region": "insula", "intensity": 0.40 },
+      { "region": "hippocampus", "intensity": 0.35 },
+      { "region": "thalamus", "intensity": 0.50 },
+      { "region": "occipital_lobe", "intensity": 0.90 },
+      { "region": "cuneus", "intensity": 0.70 }
+    ],
+    "timestamp_ms": 0
+  },
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.78 },
+      { "region": "anterior_cingulate_cortex", "intensity": 0.60 },
+      { "region": "amygdala", "intensity": 0.72 },
+      { "region": "insula", "intensity": 0.52 },
+      { "region": "hippocampus", "intensity": 0.40 },
+      { "region": "thalamus", "intensity": 0.58 },
+      { "region": "occipital_lobe", "intensity": 0.80 },
+      { "region": "cuneus", "intensity": 0.62 }
+    ],
+    "timestamp_ms": 100
+  },
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.70 },
+      { "region": "anterior_cingulate_cortex", "intensity": 0.68 },
+      { "region": "amygdala", "intensity": 0.85 },
+      { "region": "insula", "intensity": 0.66 },
+      { "region": "hippocampus", "intensity": 0.50 },
+      { "region": "thalamus", "intensity": 0.70 },
+      { "region": "entorhinal_cortex", "intensity": 0.45 },
+      { "region": "occipital_lobe", "intensity": 0.55 },
+      { "region": "cuneus", "intensity": 0.40 }
+    ],
+    "timestamp_ms": 200
+  },
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.62 },
+      { "region": "anterior_cingulate_cortex", "intensity": 0.72 },
+      { "region": "amygdala", "intensity": 0.78 },
+      { "region": "insula", "intensity": 0.70 },
+      { "region": "hippocampus", "intensity": 0.62 },
+      { "region": "gyrus", "intensity": 0.48 },
+      { "region": "thalamus", "intensity": 0.66 },
+      { "region": "entorhinal_cortex", "intensity": 0.52 },
+      { "region": "occipital_lobe", "intensity": 0.45 }
+    ],
+    "timestamp_ms": 300
+  },
+  {
+    "brain_activity": [
+      { "region": "prefrontal_cortex", "intensity": 0.74 },
+      { "region": "anterior_cingulate_cortex", "intensity": 0.64 },
+      { "region": "amygdala", "intensity": 0.66 },
+      { "region": "insula", "intensity": 0.58 },
+      { "region": "hippocampus", "intensity": 0.55 },
+      { "region": "gyrus", "intensity": 0.40 },
+      { "region": "thalamus", "intensity": 0.60 },
+      { "region": "cuneus", "intensity": 0.50 },
+      { "region": "occipital_lobe", "intensity": 0.60 }
+    ],
+    "timestamp_ms": 400
+  }
+]

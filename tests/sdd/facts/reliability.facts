@@ -1,0 +1,4 @@
+required_methods=check_system_integrity,validate_atlas_schema,verify_resource_bounds,audit_memory_usage
+criticality_level=HIGH
+equipment_learning_standard=SO-RR-EL-2026
+fail_on_warning=true

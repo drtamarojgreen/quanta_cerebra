@@ -1,0 +1,5 @@
+learning_standards=SO-RR-EL-2026,ISO-RES-CEREBRA-01
+required_behaviors=adaptive_data_dispatch,schema_evolution,fault_tolerant_parsing,state_recovery
+resilience_threshold=0.99
+equipment_id=QC-UNIT-01
+adaptive_mode=ACTIVE

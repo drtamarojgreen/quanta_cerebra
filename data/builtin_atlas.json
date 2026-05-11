@@ -1,0 +1,175 @@
+{
+  "_comment": "Built-in atlas for Brain Modeler. This file is embedded into the binary at build time (see cmake/builtin_atlas_data.cpp.in). Edit here, then rebuild; src/atlas.cpp does not duplicate any of these values.",
+
+  "regions": [
+    {
+      "id": "prefrontal_cortex",
+      "display_name": "Prefrontal Cortex",
+      "slice":      { "row": 1,  "col": 6,  "w": 22, "h": 4 },
+      "projection": { "x": 0.00, "y": 0.80, "z": 0.60, "radius": 0.30 },
+      "flows": { "dopamine": 0.7, "norepinephrine": 0.5, "glutamate": 0.6 }
+    },
+    {
+      "id": "anterior_cingulate_cortex",
+      "display_name": "Anterior Cingulate Cortex",
+      "slice":      { "row": 5,  "col": 9,  "w": 16, "h": 3 },
+      "projection": { "x": 0.00, "y": 0.50, "z": 0.45, "radius": 0.20 },
+      "flows": { "dopamine": 0.7, "norepinephrine": 0.5, "glutamate": 0.6 }
+    },
+    {
+      "id": "insula",
+      "display_name": "Insula",
+      "slice":      { "row": 9,  "col": 4,  "w": 8,  "h": 3 },
+      "projection": { "x": -0.55, "y": 0.10, "z": 0.30, "radius": 0.22 },
+      "flows": { "serotonin": 0.6, "norepinephrine": 0.4 }
+    },
+    {
+      "id": "gyrus",
+      "display_name": "Cingulate Gyrus",
+      "slice":      { "row": 9,  "col": 16, "w": 12, "h": 3 },
+      "projection": { "x": 0.30, "y": 0.30, "z": 0.40, "radius": 0.20 },
+      "flows": { "dopamine": 0.4, "serotonin": 0.5 }
+    },
+    {
+      "id": "thalamus",
+      "display_name": "Thalamus",
+      "slice":      { "row": 12, "col": 12, "w": 8,  "h": 3 },
+      "projection": { "x": 0.00, "y": 0.00, "z": 0.00, "radius": 0.18 },
+      "flows": { "glutamate": 0.7, "GABA": 0.5 }
+    },
+    {
+      "id": "amygdala",
+      "display_name": "Amygdala",
+      "slice":      { "row": 15, "col": 6,  "w": 6,  "h": 2 },
+      "projection": { "x": -0.30, "y": -0.40, "z": -0.10, "radius": 0.16 },
+      "flows": { "norepinephrine": 0.9, "glutamate": 0.7, "GABA": 0.4 }
+    },
+    {
+      "id": "hippocampus",
+      "display_name": "Hippocampus",
+      "slice":      { "row": 15, "col": 18, "w": 8,  "h": 2 },
+      "projection": { "x": 0.30, "y": -0.30, "z": -0.20, "radius": 0.22 },
+      "flows": { "acetylcholine": 0.8, "glutamate": 0.6 }
+    },
+    {
+      "id": "entorhinal_cortex",
+      "display_name": "Entorhinal Cortex",
+      "slice":      { "row": 17, "col": 14, "w": 9,  "h": 2 },
+      "projection": { "x": 0.10, "y": -0.45, "z": -0.40, "radius": 0.18 },
+      "flows": { "acetylcholine": 0.8, "glutamate": 0.6 }
+    },
+    {
+      "id": "cuneus",
+      "display_name": "Cuneus",
+      "slice":      { "row": 18, "col": 4,  "w": 7,  "h": 2 },
+      "projection": { "x": -0.20, "y": -0.10, "z": -0.70, "radius": 0.18 },
+      "flows": { "glutamate": 0.7, "acetylcholine": 0.3 }
+    },
+    {
+      "id": "occipital_lobe",
+      "display_name": "Occipital Lobe",
+      "slice":      { "row": 19, "col": 22, "w": 10, "h": 3 },
+      "projection": { "x": 0.20, "y": -0.20, "z": -0.85, "radius": 0.30 },
+      "flows": { "glutamate": 0.7, "acetylcholine": 0.3 }
+    }
+  ],
+
+  "pathways": [
+    {
+      "id": "fear_circuit",
+      "name": "Fear Circuit",
+      "nodes": ["thalamus", "amygdala"],
+      "transmitter": "glutamate",
+      "strength": 0.85
+    },
+    {
+      "id": "papez_circuit",
+      "name": "Papez Circuit",
+      "nodes": ["entorhinal_cortex", "hippocampus", "thalamus", "anterior_cingulate_cortex"],
+      "transmitter": "glutamate",
+      "strength": 0.70,
+      "bidirectional": true
+    },
+    {
+      "id": "salience_network",
+      "name": "Salience Network",
+      "nodes": ["insula", "anterior_cingulate_cortex"],
+      "transmitter": "norepinephrine",
+      "strength": 0.70
+    },
+    {
+      "id": "visual_relay",
+      "name": "Visual Relay",
+      "nodes": ["occipital_lobe", "cuneus", "thalamus"],
+      "transmitter": "glutamate",
+      "strength": 0.60
+    }
+  ],
+
+  "templates": [
+    {
+      "id": "focused",
+      "display_name": "Focused",
+      "regions": {
+        "prefrontal_cortex":         0.90,
+        "anterior_cingulate_cortex": 0.80,
+        "thalamus":                  0.65,
+        "insula":                    0.55,
+        "gyrus":                     0.50,
+        "amygdala":                  0.20,
+        "hippocampus":               0.45,
+        "entorhinal_cortex":         0.40,
+        "cuneus":                    0.30,
+        "occipital_lobe":            0.60
+      }
+    },
+    {
+      "id": "relaxed",
+      "display_name": "Relaxed",
+      "regions": {
+        "prefrontal_cortex":         0.45,
+        "anterior_cingulate_cortex": 0.40,
+        "thalamus":                  0.50,
+        "insula":                    0.35,
+        "gyrus":                     0.40,
+        "amygdala":                  0.15,
+        "hippocampus":               0.55,
+        "entorhinal_cortex":         0.50,
+        "cuneus":                    0.40,
+        "occipital_lobe":            0.50
+      }
+    },
+    {
+      "id": "stressed",
+      "display_name": "Stressed",
+      "regions": {
+        "prefrontal_cortex":         0.55,
+        "anterior_cingulate_cortex": 0.85,
+        "thalamus":                  0.75,
+        "insula":                    0.90,
+        "gyrus":                     0.65,
+        "amygdala":                  0.95,
+        "hippocampus":               0.60,
+        "entorhinal_cortex":         0.55,
+        "cuneus":                    0.45,
+        "occipital_lobe":            0.50
+      }
+    },
+    {
+      "id": "rem_sleep",
+      "display_name": "REM Sleep",
+      "regions": {
+        "prefrontal_cortex":         0.20,
+        "anterior_cingulate_cortex": 0.30,
+        "thalamus":                  0.55,
+        "insula":                    0.35,
+        "gyrus":                     0.40,
+        "amygdala":                  0.85,
+        "hippocampus":               0.80,
+        "entorhinal_cortex":         0.75,
+        "cuneus":                    0.65,
+        "occipital_lobe":            0.75
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+[
+  {
+    "key": "prefrontal_cortex",
+    "display_name": "Prefrontal Cortex",
+    "abbreviation": "PFC",
+    "slice_x": 0.50, "slice_y": 0.12, "depth": 0.05,
+    "primary_transmitter": "dopamine",
+    "region_of_interest": false,
+    "metadata": { "function": "executive control", "lobe": "frontal" }
+  },
+  {
+    "key": "anterior_cingulate_cortex",
+    "display_name": "Anterior Cingulate Cortex",
+    "abbreviation": "ACC",
+    "slice_x": 0.50, "slice_y": 0.28, "depth": 0.20,
+    "primary_transmitter": "glutamate",
+    "region_of_interest": true,
+    "metadata": { "function": "conflict monitoring" }
+  },
+  {
+    "key": "insula",
+    "display_name": "Insula",
+    "abbreviation": "INS",
+    "slice_x": 0.30, "slice_y": 0.48, "depth": 0.35,
+    "primary_transmitter": "serotonin",
+    "region_of_interest": true,
+    "metadata": { "function": "interoception" }
+  },
+  {
+    "key": "gyrus",
+    "display_name": "Cingulate Gyrus",
+    "abbreviation": "GYR",
+    "slice_x": 0.50, "slice_y": 0.38, "depth": 0.30,
+    "primary_transmitter": "glutamate",
+    "region_of_interest": true
+  },
+  {
+    "key": "thalamus",
+    "display_name": "Thalamus",
+    "abbreviation": "THA",
+    "slice_x": 0.50, "slice_y": 0.55, "depth": 0.50,
+    "primary_transmitter": "glutamate",
+    "region_of_interest": true,
+    "metadata": { "function": "sensory relay" }
+  },
+  {
+    "key": "amygdala",
+    "display_name": "Amygdala",
+    "abbreviation": "AMY",
+    "slice_x": 0.36, "slice_y": 0.62, "depth": 0.55,
+    "primary_transmitter": "norepinephrine",
+    "region_of_interest": true,
+    "metadata": { "function": "threat detection", "system": "limbic" }
+  },
+  {
+    "key": "hippocampus",
+    "display_name": "Hippocampus",
+    "abbreviation": "HIP",
+    "slice_x": 0.66, "slice_y": 0.66, "depth": 0.60,
+    "primary_transmitter": "acetylcholine",
+    "region_of_interest": true,
+    "metadata": { "function": "memory formation", "system": "limbic" }
+  },
+  {
+    "key": "entorhinal_cortex",
+    "display_name": "Entorhinal Cortex",
+    "abbreviation": "ERC",
+    "slice_x": 0.70, "slice_y": 0.74, "depth": 0.65,
+    "primary_transmitter": "acetylcholine",
+    "region_of_interest": true
+  },
+  {
+    "key": "cuneus",
+    "display_name": "Cuneus",
+    "abbreviation": "CUN",
+    "slice_x": 0.50, "slice_y": 0.88, "depth": 0.95,
+    "primary_transmitter": "glutamate",
+    "region_of_interest": true
+  },
+  {
+    "key": "occipital_lobe",
+    "display_name": "Occipital Lobe",
+    "abbreviation": "OCC",
+    "slice_x": 0.50, "slice_y": 0.92, "depth": 0.92,
+    "primary_transmitter": "glutamate",
+    "region_of_interest": false,
+    "metadata": { "function": "visual processing", "lobe": "occipital" }
+  }
+]

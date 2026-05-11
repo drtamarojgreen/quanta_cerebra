@@ -1,0 +1,57 @@
+[
+  {
+    "from": "thalamus", "to": "occipital_lobe",
+    "directed": true, "weight": 0.85, "delay_ms": 12,
+    "kind": "excitatory", "transmitter": "glutamate",
+    "metadata": { "tract": "optic radiation" }
+  },
+  {
+    "from": "occipital_lobe", "to": "cuneus",
+    "directed": true, "weight": 0.6, "delay_ms": 8,
+    "kind": "excitatory", "transmitter": "glutamate"
+  },
+  {
+    "from": "thalamus", "to": "anterior_cingulate_cortex",
+    "directed": true, "weight": 0.55, "delay_ms": 10,
+    "kind": "excitatory", "transmitter": "glutamate"
+  },
+  {
+    "from": "amygdala", "to": "prefrontal_cortex",
+    "directed": true, "weight": 0.7, "delay_ms": 15,
+    "kind": "modulatory", "transmitter": "norepinephrine",
+    "metadata": { "tract": "uncinate fasciculus", "role": "salience signalling" }
+  },
+  {
+    "from": "prefrontal_cortex", "to": "amygdala",
+    "directed": true, "weight": 0.5, "delay_ms": 18,
+    "kind": "inhibitory", "transmitter": "gaba",
+    "metadata": { "role": "top-down regulation" }
+  },
+  {
+    "from": "amygdala", "to": "insula",
+    "directed": true, "weight": 0.45, "delay_ms": 9,
+    "kind": "excitatory"
+  },
+  {
+    "from": "hippocampus", "to": "entorhinal_cortex",
+    "directed": false, "weight": 0.8, "delay_ms": 6,
+    "kind": "excitatory", "transmitter": "glutamate",
+    "metadata": { "tract": "perforant path" }
+  },
+  {
+    "from": "hippocampus", "to": "prefrontal_cortex",
+    "directed": true, "weight": 0.5, "delay_ms": 20,
+    "kind": "excitatory", "transmitter": "glutamate"
+  },
+  {
+    "from": "anterior_cingulate_cortex", "to": "gyrus",
+    "directed": true, "weight": 0.4, "delay_ms": 5,
+    "kind": "excitatory"
+  },
+  {
+    "from": "thalamus", "to": "amygdala",
+    "directed": true, "weight": 0.5, "delay_ms": 8,
+    "kind": "excitatory", "transmitter": "glutamate",
+    "metadata": { "role": "fast threat route" }
+  }
+]

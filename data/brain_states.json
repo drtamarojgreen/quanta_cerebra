@@ -1,0 +1,73 @@
+[
+  {
+    "key": "focused",
+    "display_name": "Focused",
+    "description": "Sustained attention: strong frontal/cingulate engagement.",
+    "region_intensities": {
+      "prefrontal_cortex": 0.85,
+      "anterior_cingulate_cortex": 0.80,
+      "gyrus": 0.55,
+      "thalamus": 0.60,
+      "insula": 0.45,
+      "hippocampus": 0.35,
+      "amygdala": 0.20,
+      "entorhinal_cortex": 0.30,
+      "cuneus": 0.40,
+      "occipital_lobe": 0.45
+    },
+    "metadata": { "tag": "task-positive" }
+  },
+  {
+    "key": "relaxed",
+    "display_name": "Relaxed",
+    "description": "Calm wakeful rest: low limbic drive, mild posterior alpha.",
+    "region_intensities": {
+      "prefrontal_cortex": 0.35,
+      "anterior_cingulate_cortex": 0.30,
+      "gyrus": 0.30,
+      "thalamus": 0.40,
+      "insula": 0.30,
+      "hippocampus": 0.35,
+      "amygdala": 0.15,
+      "entorhinal_cortex": 0.25,
+      "cuneus": 0.55,
+      "occipital_lobe": 0.55
+    }
+  },
+  {
+    "key": "stressed",
+    "display_name": "Stressed",
+    "description": "Threat response: amygdala/insula hyperactivity, blunted PFC control.",
+    "region_intensities": {
+      "prefrontal_cortex": 0.40,
+      "anterior_cingulate_cortex": 0.65,
+      "gyrus": 0.50,
+      "thalamus": 0.70,
+      "insula": 0.85,
+      "hippocampus": 0.45,
+      "amygdala": 0.90,
+      "entorhinal_cortex": 0.40,
+      "cuneus": 0.35,
+      "occipital_lobe": 0.40
+    },
+    "metadata": { "tag": "limbic-dominant" }
+  },
+  {
+    "key": "rem_sleep",
+    "display_name": "REM Sleep",
+    "description": "Dreaming: active limbic + visual cortex, quiet prefrontal cortex.",
+    "region_intensities": {
+      "prefrontal_cortex": 0.15,
+      "anterior_cingulate_cortex": 0.45,
+      "gyrus": 0.40,
+      "thalamus": 0.55,
+      "insula": 0.40,
+      "hippocampus": 0.75,
+      "amygdala": 0.70,
+      "entorhinal_cortex": 0.65,
+      "cuneus": 0.70,
+      "occipital_lobe": 0.75
+    },
+    "metadata": { "tag": "paradoxical sleep" }
+  }
+]
