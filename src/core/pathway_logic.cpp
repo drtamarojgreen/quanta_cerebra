@@ -99,8 +99,8 @@ void PathwayCatalog::load_from_json(const JsonValue& root) {
     auto rt = RegionCatalog::find(raw_to);
     if (!rf) throw std::runtime_error("pathway references unknown region '" + raw_from + "'");
     if (!rt) throw std::runtime_error("pathway references unknown region '" + raw_to + "'");
-    p.from = rf->key;
-    p.to = rt->key;
+    p.from = rf->id;
+    p.to = rt->id;
     p.directed = elem.contains("directed") ? elem["directed"].as_bool(true) : true;
     p.weight = clamp01(elem["weight"].as_number(0.5));
     p.delay_ms = std::max<std::int64_t>(0, elem["delay_ms"].as_int(0));
