@@ -11,7 +11,7 @@ void test_ascii_shader_blur() {
 }
 void test_midi_output() { std::cout << "[Artistic] MIDI output verified." << std::endl; }
 void test_poetic_description() {
-    BrainFrame f;
+    cerebra::BrainFrame f;
     BrainRegion r;
     r.region_name = "R"; r.intensity = 0.9;
     f.regions.push_back(r);
@@ -20,7 +20,7 @@ void test_poetic_description() {
 void test_big_font_rendering() { ASSERT_TRUE(!renderLargeText("A").empty(), "Large font empty"); }
 void test_svg_output() { std::cout << "[Artistic] SVG output verified." << std::endl; }
 void test_pattern_style_transfer() {
-    BrainFrame f1, f2;
+    cerebra::BrainFrame f1, f2;
     BrainRegion r1, r2;
 
     r1.region_name = "R"; r1.intensity = 0;
@@ -34,7 +34,7 @@ void test_pattern_style_transfer() {
 }
 void test_particle_render() {
     std::ostringstream oss;
-    BrainFrame f;
+    cerebra::BrainFrame f;
     BrainRegion r;
     r.region_name = "R"; r.intensity = 0.9;
     f.regions.push_back(r);
