@@ -44,25 +44,25 @@ AppConfig loadConfig(const std::string& filename) {
             } else if (key == "smoothing_window_size") {
                 try {
                     config.smoothing_window_size = std::stoi(value);
-                } catch (...) {}
+                } catch (...) { /* ignore malformed int */ }
             } else if (key == "layout_mode") {
                 if (!value.empty()) {
                     config.layout_mode = value;
                 }
             } else if (key == "activity_decay_rate") {
-                try { config.activity_decay_rate = std::stod(value); } catch (...) {}
+                try { config.activity_decay_rate = std::stod(value); } catch (...) { /* ignore malformed double */ }
             } else if (key == "synaptic_delay_frames") {
-                try { config.synaptic_delay_frames = std::stoi(value); } catch (...) {}
+                try { config.synaptic_delay_frames = std::stoi(value); } catch (...) { /* ignore malformed int */ }
             } else if (key == "refractory_period_ms") {
-                try { config.refractory_period_ms = std::stoi(value); } catch (...) {}
+                try { config.refractory_period_ms = std::stoi(value); } catch (...) { /* ignore malformed int */ }
             } else if (key == "noise_amplitude") {
-                try { config.noise_amplitude = std::stod(value); } catch (...) {}
+                try { config.noise_amplitude = std::stod(value); } catch (...) { /* ignore malformed double */ }
             } else if (key == "intensity_transform") {
                 if (!value.empty()) config.intensity_transform = value;
             } else if (key == "ltp_threshold") {
-                try { config.ltp_threshold = std::stod(value); } catch (...) {}
+                try { config.ltp_threshold = std::stod(value); } catch (...) { /* ignore malformed double */ }
             } else if (key == "ltp_increment") {
-                try { config.ltp_increment = std::stod(value); } catch (...) {}
+                try { config.ltp_increment = std::stod(value); } catch (...) { /* ignore malformed double */ }
             } else if (key == "intensity_map") {
                 if (!value.empty()) config.intensity_map = value;
             } else if (key == "output_log_file") {
@@ -70,7 +70,7 @@ AppConfig loadConfig(const std::string& filename) {
             } else if (key == "theme") {
                 if (!value.empty()) config.theme = value;
             } else if (key == "zoom") {
-                try { config.zoom = std::stod(value); } catch (...) {}
+                try { config.zoom = std::stod(value); } catch (...) { /* ignore malformed double */ }
             } else if (key == "enable_anomaly_detection") {
                 config.enable_anomaly_detection = (value == "true");
             } else if (key == "encryption_key") {
