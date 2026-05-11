@@ -8,6 +8,7 @@
 #include <variant>
 #include <string_view>
 #include <stdexcept>
+#include <cstdint>
 
 namespace cerebra {
 
@@ -36,6 +37,7 @@ public:
 
     bool as_bool(bool fallback = false) const { return is_bool() ? std::get<bool>(data_) : fallback; }
     double as_number(double fallback = 0.0) const { return is_number() ? std::get<double>(data_) : fallback; }
+    std::int64_t as_int(std::int64_t fallback = 0) const { return is_number() ? (std::int64_t)std::get<double>(data_) : fallback; }
     const std::string& as_string() const { static const std::string e; return is_string() ? std::get<std::string>(data_) : e; }
     const Array& as_array() const { static const Array e; return is_array() ? std::get<Array>(data_) : e; }
     const Object& as_object() const { static const Object e; return is_object() ? std::get<Object>(data_) : e; }
