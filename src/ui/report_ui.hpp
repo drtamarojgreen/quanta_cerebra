@@ -5,7 +5,7 @@
 #include <string>
 
 #include "ui/cli_handler.h"
-#include "core/bm_simulation_engine.h"
+#include "core/simulation_engine.h"
 
 namespace cerebra {
 

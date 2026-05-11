@@ -2,7 +2,7 @@
 
 #include "core/atlas_core.h"
 #include "core/atlas_region.h"
-#include "io/atlas_json_parser.h"
+#include "io/json_parser.h"
 
 #include <string>
 

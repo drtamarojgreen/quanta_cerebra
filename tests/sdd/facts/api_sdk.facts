@@ -1,2 +1,2 @@
 required_methods=qc_init_simulation,qc_process_frame,qc_get_state,qc_render_headless,qc_cleanup,serialize,deserialize
-required_files=src/core/json_logic.h,src/cloud/cloud.h
+required_files=src/core/data_parsing_hub.h,src/cloud/cloud.h

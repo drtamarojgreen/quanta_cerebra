@@ -18,7 +18,7 @@ struct AtlasFlow {
 // A single region in the atlas: identity, display metadata, where it lives in
 // the 2D coronal slice, where it lives in the 3D projection, and the baseline
 // neurotransmitter flows it drives.
-struct RegionDefinition {
+struct cerebra::RegionDefinition {
     std::string id;
     std::string display_name;
 
@@ -66,10 +66,10 @@ public:
     static RegionAtlas from_json(std::string_view text);
     static RegionAtlas from_file(const std::string& path);
 
-    const std::vector<RegionDefinition>& regions() const { return regions_; }
-    const RegionDefinition* find(std::string_view id) const;
+    const std::vector<cerebra::RegionDefinition>& regions() const { return regions_; }
+    const cerebra::RegionDefinition* find(std::string_view id) const;
 
-    void add_or_replace(RegionDefinition def);
+    void add_or_replace(cerebra::RegionDefinition def);
     bool remove(std::string_view id);
 
     std::size_t size() const { return regions_.size(); }
@@ -86,7 +86,7 @@ public:
     bool remove_template(std::string_view id);
 
 private:
-    std::vector<RegionDefinition> regions_;
+    std::vector<cerebra::RegionDefinition> regions_;
     std::vector<PathwayDefinition> pathways_;
     std::vector<TemplateDefinition> templates_;
 };

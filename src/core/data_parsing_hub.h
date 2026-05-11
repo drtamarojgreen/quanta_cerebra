@@ -13,20 +13,20 @@ std::string trim(const std::string& s);
 const std::string& internString(const std::string& s);
 
 // Format Dispatchers
-std::vector<BrainFrame> parse_frames_by_format(const std::string& data, const std::string& format);
+std::vector<cerebra::BrainFrame> parse_frames_by_format(const std::string& data, const std::string& format);
 
 // Direct Format Parsers
-std::vector<BrainFrame> parse_frames_json(const std::string& json);
-std::vector<BrainFrame> parse_frames_yaml(const std::string& yaml);
-std::vector<BrainFrame> parse_frames_xml(const std::string& xml);
-std::vector<BrainFrame> parse_frames_csv(const std::string& csv);
+std::vector<cerebra::BrainFrame> parse_frames_json(const std::string& json);
+std::vector<cerebra::BrainFrame> parse_frames_yaml(const std::string& yaml);
+std::vector<cerebra::BrainFrame> parse_frames_xml(const std::string& xml);
+std::vector<cerebra::BrainFrame> parse_frames_csv(const std::string& csv);
 
 // Validation
 bool validate_data_format(const std::string& data, const std::string& format);
 
 // Binary State Persistence
-void save_simulation_state(const std::vector<BrainFrame>& frames, const std::string& filename);
-std::vector<BrainFrame> load_simulation_state(const std::string& filename);
+void save_simulation_state(const std::vector<cerebra::BrainFrame>& frames, const std::string& filename);
+std::vector<cerebra::BrainFrame> load_simulation_state(const std::string& filename);
 
 // Security
 std::string encrypt_data(const std::string& data, const std::string& key);

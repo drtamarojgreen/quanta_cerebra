@@ -110,11 +110,11 @@ private:
     }
 };
 
-BrainFrame json_to_frame(const JsonValue& v) {
-    BrainFrame f;
+cerebra::BrainFrame json_to_frame(const JsonValue& v) {
+    cerebra::BrainFrame f;
     f.timestamp_ms = static_cast<std::int64_t>(v["timestamp_ms"].as_number());
     for (const auto& entry : v["brain_activity"].as_array()) {
-        RegionState rs;
+        cerebra::RegionState rs;
         rs.region = entry["region"].as_string();
         rs.intensity = std::clamp(entry["intensity"].as_number(), 0.0, 1.0);
         for (const auto& [k, val] : entry["metrics"].as_object()) if (val.is_number()) rs.metrics[k] = val.as_number();
@@ -141,15 +141,15 @@ const JsonValue& JsonValue::operator[](std::size_t index) const {
 bool JsonValue::contains(const std::string& key) const { return is_object() && as_object().count(key); }
 
 // Domain Mappings
-std::vector<BrainFrame> parse_json_frames(std::string_view json) {
+std::vector<cerebra::BrainFrame> parse_json_frames(std::string_view json) {
     auto val = JsonValue::parse(json);
-    std::vector<BrainFrame> out;
+    std::vector<cerebra::BrainFrame> out;
     if (val.is_array()) for (const auto& f : val.as_array()) out.push_back(json_to_frame(f));
     else if (val.is_object()) out.push_back(json_to_frame(val));
     return out;
 }
 
-BrainFrame parse_single_json_frame(std::string_view json) { return json_to_frame(JsonValue::parse(json)); }
+cerebra::BrainFrame parse_single_json_frame(std::string_view json) { return json_to_frame(JsonValue::parse(json)); }
 
 RegionAtlas parse_json_atlas(std::string_view json) {
     auto root = JsonValue::parse(json);
@@ -157,7 +157,7 @@ RegionAtlas parse_json_atlas(std::string_view json) {
     if (root["extends_builtin"].as_bool()) atlas = RegionAtlas::builtin();
     
     for (const auto& r : root["regions"].as_array()) {
-        RegionDefinition d;
+        cerebra::RegionDefinition d;
         d.id = r["id"].as_string();
         d.display_name = r["display_name"].as_string();
         d.slice_row = (int)r["slice"]["row"].as_number();

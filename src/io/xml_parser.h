@@ -4,5 +4,5 @@
 #include <string>
 
 namespace cerebra {
-std::vector<BrainFrame> parse_xml_frames(const std::string& xml);
+std::vector<cerebra::BrainFrame> parse_xml_frames(const std::string& xml);
 }

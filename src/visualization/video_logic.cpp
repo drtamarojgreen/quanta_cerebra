@@ -1,5 +1,5 @@
 #include "visualization/video_logic.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "io/config.h"
 #include "ai/ai.h"
 #include <fstream>
@@ -93,7 +93,7 @@ void renderRegion(std::ostringstream& oss, const BrainRegion& region, int depth,
     for (const BrainRegion& subregion : region.subregions) renderRegion(oss, subregion, depth + 1, config);
 }
 
-void renderGrid(std::ostringstream& oss, const BrainFrame& frame, const AppConfig& config) {
+void renderGrid(std::ostringstream& oss, const cerebra::BrainFrame& frame, const AppConfig& config) {
     double grid[10][10]; bool occupied[10][10];
     for(int i=0; i<10; ++i) for(int j=0; j<10; ++j) { grid[i][j] = 0; occupied[i][j] = false; }
     for (const auto& region : frame.regions) {
@@ -116,7 +116,7 @@ void renderGrid(std::ostringstream& oss, const BrainFrame& frame, const AppConfi
     }
 }
 
-void renderParticles(std::ostringstream& oss, const BrainFrame& frame) {
+void renderParticles(std::ostringstream& oss, const cerebra::BrainFrame& frame) {
     oss << "--- Particles ---\n";
     for(const auto& r : frame.regions) {
         int count = (int)(r.intensity * 20);
@@ -125,7 +125,7 @@ void renderParticles(std::ostringstream& oss, const BrainFrame& frame) {
     }
 }
 
-void render3D(std::ostringstream& oss, const BrainFrame& frame, const AppConfig& config) {
+void render3D(std::ostringstream& oss, const cerebra::BrainFrame& frame, const AppConfig& config) {
     double canvas[20][40]; bool occupied[20][40];
     for(int i=0; i<20; ++i) for(int j=0; j<40; ++j) { canvas[i][j] = 0; occupied[i][j] = false; }
     for (const auto& region : frame.regions) {
@@ -151,11 +151,11 @@ void render3D(std::ostringstream& oss, const BrainFrame& frame, const AppConfig&
     }
 }
 
-std::vector<std::string> generateFrames(const std::vector<BrainFrame>& input, const AppConfig& config) {
+std::vector<std::string> generateFrames(const std::vector<cerebra::BrainFrame>& input, const AppConfig& config) {
     std::vector<std::string> result;
     if (config.layout_mode == "quiet") return result;
     result.reserve(input.size());
-    for (const BrainFrame& frame : input) {
+    for (const cerebra::BrainFrame& frame : input) {
         std::ostringstream oss;
         oss << "[Time: " << frame.timestamp_ms << " ms] " << generatePoeticDescription(frame) << "\n";
         if (config.layout_mode == "grid") renderGrid(oss, frame, config);
@@ -175,7 +175,7 @@ void applyASCIIShader(std::string& frame, const std::string& type) {
     }
 }
 
-void synthesizeRealTimeSound(const BrainFrame& frame) {
+void synthesizeRealTimeSound(const cerebra::BrainFrame& frame) {
     for(const auto& r : frame.regions) if(r.intensity > 0.95) std::cout << "\a" << std::flush;
 }
 

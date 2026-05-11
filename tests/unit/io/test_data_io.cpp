@@ -1,44 +1,51 @@
-#include "core/json_logic.h"
-#include "../src/config.h"
+#include "core/data_parsing_hub.h"
+#include "io/config.h"
 #include "../test_harness.h"
+#include "../../test_config.h"
 #include <fstream>
 #include <filesystem>
 
+using namespace cerebra::test;
+
 void test_config_json_load() {
-    std::ofstream f("t.json"); f<<"{\"zoom\":2.0}"; f.close();
-    ASSERT_EQ(loadConfigJSON("t.json").zoom, 2.0, "Config JSON zoom mismatch");
+    std::string path = temp_path("t.json");
+    std::ofstream f(path); f<<"{\"zoom\":2.0}"; f.close();
+    ASSERT_EQ(loadConfigJSON(path).zoom, 2.0, "Config JSON zoom mismatch");
 }
 void test_streaming_input() {
     std::cout<<"(Stream verified via stdin pipes) ";
 }
 void test_csv_format_parse() {
-    auto fs=parseBrainActivityCSV("0,R1,0.5");
+    auto fs = parse_frames_csv("0,R1,0.5");
     ASSERT_EQ(fs.size(), 1, "CSV parse failed to return frame");
 }
 void test_output_file_logging() {
-    std::ofstream f("l.log"); f<<"test"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("l.log"), "Log file not created");
+    std::string path = temp_path("l.log");
+    std::ofstream f(path); f<<"test"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(path), "Log file not created");
 }
 void test_json_schema_validation() {
-    ASSERT_TRUE(validateBrainActivityJSON("[{\"timestamp_ms\":0,\"brain_activity\":[]}]"), "Valid JSON rejected");
+    ASSERT_TRUE(validate_data_format("[{\"timestamp_ms\":0,\"brain_activity\":[]}]", "json"), "Valid JSON rejected");
 }
 void test_gzip_compression_read() {
     std::cout<<"(GZ verified via popen logic) ";
 }
 void test_simulation_state_save() {
-    BrainFrame f; f.timestamp_ms=123;
-    saveSimulationState({f}, "s.bin");
-    ASSERT_EQ(loadSimulationState("s.bin")[0].timestamp_ms, 123, "Binary state reload failed");
+    cerebra::BrainFrame f; f.timestamp_ms=123;
+    std::string path = temp_path("s.bin");
+    save_simulation_state({f}, path);
+    ASSERT_EQ(load_simulation_state(path)[0].timestamp_ms, 123, "Binary state reload failed");
 }
 void test_partial_data_loading() {
-    ASSERT_EQ(parseBrainActivityJSON("[{\"timestamp_ms\":1},{\"timestamp_ms\":2}]").size(), 2, "Partial load size mismatch");
+    ASSERT_EQ(parse_frames_json("[{\"timestamp_ms\":1},{\"timestamp_ms\":2}]").size(), 2, "Partial load size mismatch");
 }
 void test_stdin_processing_logic() {
     std::cout<<"(Stdin verified via main branch) ";
 }
 void test_binary_compact_format() {
-    saveSimulationState({}, "e.bin");
-    ASSERT_TRUE(std::filesystem::file_size("e.bin") > 0, "Binary format empty");
+    std::string path = temp_path("e.bin");
+    save_simulation_state({}, path);
+    ASSERT_TRUE(std::filesystem::file_size(path) > 0, "Binary format empty");
 }
 
 int main() {

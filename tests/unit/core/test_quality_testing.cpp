@@ -1,4 +1,4 @@
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 #include <fstream>
 #include <filesystem>
@@ -10,7 +10,7 @@ void test_visual_logic() { std::cout << "[Quality] Visual regression logic verif
 void test_perf_bench_logic() { std::cout << "[Quality] Performance benchmarking verified." << std::endl; }
 void test_static_asserts_logic() { std::cout << "[Quality] Static analysis logic verified." << std::endl; }
 void test_e2e_scenarios_logic() { std::cout << "[Quality] E2E scenario logic verified." << std::endl; }
-void t198() { std::ofstream f("tj.json"); f<<"[]"; f.close(); ASSERT_TRUE(std::filesystem::exists("tj.json"),"Gen fail"); }
+void t198() { std::string p = temp_path("tj.json"); std::ofstream f(p); f<<"[]"; f.close(); ASSERT_TRUE(std::filesystem::exists(temp_path("tj.json")),"Gen fail"); }
 void test_mocking_logic() { std::cout << "[Quality] Mocking system verified." << std::endl; }
 void test_cpp20_concepts_logic() { std::cout << "[Quality] C++20 concepts logic verified." << std::endl; }
 

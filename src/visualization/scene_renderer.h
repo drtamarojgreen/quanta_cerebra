@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "ui/color_theme.hpp"
-#include "core/bm_simulation_engine.h"
+#include "core/simulation_engine.h"
 
 namespace cerebra {
 

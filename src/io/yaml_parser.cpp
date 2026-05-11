@@ -1,21 +1,21 @@
 #include "io/yaml_parser.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include <sstream>
 
 namespace cerebra {
 
-std::vector<BrainFrame> parse_yaml_frames(const std::string& yaml) {
-    std::vector<BrainFrame> frames;
+std::vector<cerebra::BrainFrame> parse_yaml_frames(const std::string& yaml) {
+    std::vector<cerebra::BrainFrame> frames;
     std::stringstream ss(yaml);
     std::string line;
-    BrainFrame* current = nullptr;
+    cerebra::BrainFrame* current = nullptr;
     while (std::getline(ss, line)) {
         if (line.find("timestamp_ms:") != std::string::npos) {
-            frames.push_back(BrainFrame());
+            frames.push_back(cerebra::BrainFrame());
             current = &frames.back();
             current->timestamp_ms = std::stoll(trim(line.substr(line.find(":") + 1)));
         } else if (line.find("- region:") != std::string::npos && current) {
-            RegionState r;
+            cerebra::RegionState r;
             r.region = internString(trim(line.substr(line.find(":") + 1)));
             if (std::getline(ss, line)) {
                 r.intensity = std::stod(trim(line.substr(line.find(":") + 1)));

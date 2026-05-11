@@ -11,7 +11,7 @@
 #include <map>
 #include <string>
 
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 
 namespace cerebra {
 namespace config_util {

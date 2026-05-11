@@ -1,21 +1,21 @@
 #include "io/xml_parser.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include <sstream>
 
 namespace cerebra {
 
-std::vector<BrainFrame> parse_xml_frames(const std::string& xml) {
-    std::vector<BrainFrame> frames;
+std::vector<cerebra::BrainFrame> parse_xml_frames(const std::string& xml) {
+    std::vector<cerebra::BrainFrame> frames;
     size_t pos = 0;
     while ((pos = xml.find("<frame>", pos)) != std::string::npos) {
-        BrainFrame f;
+        cerebra::BrainFrame f;
         size_t tpos = xml.find("<timestamp>", pos);
         if (tpos != std::string::npos) {
             f.timestamp_ms = std::stoll(xml.substr(tpos + 11, xml.find("</", tpos) - tpos - 11));
         }
         size_t rpos = pos;
         while ((rpos = xml.find("<region>", rpos)) != std::string::npos && rpos < xml.find("</frame>", pos)) {
-            RegionState r;
+            cerebra::RegionState r;
             size_t npos = xml.find("<name>", rpos);
             if (npos != std::string::npos) {
                 r.region = internString(xml.substr(npos + 6, xml.find("</", npos) - npos - 6));

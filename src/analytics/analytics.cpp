@@ -108,17 +108,17 @@ void calculateCrossCorrelation(const std::vector<double>& a, const std::vector<d
     }
 }
 
-void calculateConnectivityMatrix(const std::vector<BrainFrame>& frames) {
+void calculateConnectivityMatrix(const std::vector<cerebra::BrainFrame>& frames) {
     if (frames.empty()) return;
     size_t num_regions = frames[0].regions.size();
     std::cout << "[Analytics] Generating " << num_regions << "x" << num_regions << " Connectivity Matrix..." << std::endl;
 }
 
-void applyClustering(const std::vector<BrainFrame>& frames) {
+void applyClustering(const std::vector<cerebra::BrainFrame>& frames) {
     std::cout << "[Analytics] Applying K-Means Clustering to " << frames.size() << " frames." << std::endl;
 }
 
-void generateStatisticsSummary(const std::vector<BrainFrame>& frames) {
+void generateStatisticsSummary(const std::vector<cerebra::BrainFrame>& frames) {
     if (frames.empty()) return;
     double total_intensity = 0;
     int count = 0;
@@ -131,7 +131,7 @@ void generateStatisticsSummary(const std::vector<BrainFrame>& frames) {
     std::cout << "[Analytics] Summary: Mean Intensity = " << (total_intensity / count) << std::endl;
 }
 
-void detectEvents(const std::vector<BrainFrame>& frames) {
+void detectEvents(const std::vector<cerebra::BrainFrame>& frames) {
     for (const auto& f : frames) {
         for (const auto& r : f.regions) {
             if (r.intensity > 0.98) std::cout << "[Analytics] Peak Event detected at " << f.timestamp_ms << "ms in " << r.region_name << std::endl;

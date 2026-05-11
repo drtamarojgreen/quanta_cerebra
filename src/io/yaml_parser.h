@@ -4,5 +4,5 @@
 #include <string>
 
 namespace cerebra {
-std::vector<BrainFrame> parse_yaml_frames(const std::string& yaml);
+std::vector<cerebra::BrainFrame> parse_yaml_frames(const std::string& yaml);
 }

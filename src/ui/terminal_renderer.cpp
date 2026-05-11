@@ -72,7 +72,7 @@ std::string ansi(const std::string& sgr) {
     if (!color_supported()) return {};
     return "\x1b[" + sgr + "m";
 }
-std::string ansi_reset() { return color_supported() ? "\x1b[0m" : "; }
+std::string ansi_reset() { return color_supported() ? "\x1b[0m" : ""; }
 std::string ansi_clear_screen() { return "\x1b[2J\x1b[H"; }
 std::string ansi_move(int row, int col) {
     return "\x1b[" + std::to_string(row) + ";" + std::to_string(col) + "H";

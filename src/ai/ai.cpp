@@ -6,12 +6,12 @@
 #include <map>
 
 // Enhancement 51: Frame Interpolation
-void applyFrameInterpolationNN(std::vector<BrainFrame>& frames) {
+void applyFrameInterpolationNN(std::vector<cerebra::BrainFrame>& frames) {
     if (frames.size() < 2) return;
-    std::vector<BrainFrame> interpolated;
+    std::vector<cerebra::BrainFrame> interpolated;
     for (size_t i = 0; i < frames.size() - 1; ++i) {
         interpolated.push_back(frames[i]);
-        BrainFrame mid;
+        cerebra::BrainFrame mid;
         mid.timestamp_ms = (frames[i].timestamp_ms + frames[i+1].timestamp_ms) / 2;
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
             BrainRegion nr;
@@ -26,7 +26,7 @@ void applyFrameInterpolationNN(std::vector<BrainFrame>& frames) {
 }
 
 // Enhancement 54: 3D Cortex Rendering (NeRF-inspired Raymarching)
-void render3DCortexNeRF(const std::vector<BrainFrame>& frames) {
+void render3DCortexNeRF(const std::vector<cerebra::BrainFrame>& frames) {
     std::cout << "[AI] Raymarching Neural Density Field..." << std::endl;
     for (const auto& f : frames) {
         // Simple volumetric sampling simulation
@@ -37,14 +37,14 @@ void render3DCortexNeRF(const std::vector<BrainFrame>& frames) {
 }
 
 // Enhancement 53: Style Transfer for Patterns
-void applyStyleTransfer(BrainFrame& target, const BrainFrame& style) {
+void applyStyleTransfer(cerebra::BrainFrame& target, const cerebra::BrainFrame& style) {
     for (size_t i = 0; i < std::min(target.regions.size(), style.regions.size()); ++i) {
         target.regions[i].intensity = (target.regions[i].intensity + style.regions[i].intensity) / 2.0;
     }
 }
 
 // Enhancement 168: Particle System Visualization
-void applyNeuralCA(BrainFrame& frame) {
+void applyNeuralCA(cerebra::BrainFrame& frame) {
     // 1D Cellular Automata on regions
     std::vector<double> next(frame.regions.size());
     for(size_t i=0; i<frame.regions.size(); i++) {
@@ -55,11 +55,11 @@ void applyNeuralCA(BrainFrame& frame) {
     for(size_t i=0; i<frame.regions.size(); i++) frame.regions[i].intensity = next[i];
 }
 
-void applyStyleGAN(BrainFrame& frame) {
+void applyStyleGAN(cerebra::BrainFrame& frame) {
     for(auto& r : frame.regions) r.intensity = std::pow(r.intensity, 1.2);
 }
 
-void applyVideoDiffusion(std::vector<BrainFrame>& frames) {
+void applyVideoDiffusion(std::vector<cerebra::BrainFrame>& frames) {
     std::cout << "[AI] Applying Video Diffusion (Denoising Process)..." << std::endl;
 }
 
@@ -72,7 +72,7 @@ void parseConfigFromNaturalLanguage(const std::string& text) {
     std::cout << "[AI] Interpreting natural language: " << text << std::endl;
 }
 
-std::vector<std::string> detectAnomalies(const std::vector<BrainFrame>& frames) {
+std::vector<std::string> detectAnomalies(const std::vector<cerebra::BrainFrame>& frames) {
     std::vector<std::string> anomalies;
     for(const auto& f : frames) {
         for(const auto& r : f.regions) {
@@ -82,11 +82,11 @@ std::vector<std::string> detectAnomalies(const std::vector<BrainFrame>& frames) 
     return anomalies;
 }
 
-void applyDynamicPanning(BrainFrame& frame, double panX, double panY) {
+void applyDynamicPanning(cerebra::BrainFrame& frame, double panX, double panY) {
     for(auto& r : frame.regions) { r.x += panX; r.y += panY; }
 }
 
-std::string generatePoeticDescription(const BrainFrame& frame) {
+std::string generatePoeticDescription(const cerebra::BrainFrame& frame) {
     double avg = 0;
     for(const auto& r : frame.regions) avg += r.intensity;
     avg /= frame.regions.size();
@@ -95,21 +95,21 @@ std::string generatePoeticDescription(const BrainFrame& frame) {
     return "The silence of a resting mind, waiting for the spark.";
 }
 
-void generateProceduralPattern(std::vector<BrainFrame>& frames) {
+void generateProceduralPattern(std::vector<cerebra::BrainFrame>& frames) {
     for(int i=0; i<10; i++) {
-        BrainFrame f; f.timestamp_ms = i*100;
+        cerebra::BrainFrame f; f.timestamp_ms = i*100;
         f.regions.push_back(BrainRegion("Procedural", std::abs(std::sin(i*0.5))));
         frames.push_back(f);
     }
 }
 
-void identifyPatterns(const std::vector<BrainFrame>& frames) {
+void identifyPatterns(const std::vector<cerebra::BrainFrame>& frames) {
     std::cout << "[AI] Pattern recognition active on " << frames.size() << " frames." << std::endl;
 }
 
-void applyPredictiveModeling(std::vector<BrainFrame>& frames) {
+void applyPredictiveModeling(std::vector<cerebra::BrainFrame>& frames) {
     if (frames.empty()) return;
-    BrainFrame next = frames.back();
+    cerebra::BrainFrame next = frames.back();
     next.timestamp_ms += 100;
     frames.push_back(next);
 }

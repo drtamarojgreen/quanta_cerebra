@@ -16,13 +16,13 @@ struct AppConfig {
     double ltp_threshold = 0.8;
     double ltp_increment = 0.05;
     std::string intensity_map = "default";
-    std::string output_log_file = ";
+    std::string output_log_file = "";
     std::string theme = "default";
     double zoom = 1.0;
     double offset_x = 0.0;
     double offset_y = 0.0;
     bool enable_anomaly_detection = false;
-    std::string encryption_key = ";
+    std::string encryption_key = "";
 
     // Integration States
     bool gpu_enabled = false;

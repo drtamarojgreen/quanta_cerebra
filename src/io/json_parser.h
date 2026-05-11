@@ -61,8 +61,8 @@ private:
 };
 
 // Unified JSON Mapping Functions
-std::vector<BrainFrame> parse_json_frames(std::string_view json);
-BrainFrame              parse_single_json_frame(std::string_view json);
+std::vector<cerebra::BrainFrame> parse_json_frames(std::string_view json);
+cerebra::BrainFrame              parse_single_json_frame(std::string_view json);
 RegionAtlas            parse_json_atlas(std::string_view json);
 RegionAtlas            load_json_atlas_file(const std::string& path);
 

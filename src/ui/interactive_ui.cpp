@@ -49,7 +49,7 @@ std::string format_footer(const Theme& theme) {
 std::string render_frame(const Simulation& sim, const InteractiveSnapshot& state,
                          const Theme& theme, int cols, int rows) {
     std::ostringstream out;
-    const BrainFrame& f = sim.current();
+    const cerebra::BrainFrame& f = sim.current();
     out << format_header(theme, state, sim.size(), f.timestamp_ms);
     out << render_2d_slice(f, cols, theme, state.highlight);
     int proj_h = std::max(12, rows - 24);
@@ -71,7 +71,7 @@ int run_report(const Simulation& sim, const std::string& theme_name, std::ostrea
     for (std::size_t i = 0; i < sim.size(); ++i) {
         Simulation s = sim;
         s.set_index(i);
-        const BrainFrame& f = s.current();
+        const cerebra::BrainFrame& f = s.current();
         out << ansi(theme.title_color) << "Brain Modeler" << ansi_reset()
             << "  " << ansi(theme.accent_color) << "frame " << (i + 1)
             << "/" << sim.size() << ansi_reset()

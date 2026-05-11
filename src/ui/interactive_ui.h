@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/bm_simulation_engine.h"
+#include "core/simulation_engine.h"
 #include "ui/visual_themes.h"
 
 #include <iosfwd>

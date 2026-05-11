@@ -44,26 +44,26 @@ bool CloudSystem::authenticateVault(const std::string& token) {
     return token == "vault-root-token";
 }
 
-void DBConnector::saveFrame(const BrainFrame& frame) {
+void DBConnector::saveFrame(const cerebra::BrainFrame& frame) {
     std::filesystem::create_directories("cloud/db");
     std::ofstream ofs("cloud/db/history.csv", std::ios::app);
     ofs << frame.timestamp_ms << "," << frame.regions.size() << "\n";
 }
 
-std::vector<BrainFrame> DBConnector::queryHistory(const std::string& filter) {
-    std::vector<BrainFrame> res;
+std::vector<cerebra::BrainFrame> DBConnector::queryHistory(const std::string& filter) {
+    std::vector<cerebra::BrainFrame> res;
     std::ifstream ifs("cloud/db/history.csv");
     std::string line;
     while(std::getline(ifs, line)) {
         if(line.find(filter) != std::string::npos) {
-            BrainFrame f; f.timestamp_ms = std::stoi(line.substr(0, line.find(',')));
+            cerebra::BrainFrame f; f.timestamp_ms = std::stoi(line.substr(0, line.find(',')));
             res.push_back(f);
         }
     }
     return res;
 }
 
-std::vector<unsigned char> GRPCInterface::serialize(const BrainFrame& frame) {
+std::vector<unsigned char> GRPCInterface::serialize(const cerebra::BrainFrame& frame) {
     std::vector<unsigned char> res;
     size_t sz = frame.regions.size();
     res.insert(res.end(), (unsigned char*)&frame.timestamp_ms, (unsigned char*)&frame.timestamp_ms + sizeof(int));
@@ -75,8 +75,8 @@ std::vector<unsigned char> GRPCInterface::serialize(const BrainFrame& frame) {
     return res;
 }
 
-BrainFrame GRPCInterface::deserialize(const std::vector<unsigned char>& data) {
-    BrainFrame f;
+cerebra::BrainFrame GRPCInterface::deserialize(const std::vector<unsigned char>& data) {
+    cerebra::BrainFrame f;
     if(data.size() < sizeof(int) + sizeof(size_t)) return f;
     std::memcpy(&f.timestamp_ms, data.data(), sizeof(int));
     size_t sz; std::memcpy(&sz, data.data() + sizeof(int), sizeof(size_t));

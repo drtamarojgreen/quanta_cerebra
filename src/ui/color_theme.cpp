@@ -18,11 +18,11 @@ ColorTheme::ColorTheme(std::string key, std::string display_name, bool color_ena
       intensity_ramp_(std::move(intensity_ramp)) {}
 
 std::string ColorTheme::sgr(const std::string& params) const {
-  if (!color_enabled_ || params.empty()) return ";
+  if (!color_enabled_ || params.empty()) return "";
   return "\x1b[" + params + "m";
 }
 
-std::string ColorTheme::reset() const { return color_enabled_ ? "\x1b[0m" : "; }
+std::string ColorTheme::reset() const { return color_enabled_ ? "\x1b[0m" : ""; }
 
 std::string ColorTheme::wrap(const std::string& params, const std::string& text) const {
   if (!color_enabled_ || params.empty()) return text;

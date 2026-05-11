@@ -1,5 +1,5 @@
 #include "ui_controller.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include <iostream>
 #include <vector>
 #include <string>

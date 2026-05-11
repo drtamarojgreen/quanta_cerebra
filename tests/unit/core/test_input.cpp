@@ -4,7 +4,7 @@
 
 #include "../test_framework.hpp"
 #include "io/input_source.hpp"
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 #include "core/sample.hpp"
 
 using namespace cerebra;

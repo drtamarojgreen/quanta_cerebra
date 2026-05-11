@@ -9,8 +9,8 @@ void test_collab_peers_logic() { bool collab = true; ASSERT_TRUE(collab, "Collab
 void test_leaderboard_logic_check() { bool board = true; ASSERT_TRUE(board, "Board fail"); }
 void test_showcase_highlight_logic() { bool showcase = true; ASSERT_TRUE(showcase, "Showcase fail"); }
 void test_git_repo_data_logic() { bool git = true; ASSERT_TRUE(git, "Git fail"); }
-void t187() { P2PSystem::broadcast("H"); ASSERT_TRUE(std::filesystem::exists("cloud/p2p/broadcast.dat"),"P2P fail"); }
-void t188() { std::ofstream f("b.txt"); f<<"r"; f.close(); ASSERT_TRUE(std::filesystem::exists("b.txt"),"Bug fail"); }
+void t187() { P2PSystem::broadcast("H"); ASSERT_TRUE(std::filesystem::exists(temp_path("cloud/p2p/broadcast.dat")),"P2P fail"); }
+void t188() { std::string p = temp_path("b.txt"); std::ofstream f(p); f<<"r"; f.close(); ASSERT_TRUE(std::filesystem::exists(temp_path("b.txt")),"Bug fail"); }
 void test_plugin_gallery_logic_check() { bool plug = true; ASSERT_TRUE(plug, "Plug fail"); }
 void test_annotation_sharing_logic_check() { bool note = true; ASSERT_TRUE(note, "Note fail"); }
 

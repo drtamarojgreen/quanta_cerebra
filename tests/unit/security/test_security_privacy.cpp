@@ -14,18 +14,18 @@ void test_rbac_logic() { std::cout << "(RBAC verified) "; }
 void test_sanitization_logic() { ASSERT_EQ(trim(" a "),"a","Sanitization failed to trim"); }
 void test_selective_logging_logic() { std::cout << "(Logs verified) "; }
 void test_scanner_logic() {
-    std::ofstream f("s.sh"); f<<"e"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("s.sh"), "Scanner file write failed");
+    std::string p = temp_path("s.sh"); std::ofstream f(p); f<<"e"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path("s.sh")), "Scanner file write failed");
 }
 void test_digital_sig_logic() { std::cout << "(DigitalSign verified) "; }
 void test_compliance_logic() { std::cout << "(Compliance verified) "; }
 void test_audit_trail_logic() {
-    std::ofstream f("a.log"); f<<"l"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("a.log"), "Audit trail write failed");
+    std::string p = temp_path("a.log"); std::ofstream f(p); f<<"l"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path("a.log")), "Audit trail write failed");
 }
 void test_secure_temp_logic() {
-    std::ofstream f("t.tmp"); f<<"t"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("t.tmp"), "Temp file write failed");
+    std::string p = temp_path("t.tmp"); std::ofstream f(p); f<<"t"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path("t.tmp")), "Temp file write failed");
 }
 
 int main() {

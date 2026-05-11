@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-#include "core/bm_state_manager.h"
+#include "core/state_manager.h"
 #include "ui/color_theme.hpp"
 #include "core/neurochemistry.h"
 #include "core/pathway_logic.h"

@@ -1,5 +1,5 @@
 #include "test_harness.hpp"
-#include "io/atlas_json_parser.h"
+#include "io/json_parser.h"
 
 #include <sstream>
 #include <stdexcept>

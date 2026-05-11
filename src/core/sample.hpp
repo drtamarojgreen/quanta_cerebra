@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 
 namespace cerebra {
 

@@ -1,5 +1,5 @@
 #include "api/qc_api.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "io/config.h"
 #include <string>
 #include <vector>
@@ -12,7 +12,7 @@ void* qc_init_simulation(const char* config_path) {
 
 void qc_process_frame(void* handle, const char* json_data) {
     if (!handle || !json_data) return;
-    std::vector<BrainFrame> frames = parseBrainActivityJSON(json_data);
+    std::vector<cerebra::BrainFrame> frames = parseBrainActivityJSON(json_data);
     if(!frames.empty()) {
         saveSimulationState(frames, "qc_last_processed.bin");
     }

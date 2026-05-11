@@ -4,7 +4,7 @@
 
 #include "../test_framework.hpp"
 #include "core/state_manager.h"
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 #include "core/region.hpp"
 
 using namespace cerebra;

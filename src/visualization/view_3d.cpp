@@ -11,14 +11,14 @@ namespace cerebra {
 
 namespace {
 
-double intensity_for(const BrainFrame& f, const std::string& id) {
+double intensity_for(const cerebra::BrainFrame& f, const std::string& id) {
     for (const auto& r : f.regions) if (r.region == id) return r.intensity;
     return 0.0;
 }
 
 }
 
-std::string render_3d_projection(const BrainFrame& frame, int width, int height,
+std::string render_3d_projection(const cerebra::BrainFrame& frame, int width, int height,
                                  const Theme& theme, double yaw_deg,
                                  const std::string& highlight) {
     if (width < 40) width = 40;

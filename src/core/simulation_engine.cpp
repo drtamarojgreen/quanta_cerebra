@@ -1,22 +1,22 @@
-#include "core/bm_simulation_engine.h"
+#include "core/simulation_engine.h"
 
 #include <algorithm>
 #include <stdexcept>
 
 namespace cerebra {
 
-Simulation::Simulation(std::vector<BrainFrame> frames) : frames_(std::move(frames)) {}
+Simulation::Simulation(std::vector<cerebra::BrainFrame> frames) : frames_(std::move(frames)) {}
 
-void Simulation::set_frames(std::vector<BrainFrame> frames) {
+void Simulation::set_frames(std::vector<cerebra::BrainFrame> frames) {
     frames_ = std::move(frames);
     index_ = 0;
 }
 
-void Simulation::append_frame(BrainFrame f) {
+void Simulation::append_frame(cerebra::BrainFrame f) {
     frames_.push_back(std::move(f));
 }
 
-const BrainFrame& Simulation::current() const {
+const cerebra::BrainFrame& Simulation::current() const {
     if (frames_.empty()) {
         throw std::out_of_range("Simulation is empty");
     }

@@ -2,7 +2,7 @@
 #define CLOUD_H
 #include <string>
 #include <vector>
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 
 // Simulated Cloud/Ecosystem Logic
 class CloudSystem {
@@ -17,14 +17,14 @@ public:
 
 class DBConnector {
 public:
-    static void saveFrame(const BrainFrame& frame);
-    static std::vector<BrainFrame> queryHistory(const std::string& filter);
+    static void saveFrame(const cerebra::BrainFrame& frame);
+    static std::vector<cerebra::BrainFrame> queryHistory(const std::string& filter);
 };
 
 class GRPCInterface {
 public:
-    static std::vector<unsigned char> serialize(const BrainFrame& frame);
-    static BrainFrame deserialize(const std::vector<unsigned char>& data);
+    static std::vector<unsigned char> serialize(const cerebra::BrainFrame& frame);
+    static cerebra::BrainFrame deserialize(const std::vector<unsigned char>& data);
 };
 
 class P2PSystem {

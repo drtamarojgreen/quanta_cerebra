@@ -1,7 +1,7 @@
-#include "core/bm_state_manager.h"
+#include "core/state_manager.h"
 
 #include "core/atlas_core.h"
-#include "core/bm_atlas_region.h"
+#include "core/atlas_region.h"
 
 #include <algorithm>
 #include <cctype>
@@ -50,15 +50,15 @@ bool parse_template(std::string_view name, BrainTemplate& out) {
     return false;
 }
 
-BrainFrame template_frame(std::string_view template_id, std::int64_t timestamp_ms) {
-    BrainFrame f;
+cerebra::BrainFrame template_frame(std::string_view template_id, std::int64_t timestamp_ms) {
+    cerebra::BrainFrame f;
     f.timestamp_ms = timestamp_ms;
     std::string canonical = resolve_template_id(template_id);
     if (canonical.empty()) return f;
     const TemplateDefinition* def = current_atlas().find_template(canonical);
     if (!def) return f;
     for (const auto& kv : def->intensities) {
-        RegionState rs;
+        cerebra::RegionState rs;
         rs.region = kv.first;
         double inten = kv.second;
         if (inten < 0.0) inten = 0.0;
@@ -70,7 +70,7 @@ BrainFrame template_frame(std::string_view template_id, std::int64_t timestamp_m
     return f;
 }
 
-BrainFrame template_frame(BrainTemplate t, std::int64_t timestamp_ms) {
+cerebra::BrainFrame template_frame(BrainTemplate t, std::int64_t timestamp_ms) {
     return template_frame(template_name(t), timestamp_ms);
 }
 

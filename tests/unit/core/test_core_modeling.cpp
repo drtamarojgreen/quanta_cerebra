@@ -1,6 +1,6 @@
 #include "core/brain_region.h"
 #include "core/modeling_engine.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 #include <vector>
 
@@ -9,53 +9,53 @@ void test_hierarchical_regions() {
     ASSERT_EQ(r.subregions.size(), 1, "Subregion count mismatch");
 }
 void test_temporal_smoothing_logic() {
-    BrainFrame f1; f1.regions={{"R1", 1.0}};
-    BrainFrame f2; f2.regions={{"R1", 0.0}};
-    std::vector<BrainFrame> fs={f1,f2};
+    cerebra::BrainFrame f1; f1.regions={{"R1", 1.0}};
+    cerebra::BrainFrame f2; f2.regions={{"R1", 0.0}};
+    std::vector<cerebra::BrainFrame> fs={f1,f2};
     applyTemporalSmoothing(fs, 2);
     ASSERT_EQ(fs[1].regions[0].intensity, 0.5, "Smoothing value mismatch");
 }
 void test_activity_decay_logic() {
-    BrainFrame f1; f1.timestamp_ms=0; f1.regions={{"R1", 1.0}};
-    BrainFrame f2; f2.timestamp_ms=1000; f2.regions={{"R1", 1.0}};
-    std::vector<BrainFrame> fs={f1,f2};
+    cerebra::BrainFrame f1; f1.timestamp_ms=0; f1.regions={{"R1", 1.0}};
+    cerebra::BrainFrame f2; f2.timestamp_ms=1000; f2.regions={{"R1", 1.0}};
+    std::vector<cerebra::BrainFrame> fs={f1,f2};
     applyActivityDecayModel(fs, 1.0);
     ASSERT_TRUE(fs[1].regions[0].intensity < 0.4, "Decay logic failed");
 }
 void test_synaptic_delay_logic() {
-    BrainFrame f; f.regions={{"R1", 1.0}};
-    std::vector<BrainFrame> fs={f,f,f};
+    cerebra::BrainFrame f; f.regions={{"R1", 1.0}};
+    std::vector<cerebra::BrainFrame> fs={f,f,f};
     applySynapticDelaySimulation(fs, 2);
     ASSERT_EQ(fs[0].regions[0].intensity, 0.0, "Delay buffer failed");
 }
 void test_refractory_period_logic() {
-    BrainFrame f1; f1.timestamp_ms=0; f1.regions={{"R1", 1.0}};
-    BrainFrame f2; f2.timestamp_ms=10; f2.regions={{"R1", 1.0}};
-    std::vector<BrainFrame> fs={f1,f2};
+    cerebra::BrainFrame f1; f1.timestamp_ms=0; f1.regions={{"R1", 1.0}};
+    cerebra::BrainFrame f2; f2.timestamp_ms=10; f2.regions={{"R1", 1.0}};
+    std::vector<cerebra::BrainFrame> fs={f1,f2};
     applyRefractoryPeriodLogic(fs, 100);
     ASSERT_TRUE(fs[1].regions[0].intensity < 0.6, "Refractory suppression failed");
 }
 void test_stochastic_noise_logic() {
-    BrainFrame f; f.regions={{"R1", 0.5}};
-    std::vector<BrainFrame> fs={f};
+    cerebra::BrainFrame f; f.regions={{"R1", 0.5}};
+    std::vector<cerebra::BrainFrame> fs={f};
     applyStochasticModeling(fs, 0.5);
     ASSERT_TRUE(fs[0].regions[0].intensity != 0.5, "Noise injected no change");
 }
 void test_custom_math_logic() {
-    BrainFrame f; f.regions={{"R1", 0.5}};
-    std::vector<BrainFrame> fs={f};
+    cerebra::BrainFrame f; f.regions={{"R1", 0.5}};
+    std::vector<cerebra::BrainFrame> fs={f};
     applyCustomMathematicalFunctions(fs, "square");
     ASSERT_EQ(fs[0].regions[0].intensity, 0.25, "Custom math 'square' failed");
 }
 void test_neurotransmitter_logic() {
-    BrainFrame f; f.regions={{"R1", 0.9}};
-    std::vector<BrainFrame> fs={f};
+    cerebra::BrainFrame f; f.regions={{"R1", 0.9}};
+    std::vector<cerebra::BrainFrame> fs={f};
     applyNeurotransmitterSimulation(fs);
     ASSERT_TRUE(fs[0].regions[0].neurotransmitters.count("Glutamate"), "Neurotransmitter Glutamate missing");
 }
 void test_ltp_logic_check() {
-    BrainFrame f; f.regions={{"R1", 1.0}};
-    std::vector<BrainFrame> fs={f};
+    cerebra::BrainFrame f; f.regions={{"R1", 1.0}};
+    std::vector<cerebra::BrainFrame> fs={f};
     applyLongTermPotentiation(fs, 0.5, 0.1);
     ASSERT_TRUE(fs[0].regions[0].plasticity_factor > 1.0, "LTP factor did not increase");
 }

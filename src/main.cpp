@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     } else {
         std::string id = resolve_template_id(template_name);
         if (!id.empty()) {
-            std::vector<BrainFrame> frames;
+            std::vector<cerebra::BrainFrame> frames;
             for (int i = 0; i < 30; ++i) frames.push_back(template_frame(id, i * 200));
             sim.set_frames(std::move(frames));
         }

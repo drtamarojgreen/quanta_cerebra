@@ -1,5 +1,5 @@
 #include "core/atlas_core.h"
-#include "io/atlas_json_parser.h"
+#include "io/json_parser.h"
 
 #include <algorithm>
 #include <fstream>
@@ -31,12 +31,12 @@ const RegionAtlas& RegionAtlas::builtin() {
     return atlas;
 }
 
-const RegionDefinition* RegionAtlas::find(std::string_view id) const {
+const cerebra::RegionDefinition* RegionAtlas::find(std::string_view id) const {
     for (const auto& r : regions_) if (r.id == id) return &r;
     return nullptr;
 }
 
-void RegionAtlas::add_or_replace(RegionDefinition def) {
+void RegionAtlas::add_or_replace(cerebra::RegionDefinition def) {
     for (auto& r : regions_) {
         if (r.id == def.id) { r = std::move(def); return; }
     }
@@ -45,7 +45,7 @@ void RegionAtlas::add_or_replace(RegionDefinition def) {
 
 bool RegionAtlas::remove(std::string_view id) {
     auto it = std::find_if(regions_.begin(), regions_.end(),
-                           [&](const RegionDefinition& r){ return r.id == id; });
+                           [&](const cerebra::RegionDefinition& r){ return r.id == id; });
     if (it == regions_.end()) return false;
     regions_.erase(it);
     return true;

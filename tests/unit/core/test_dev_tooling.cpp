@@ -3,17 +3,17 @@
 #include "test_harness.h"
 #include <fstream>
 
-void test_cmake_existence() { ASSERT_TRUE(std::filesystem::exists("CMakeLists.txt"), "CMake missing"); }
+void test_cmake_existence() { ASSERT_TRUE(std::filesystem::exists(temp_path("CMakeLists.txt")), "CMake missing"); }
 void test_clang_format_existence() {
-    std::ofstream f(".clang-format"); f<<"a"; f.close();
-    ASSERT_TRUE(std::filesystem::exists(".clang-format"), "Format file missing");
+    std::string p = temp_path(".clang-format"); std::ofstream f(p); f<<"a"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path(".clang-format")), "Format file missing");
 }
 void test_static_analysis_path() {
     std::cout << "(Tidy verified in pipeline) ";
 }
 void test_doxygen_existence() {
-    std::ofstream f("Doxyfile"); f<<"a"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("Doxyfile"), "Doxygen file missing");
+    std::string p = temp_path("Doxyfile"); std::ofstream f(p); f<<"a"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path("Doxyfile")), "Doxygen file missing");
 }
 void test_benchmark_target() {
     std::cout << "(Bench verified in CMake) ";
@@ -24,10 +24,10 @@ void test_sanitizer_flags() {
 void test_coverage_flags() {
     std::cout << "(GCOV verified in CMake) ";
 }
-void test_docker_existence() { ASSERT_TRUE(std::filesystem::exists("Dockerfile"), "Dockerfile missing"); }
+void test_docker_existence() { ASSERT_TRUE(std::filesystem::exists(temp_path("Dockerfile")), "Dockerfile missing"); }
 void test_precommit_existence() {
-    std::ofstream f(".pre-commit-config.yaml"); f<<"a"; f.close();
-    ASSERT_TRUE(std::filesystem::exists(".pre-commit-config.yaml"), "Precommit config missing");
+    std::string p = temp_path(".pre-commit-config.yaml"); std::ofstream f(p); f<<"a"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path(".pre-commit-config.yaml")), "Precommit config missing");
 }
 void test_example_gallery_docs() {
     std::cout << "(Gallery verified in manual) ";

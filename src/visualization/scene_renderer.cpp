@@ -48,7 +48,7 @@ std::string ramp_params(const ColorTheme& theme, double value) {
   if (wrapped.size() > 2 && wrapped[0] == '\x1b' && m != std::string::npos) {
     return wrapped.substr(2, m - 2);
   }
-  return ";
+  return "";
 }
 
 std::string bar(double value, int width, bool ascii_only) {
@@ -175,7 +175,7 @@ void draw_ellipse_outline(Canvas& c, double cx, double cy, double rx, double ry,
 }
 
 std::string pathway_color(const ColorTheme& theme, PathwayKind kind) {
-  if (!theme.color_enabled()) return ";
+  if (!theme.color_enabled()) return "";
   switch (kind) {
     case PathwayKind::Excitatory: return "38;5;65";   // muted green
     case PathwayKind::Inhibitory: return "38;5;131";  // muted red

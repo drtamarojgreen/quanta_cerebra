@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../test_framework.hpp"
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 #include "core/pathway_logic.h"
 #include "core/region.hpp"
 #include "visualization/scene_renderer.h"

@@ -22,7 +22,7 @@ const std::string& internString(const std::string& s) {
     return *pool.insert(s).first;
 }
 
-std::vector<BrainFrame> parse_frames_by_format(const std::string& data, const std::string& format) {
+std::vector<cerebra::BrainFrame> parse_frames_by_format(const std::string& data, const std::string& format) {
     if (format == "json") return parse_json_frames(data);
     if (format == "yaml") return parse_yaml_frames(data);
     if (format == "xml")  return parse_xml_frames(data);
@@ -30,10 +30,10 @@ std::vector<BrainFrame> parse_frames_by_format(const std::string& data, const st
     return {};
 }
 
-std::vector<BrainFrame> parse_frames_json(const std::string& json) { return parse_json_frames(json); }
-std::vector<BrainFrame> parse_frames_yaml(const std::string& yaml) { return parse_yaml_frames(yaml); }
-std::vector<BrainFrame> parse_frames_xml(const std::string& xml)   { return parse_xml_frames(xml); }
-std::vector<BrainFrame> parse_frames_csv(const std::string& csv)   { return parse_csv_frames(csv); }
+std::vector<cerebra::BrainFrame> parse_frames_json(const std::string& json) { return parse_json_frames(json); }
+std::vector<cerebra::BrainFrame> parse_frames_yaml(const std::string& yaml) { return parse_yaml_frames(yaml); }
+std::vector<cerebra::BrainFrame> parse_frames_xml(const std::string& xml)   { return parse_xml_frames(xml); }
+std::vector<cerebra::BrainFrame> parse_frames_csv(const std::string& csv)   { return parse_csv_frames(csv); }
 
 bool validate_data_format(const std::string& data, const std::string& format) {
     if (data.empty()) return false;
@@ -44,7 +44,7 @@ bool validate_data_format(const std::string& data, const std::string& format) {
     return false;
 }
 
-void save_simulation_state(const std::vector<BrainFrame>& frames, const std::string& filename) {
+void save_simulation_state(const std::vector<cerebra::BrainFrame>& frames, const std::string& filename) {
     std::ofstream of(filename, std::ios::binary);
     for (const auto& f : frames) {
         of.write((char*)&f.timestamp_ms, sizeof(std::int64_t));
@@ -59,11 +59,11 @@ void save_simulation_state(const std::vector<BrainFrame>& frames, const std::str
     }
 }
 
-std::vector<BrainFrame> load_simulation_state(const std::string& filename) {
-    std::vector<BrainFrame> frames;
+std::vector<cerebra::BrainFrame> load_simulation_state(const std::string& filename) {
+    std::vector<cerebra::BrainFrame> frames;
     std::ifstream ifs(filename, std::ios::binary);
     while (ifs.peek() != EOF) {
-        BrainFrame f;
+        cerebra::BrainFrame f;
         ifs.read((char*)&f.timestamp_ms, sizeof(std::int64_t));
         size_t r_count;
         ifs.read((char*)&r_count, sizeof(size_t));
@@ -74,7 +74,7 @@ std::vector<BrainFrame> load_simulation_state(const std::string& filename) {
             ifs.read(&name[0], n_len);
             double intens;
             ifs.read((char*)&intens, sizeof(double));
-            RegionState r;
+            cerebra::RegionState r;
             r.region = internString(name);
             r.intensity = intens;
             r.flows = default_flows_for(r.region, r.intensity);

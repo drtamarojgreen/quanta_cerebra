@@ -14,14 +14,14 @@ namespace {
 constexpr int kBaseW = 38; // intrinsic slice template width
 constexpr int kBaseH = 22; // intrinsic slice template height
 
-double intensity_for(const BrainFrame& f, const std::string& id) {
+double intensity_for(const cerebra::BrainFrame& f, const std::string& id) {
     for (const auto& r : f.regions) if (r.region == id) return r.intensity;
     return 0.0;
 }
 
 }
 
-std::string render_2d_slice(const BrainFrame& frame, int width, const Theme& theme,
+std::string render_2d_slice(const cerebra::BrainFrame& frame, int width, const Theme& theme,
                             const std::string& highlight) {
     if (width < 50) width = 50;
     int inner_w = width - 4;
@@ -106,19 +106,19 @@ std::string render_2d_slice(const BrainFrame& frame, int width, const Theme& the
     return out.str();
 }
 
-std::string render_region_table(const BrainFrame& frame, int width, const Theme& theme,
+std::string render_region_table(const cerebra::BrainFrame& frame, int width, const Theme& theme,
                                 const std::string& highlight) {
     (void)width;
     std::ostringstream out;
     out << ansi(theme.title_color)
         << "Region                       Intensity  Bar          Neurotransmitters\n"
         << ansi_reset();
-    auto lookup = [&](const std::string& id) -> const RegionState* {
+    auto lookup = [&](const std::string& id) -> const cerebra::RegionState* {
         for (const auto& r : frame.regions) if (r.region == id) return &r;
         return nullptr;
     };
     for (const auto& info : known_regions()) {
-        const RegionState* rs = lookup(info.id);
+        const cerebra::RegionState* rs = lookup(info.id);
         double inten = rs ? rs->intensity : 0.0;
         int bar = static_cast<int>(inten * 10);
         std::string b;
@@ -150,7 +150,7 @@ std::string render_region_table(const BrainFrame& frame, int width, const Theme&
     return out.str();
 }
 
-double pathway_activation(const PathwayDefinition& p, const BrainFrame& frame) {
+double pathway_activation(const PathwayDefinition& p, const cerebra::BrainFrame& frame) {
     if (p.nodes.empty()) return 0.0;
     double sum = 0.0;
     int counted = 0;
@@ -164,7 +164,7 @@ double pathway_activation(const PathwayDefinition& p, const BrainFrame& frame) {
     return mean * p.strength;
 }
 
-std::string render_pathways_table(const BrainFrame& frame, int width, const Theme& theme,
+std::string render_pathways_table(const cerebra::BrainFrame& frame, int width, const Theme& theme,
                                   const std::string& highlight) {
     (void)width;
     std::ostringstream out;
@@ -180,7 +180,7 @@ std::string render_pathways_table(const BrainFrame& frame, int width, const Them
         std::string route;
         for (std::size_t i = 0; i < p.nodes.size(); ++i) {
             if (i) route += p.bidirectional ? " <-> " : " -> ";
-            const RegionDefinition* def = find_region(p.nodes[i]);
+            const cerebra::RegionDefinition* def = find_region(p.nodes[i]);
             route += def ? def->display_name : p.nodes[i];
         }
         const std::string& color = (p.id == highlight) ? theme.warn_color : theme.label_color;

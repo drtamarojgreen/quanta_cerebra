@@ -4,8 +4,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "core/bm_state_manager.h"
-#include "io/json_utility.h"
+#include "core/state_manager.h"
+#include "io/json_parser.h"
 
 namespace cerebra {
 namespace {

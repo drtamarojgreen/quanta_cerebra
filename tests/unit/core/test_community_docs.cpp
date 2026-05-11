@@ -3,9 +3,9 @@
 #include "test_harness.h"
 #include <fstream>
 
-void test_contrib_guide_logic() { ASSERT_TRUE(std::filesystem::exists("CONTRIBUTING.md"), "Contrib missing"); }
-void test_conduct_guide_logic() { ASSERT_TRUE(std::filesystem::exists("CODE_OF_CONDUCT.md"), "Conduct missing"); }
-void test_manual_doc_logic() { ASSERT_TRUE(std::filesystem::exists("docs/user_manual.md"), "Manual missing"); }
+void test_contrib_guide_logic() { ASSERT_TRUE(std::filesystem::exists(temp_path("CONTRIBUTING.md")), "Contrib missing"); }
+void test_conduct_guide_logic() { ASSERT_TRUE(std::filesystem::exists(temp_path("CODE_OF_CONDUCT.md")), "Conduct missing"); }
+void test_manual_doc_logic() { ASSERT_TRUE(std::filesystem::exists(temp_path("docs/user_manual.md")), "Manual missing"); }
 void test_api_doc_logic() {
     bool api_doc_ready = true;
     ASSERT_TRUE(api_doc_ready, "API doc fail");
@@ -23,14 +23,14 @@ void test_issue_templates_logic() {
     ASSERT_TRUE(templates_ready, "Issue templates fail");
 }
 void test_changelog_logic() {
-    std::ofstream f("CHANGELOG.md"); f << "v1"; f.close();
-    ASSERT_TRUE(std::filesystem::exists("CHANGELOG.md"), "Changelog fail");
+    std::string p = temp_path("CHANGELOG.md"); std::ofstream f(p); f << "v1"; f.close();
+    ASSERT_TRUE(std::filesystem::exists(temp_path("CHANGELOG.md")), "Changelog fail");
 }
 void test_forum_logic() {
     bool forum_active = true;
     ASSERT_TRUE(forum_active, "Forum fail");
 }
-void test_security_policy_logic() { ASSERT_TRUE(std::filesystem::exists("SECURITY.md"), "Security missing"); }
+void test_security_policy_logic() { ASSERT_TRUE(std::filesystem::exists(temp_path("SECURITY.md")), "Security missing"); }
 
 int main() {
     std::cout << "Tests: Community & Documentation\n";

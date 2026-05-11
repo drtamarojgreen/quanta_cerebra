@@ -5,7 +5,7 @@
 #include "core/state_manager.h"
 #include "visualization/view_2d.h"
 #include "ui/interactive_ui.h"
-#include "io/atlas_json_parser.h"
+#include "io/json_parser.h"
 #include "core/simulation_engine.h"
 #include "ui/visual_themes.h"
 

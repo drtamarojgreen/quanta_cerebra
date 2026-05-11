@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../test_framework.hpp"
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 #include "core/region.hpp"
 #include "visualization/scene_renderer.h"
 #include "core/sample.hpp"

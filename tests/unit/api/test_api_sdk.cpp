@@ -1,6 +1,6 @@
 #include "api/qc_api.h"
 #include "cloud/cloud.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 
 void test_rest_server_start() { 
@@ -8,7 +8,7 @@ void test_rest_server_start() {
     // startAPIServer(0); // 0 lets OS pick port, but it detaches.
 }
 void test_grpc_serialization() {
-    BrainFrame f; f.timestamp_ms=5;
+    cerebra::BrainFrame f; f.timestamp_ms=5;
     auto b=GRPCInterface::serialize(f);
     ASSERT_EQ(GRPCInterface::deserialize(b).timestamp_ms, 5, "gRPC SerDe failed");
 }

@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include "core/bm_state_manager.h"
+#include "core/state_manager.h"
 
 namespace cerebra {
 

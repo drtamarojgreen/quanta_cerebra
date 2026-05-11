@@ -22,7 +22,7 @@ static void adler32(const unsigned char* data, size_t len, unsigned int& a, unsi
     for (size_t i = 0; i < len; i++) { a = (a + data[i]) % 65521; b = (b + a) % 65521; }
 }
 
-void generateMIDI(const std::vector<BrainFrame>& frames) {
+void generateMIDI(const std::vector<cerebra::BrainFrame>& frames) {
     std::ofstream ofs("brain.mid", std::ios::binary);
     unsigned char header[] = {'M','T','h','d', 0,0,0,6, 0,1, 0,1, 0,96};
     ofs.write((char*)header, 14);
@@ -46,7 +46,7 @@ void generateMIDI(const std::vector<BrainFrame>& frames) {
     ofs.write((char*)track.data(), track.size());
 }
 
-std::string exportToSVG(const std::vector<BrainFrame>& frames) {
+std::string exportToSVG(const std::vector<cerebra::BrainFrame>& frames) {
     std::ostringstream oss;
     oss << "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'>\n";
     for (const auto& f : frames) {
@@ -59,7 +59,7 @@ std::string exportToSVG(const std::vector<BrainFrame>& frames) {
     return oss.str();
 }
 
-void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& /*config*/) {
+void exportToPNG(const std::vector<cerebra::BrainFrame>& frames, const AppConfig& /*config*/) {
     int w = 256, h = 256;
     for (size_t fIdx = 0; fIdx < frames.size(); ++fIdx) {
         std::string filename = "frame_" + std::to_string(fIdx) + ".png";
@@ -95,7 +95,7 @@ void exportToPNG(const std::vector<BrainFrame>& frames, const AppConfig& /*confi
     }
 }
 
-void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& /*config*/) {
+void exportToBMP(const std::vector<cerebra::BrainFrame>& frames, const AppConfig& /*config*/) {
     int w = 256, h = 256;
     int frameIdx = 0;
     for (const auto& f : frames) {
@@ -126,7 +126,7 @@ void exportToBMP(const std::vector<BrainFrame>& frames, const AppConfig& /*confi
     }
 }
 
-void exportToGIF(const std::vector<BrainFrame>& frames, const AppConfig& /* config */) {
+void exportToGIF(const std::vector<cerebra::BrainFrame>& frames, const AppConfig& /* config */) {
     std::ofstream ofs("brain.gif", std::ios::binary);
     if (!ofs.is_open()) return;
     ofs.write("GIF89a", 6);

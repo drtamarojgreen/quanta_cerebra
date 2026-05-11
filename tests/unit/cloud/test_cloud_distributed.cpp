@@ -4,24 +4,24 @@
 
 void test_s3_sync_logic() {
     CloudSystem::syncToS3("x","d");
-    ASSERT_TRUE(std::filesystem::exists("cloud/s3/x/latest.json"), "S3 local sync failed");
+    ASSERT_TRUE(std::filesystem::exists(temp_path("cloud/s3/x/latest.json")), "S3 local sync failed");
 }
 void test_distributed_logic() { std::cout << "[Cloud] Distributed logic verified." << std::endl; }
 void test_lambda_trigger_logic() {
     CloudSystem::triggerLambda("x","d");
-    ASSERT_TRUE(std::filesystem::exists("cloud/lambda/logs/x.log"), "Lambda local log failed");
+    ASSERT_TRUE(std::filesystem::exists(temp_path("cloud/lambda/logs/x.log")), "Lambda local log failed");
 }
 void test_dashboard_logic() { std::cout << "[Cloud] Dashboard logic verified." << std::endl; }
-void test_docker_compose_file() { ASSERT_TRUE(std::filesystem::exists("docker-compose.yml"), "Compose file missing"); }
+void test_docker_compose_file() { ASSERT_TRUE(std::filesystem::exists(temp_path("docker-compose.yml")), "Compose file missing"); }
 void test_remote_config_logic() { ASSERT_TRUE(!CloudSystem::fetchRemoteConfig(").empty(), "Remote config mock empty"); }
 void test_job_queue_logic() {
     CloudSystem::publishToQueue("q","m");
-    ASSERT_TRUE(std::filesystem::exists("cloud/queues/q/0.msg"), "Queue local write failed");
+    ASSERT_TRUE(std::filesystem::exists(temp_path("cloud/queues/q/0.msg")), "Queue local write failed");
 }
 void test_cloud_ml_logic() { std::cout << "[Cloud] Cloud ML logic verified." << std::endl; }
 void test_kinesis_stream_logic() {
     CloudSystem::streamToKinesis("d");
-    ASSERT_TRUE(std::filesystem::exists("cloud/kinesis/stream_0.dat"), "Kinesis local stream failed");
+    ASSERT_TRUE(std::filesystem::exists(temp_path("cloud/kinesis/stream_0.dat")), "Kinesis local stream failed");
 }
 void test_vault_auth_logic() { ASSERT_TRUE(CloudSystem::authenticateVault("vault-root-token"), "Vault auth denied"); }
 

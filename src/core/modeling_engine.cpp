@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdlib>
 
-void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
+void applyTemporalSmoothing(std::vector<cerebra::BrainFrame>& frames, int window_size) {
     if (frames.size() < 2 || window_size < 2) return;
     for (size_t i = 0; i < frames.size(); ++i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
@@ -23,7 +23,7 @@ void applyTemporalSmoothing(std::vector<BrainFrame>& frames, int window_size) {
     }
 }
 
-void applyActivityDecayModel(std::vector<BrainFrame>& frames, double decay_rate) {
+void applyActivityDecayModel(std::vector<cerebra::BrainFrame>& frames, double decay_rate) {
     for (size_t i = 1; i < frames.size(); ++i) {
         double dt = (frames[i].timestamp_ms - frames[i - 1].timestamp_ms) / 1000.0;
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
@@ -32,7 +32,7 @@ void applyActivityDecayModel(std::vector<BrainFrame>& frames, double decay_rate)
     }
 }
 
-void applySynapticDelaySimulation(std::vector<BrainFrame>& frames, int delay_frames) {
+void applySynapticDelaySimulation(std::vector<cerebra::BrainFrame>& frames, int delay_frames) {
     if (delay_frames <= 0) return;
     for (int i = (int)frames.size() - 1; i >= delay_frames; --i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
@@ -44,7 +44,7 @@ void applySynapticDelaySimulation(std::vector<BrainFrame>& frames, int delay_fra
     }
 }
 
-void applyRefractoryPeriodLogic(std::vector<BrainFrame>& frames, int period_ms) {
+void applyRefractoryPeriodLogic(std::vector<cerebra::BrainFrame>& frames, int period_ms) {
     std::map<size_t, int> last_fire;
     for (size_t i = 0; i < frames.size(); ++i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
@@ -59,7 +59,7 @@ void applyRefractoryPeriodLogic(std::vector<BrainFrame>& frames, int period_ms) 
     }
 }
 
-void applyStochasticModeling(std::vector<BrainFrame>& frames, double noise_amplitude) {
+void applyStochasticModeling(std::vector<cerebra::BrainFrame>& frames, double noise_amplitude) {
     static bool seeded = false;
     if (!seeded) { std::srand(std::time(nullptr)); seeded = true; }
     for (auto& f : frames) {
@@ -70,7 +70,7 @@ void applyStochasticModeling(std::vector<BrainFrame>& frames, double noise_ampli
     }
 }
 
-void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std::string& transform) {
+void applyCustomMathematicalFunctions(std::vector<cerebra::BrainFrame>& frames, const std::string& transform) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
             if (transform == "square") r.intensity = r.intensity * r.intensity;
@@ -81,7 +81,7 @@ void applyCustomMathematicalFunctions(std::vector<BrainFrame>& frames, const std
     }
 }
 
-void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames) {
+void applyNeurotransmitterSimulation(std::vector<cerebra::BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
             double glutamate = r.neurotransmitters["Glutamate"];
@@ -92,7 +92,7 @@ void applyNeurotransmitterSimulation(std::vector<BrainFrame>& frames) {
     }
 }
 
-void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold, double increment) {
+void applyLongTermPotentiation(std::vector<cerebra::BrainFrame>& frames, double threshold, double increment) {
     for (size_t i = 1; i < frames.size(); ++i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
             if (frames[i].regions[r].intensity > threshold && frames[i-1].regions[r].intensity > threshold) {
@@ -104,8 +104,8 @@ void applyLongTermPotentiation(std::vector<BrainFrame>& frames, double threshold
     }
 }
 
-std::vector<BrainFrame> getBrainStateTemplate(const std::string& state) {
-    std::vector<BrainFrame> frames(10);
+std::vector<cerebra::BrainFrame> getBrainStateTemplate(const std::string& state) {
+    std::vector<cerebra::BrainFrame> frames(10);
     for (int i = 0; i < 10; ++i) {
         frames[i].timestamp_ms = i * 100;
         if (state == "focused") {
@@ -121,7 +121,7 @@ std::vector<BrainFrame> getBrainStateTemplate(const std::string& state) {
     return frames;
 }
 
-void processHierarchicalRegions(std::vector<BrainFrame>& frames) {
+void processHierarchicalRegions(std::vector<cerebra::BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
             if (!r.subregions.empty()) {

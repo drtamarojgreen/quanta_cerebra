@@ -1,5 +1,5 @@
 #include "visualization/video_logic.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 #include <filesystem>
 #include <sstream>
@@ -8,13 +8,13 @@ void test_color_output() {
     ASSERT_TRUE(!intensityToColor(0.5, "ocean").empty(), "Color string empty");
 }
 void test_grid_layout_render() {
-    BrainFrame f; f.regions={{"R1",0.5}};
+    cerebra::BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; c.layout_mode="grid";
     auto res=generateFrames({f}, c);
     ASSERT_TRUE(res[0].find("Grid") != std::string::npos, "Grid view not rendered");
 }
 void test_3d_projection_render() {
-    BrainFrame f; f.regions={{"R1",0.5}};
+    cerebra::BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; c.layout_mode="3d";
     auto res=generateFrames({f}, c);
     ASSERT_TRUE(res[0].find("3D") != std::string::npos, "3D view not rendered");
@@ -45,12 +45,12 @@ void test_dynamic_bar_scaling() {
     ASSERT_TRUE(oss.str().length() > 5, "Scaled bar too short");
 }
 void test_png_export_logic() {
-    BrainFrame f; f.regions={{"R1",0.5}};
+    cerebra::BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; exportToPNG({f}, c);
     ASSERT_TRUE(std::filesystem::exists("frame_0.png"), "PNG file not generated");
 }
 void test_gif_export_logic() {
-    BrainFrame f; f.regions={{"R1",0.5}};
+    cerebra::BrainFrame f; f.regions={{"R1",0.5}};
     AppConfig c; exportToGIF({f}, c);
     ASSERT_TRUE(std::filesystem::exists("brain.gif"), "GIF file not generated");
 }

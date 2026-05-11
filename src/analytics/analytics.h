@@ -13,14 +13,14 @@ double calculateEntropy(const std::vector<double>& probabilities);
 double calculateMutualInformation(const std::vector<double>& x, const std::vector<double>& y);
 void performClustering(const std::vector<BrainRegion>& regions);
 int findCrossCorrelationLag(const std::vector<double>& x, const std::vector<double>& y);
-void renderCorrelationMatrix(std::ostringstream& oss, const BrainFrame& frame);
+void renderCorrelationMatrix(std::ostringstream& oss, const cerebra::BrainFrame& frame);
 
 void calculatePCA();
 void calculateFFT();
 void calculateCrossCorrelation(const std::vector<double>& a, const std::vector<double>& b, std::vector<double>& output);
-void calculateConnectivityMatrix(const std::vector<BrainFrame>& frames);
-void applyClustering(const std::vector<BrainFrame>& frames);
-void generateStatisticsSummary(const std::vector<BrainFrame>& frames);
-void detectEvents(const std::vector<BrainFrame>& frames);
+void calculateConnectivityMatrix(const std::vector<cerebra::BrainFrame>& frames);
+void applyClustering(const std::vector<cerebra::BrainFrame>& frames);
+void generateStatisticsSummary(const std::vector<cerebra::BrainFrame>& frames);
+void detectEvents(const std::vector<cerebra::BrainFrame>& frames);
 
 #endif

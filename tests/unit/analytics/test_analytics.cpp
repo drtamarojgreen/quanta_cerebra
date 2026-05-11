@@ -1,11 +1,11 @@
 #include "analytics/analytics.h"
-#include "core/json_logic.h"
+#include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 #include <sstream>
 #include <cmath>
 
 void test_forecasting_logic_check() {
-    std::vector<BrainFrame> fs = {{0,{BrainRegion("R",0.1)}}, {10,{BrainRegion("R",0.2)}}};
+    std::vector<cerebra::BrainFrame> fs = {{0,{BrainRegion("R",0.1)}}, {10,{BrainRegion("R",0.2)}}};
     applyPredictiveModeling(fs);
     ASSERT_EQ(fs.size(), 3, "Prediction failed");
 }
@@ -16,7 +16,7 @@ void test_zscore_logic_check() {
 }
 
 // Redefining some from previous file to ensure 10 tests
-void t101() { BrainFrame f; BrainRegion r; r.region_name="R1"; r.intensity=0.9; f.regions.push_back(r); r.region_name="R2"; r.intensity=0.1; f.regions.push_back(r); std::ostringstream oss; renderCorrelationMatrix(oss,f); ASSERT_TRUE(oss.str().find("Matrix")!=std::string::npos, "Corr fail"); }
+void t101() { cerebra::BrainFrame f; BrainRegion r; r.region_name="R1"; r.intensity=0.9; f.regions.push_back(r); r.region_name="R2"; r.intensity=0.1; f.regions.push_back(r); std::ostringstream oss; renderCorrelationMatrix(oss,f); ASSERT_TRUE(oss.str().find("Matrix")!=std::string::npos, "Corr fail"); }
 void t102() { std::vector<std::vector<double>> d={{1,0},{1.1,0.1},{0.9,-0.1}}; std::vector<double> pc; performPCA(d,pc); ASSERT_EQ(pc.size(), 2, "PCA fail"); }
 void t103() { std::vector<double> s={1,0,1,0,1,0,1,0}; std::vector<double> m; performFFT(s,m); ASSERT_TRUE(m[4]>1.0, "FFT fail"); }
 void t104() { std::vector<double> x,y; for(int i=0;i<20;i++){x.push_back(sin(i));y.push_back(sin(i-1));} ASSERT_TRUE(calculateGrangerCausality(x,y)>0, "Granger fail"); }

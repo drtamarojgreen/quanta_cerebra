@@ -1,5 +1,5 @@
 #include "../test_framework.hpp"
-#include "io/json_utility.h"
+#include "io/json_parser.h"
 
 using cerebra::JsonValue;
 using cerebra::JsonParseError;
