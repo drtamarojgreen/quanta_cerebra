@@ -63,28 +63,43 @@ target_link_libraries(QuantaCerebra PRIVATE quantacerebra_lib)
 # Tests integration
 file(GLOB_RECURSE UNIT_TESTS "tests/unit/*.cpp")
 
+set(TEST_EXECUTABLES "")
+
 foreach(TEST_FILE ${UNIT_TESTS})
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
     add_executable(${TEST_NAME} ${TEST_FILE})
     target_link_libraries(${TEST_NAME} PRIVATE quantacerebra_lib)
+    list(APPEND TEST_EXECUTABLES ${TEST_NAME})
 endforeach()
 
 # BDD Runner
 add_executable(bdd_runner tests/bdd/bdd_runner.cpp)
 target_link_libraries(bdd_runner PRIVATE quantacerebra_lib)
+list(APPEND TEST_EXECUTABLES bdd_runner)
 
 # Data Parsing Hub Test (explicitly named for clarity)
-add_executable(test_data_parsing_hub tests/unit/core/test_data_parsing_hub.cpp)
-target_link_libraries(test_data_parsing_hub PRIVATE quantacerebra_lib)
+if(NOT TARGET test_data_parsing_hub)
+    add_executable(test_data_parsing_hub tests/unit/core/test_data_parsing_hub.cpp)
+    target_link_libraries(test_data_parsing_hub PRIVATE quantacerebra_lib)
+    list(APPEND TEST_EXECUTABLES test_data_parsing_hub)
+endif()
 
 # SDD Cards
 add_executable(sdd_method_audit tests/sdd/cards/MethodAudit.cpp)
 target_link_libraries(sdd_method_audit PRIVATE quantacerebra_lib)
+list(APPEND TEST_EXECUTABLES sdd_method_audit)
 
 add_executable(sdd_resilience_audit tests/sdd/cards/ResilienceAudit.cpp)
 target_link_libraries(sdd_resilience_audit PRIVATE quantacerebra_lib)
+list(APPEND TEST_EXECUTABLES sdd_resilience_audit)
 
 add_executable(sdd_equipment_learning_audit tests/sdd/cards/EquipmentLearningAudit.cpp)
 target_link_libraries(sdd_equipment_learning_audit PRIVATE quantacerebra_lib)
+list(APPEND TEST_EXECUTABLES sdd_equipment_learning_audit)
+
+# Enforce test binary locations
+set_target_properties(${TEST_EXECUTABLES} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/tests/bin"
+)
 
 

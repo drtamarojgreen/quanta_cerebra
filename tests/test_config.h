@@ -7,9 +7,13 @@
 namespace cerebra {
 namespace test {
 
-inline std::string temp_path(const std::string& filename) {
+inline std::string temp_dir() {
     std::filesystem::create_directories("tests/temp");
-    return (std::filesystem::path("tests/temp") / filename).string();
+    return "tests/temp";
+}
+
+inline std::string temp_path(const std::string& filename) {
+    return (std::filesystem::path(temp_dir()) / filename).string();
 }
 
 } // namespace test

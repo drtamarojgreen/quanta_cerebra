@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <regex>
 #include "../cpp/util/fact_utils.h"
+#include "../../test_config.h"
 
 using namespace Sorrel::Sdd::Util;
 namespace fs = std::filesystem;

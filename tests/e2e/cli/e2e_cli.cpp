@@ -8,6 +8,7 @@
 #include <string>
 
 #include "../test_framework.hpp"
+#include "../../test_config.h"
 
 #if !defined(_WIN32)
 #  include <sys/wait.h>
@@ -27,15 +28,13 @@ struct RunResult {
   std::string output;
 };
 
-std::string temp_dir() { return P_tmpdir ? std::string(P_tmpdir) : std::string("/tmp"); }
-
 // Run `<binary> <args>`, capturing stdout+stderr via a temp file, and return
 // the decoded exit code together with the captured text.
 RunResult run(const std::string& args) {
   static int counter = 0;
-  std::string out_path = temp_dir() + "/brain_modeler_e2e_" + std::to_string(++counter) + ".txt";
-  std::string cmd = std::string("\") + BRAIN_MODELER_BINARY + "\" " + args +
-                    " > \" + out_path + "\" 2>&1";
+  std::string out_path = cerebra::test::temp_path("brain_modeler_e2e_" + std::to_string(++counter) + ".txt");
+  std::string cmd = std::string("\"") + BRAIN_MODELER_BINARY + "\" " + args +
+                    " > \"" + out_path + "\" 2>&1";
   int status = std::system(cmd.c_str());
 
   RunResult r;
@@ -99,7 +98,7 @@ TEST_CASE("e2e: --list-states / --list-regions / --list-themes") {
 }
 
 TEST_CASE("e2e: report mode on the sample JSON file") {
-  auto r = run("--format report --ascii --width 80 --input \" + data_file("sample_activity.json") + "\");
+  auto r = run("--format report --ascii --width 80 --input \"" + data_file("sample_activity.json") + "\"");
   CHECK_EQ(r.exit_code, 0);
   CHECK(contains(r.output, "simulation report"));
   CHECK(contains(r.output, "frames      : 5"));
@@ -152,8 +151,8 @@ TEST_CASE("e2e: the memory-serial device transmits a real timeline into the repo
 }
 
 TEST_CASE("e2e: --pathways loads a connectivity catalog and surfaces it in the report") {
-  auto r = run("--pathways \" + data_file("pathways.json") + "\" --format report --ascii --width 90 "
-               "--input \" + data_file("sample_activity.json") + "\");
+  auto r = run("--pathways \"" + data_file("pathways.json") + "\" --format report --ascii --width 90 "
+               "--input \"" + data_file("sample_activity.json") + "\"");
   CHECK_EQ(r.exit_code, 0);
   CHECK(contains(r.output, "Pathways"));
   CHECK(contains(r.output, "Amygdala -> Prefrontal Cortex"));
@@ -161,7 +160,7 @@ TEST_CASE("e2e: --pathways loads a connectivity catalog and surfaces it in the r
   CHECK(contains(r.output, "uncinate fasciculus"));
   CHECK(contains(r.output, "Hippocampus -- Entorhinal Cortex"));  // an undirected pathway
 
-  auto lp = run("--pathways \" + data_file("pathways.json") + "\" --list-pathways");
+  auto lp = run("--pathways \"" + data_file("pathways.json") + "\" --list-pathways");
   CHECK_EQ(lp.exit_code, 0);
   CHECK(contains(lp.output, "amygdala -> prefrontal_cortex"));
   auto lp2 = run("--list-pathways");
@@ -173,8 +172,8 @@ TEST_CASE("e2e: --pathways loads a connectivity catalog and surfaces it in the r
 }
 
 TEST_CASE("e2e: the shipped neurotransmitter and brain-state catalogs round-trip") {
-  auto r = run("--neurotransmitters \" + data_file("neurotransmitters.json") + "\" "
-               "--states \" + data_file("brain_states.json") + "\" "
+  auto r = run("--neurotransmitters \"" + data_file("neurotransmitters.json") + "\" "
+               "--states \"" + data_file("brain_states.json") + "\" "
                "--state focused --format report --ascii --width 80 --frames 8");
   CHECK_EQ(r.exit_code, 0);
   CHECK(contains(r.output, "frames      : 8"));
@@ -182,20 +181,20 @@ TEST_CASE("e2e: the shipped neurotransmitter and brain-state catalogs round-trip
   CHECK(contains(r.output, "Dopamine"));
   CHECK(contains(r.output, "Amygdala"));
 
-  auto lt = run("--neurotransmitters \" + data_file("neurotransmitters.json") + "\" --list-transmitters");
+  auto lt = run("--neurotransmitters \"" + data_file("neurotransmitters.json") + "\" --list-transmitters");
   CHECK_EQ(lt.exit_code, 0);
   for (const char* nt : {"dopamine", "serotonin", "norepinephrine", "acetylcholine", "glutamate", "gaba"})
     CHECK(contains(lt.output, nt));
 
-  auto ls = run("--states \" + data_file("brain_states.json") + "\" --list-states");
+  auto ls = run("--states \"" + data_file("brain_states.json") + "\" --list-states");
   CHECK_EQ(ls.exit_code, 0);
   for (const char* st : {"focused", "relaxed", "stressed", "rem_sleep"}) CHECK(contains(ls.output, st));
   CHECK(contains(ls.output, "tag=task-positive"));  // metadata from the file
 }
 
 TEST_CASE("e2e: a custom neurotransmitter can be referenced by a custom region") {
-  std::string nt = temp_dir() + "/bm_e2e_nt.json";
-  std::string rg = temp_dir() + "/bm_e2e_rg.json";
+  std::string nt = cerebra::test::temp_path("bm_e2e_nt.json");
+  std::string rg = cerebra::test::temp_path("bm_e2e_rg.json");
   { std::ofstream out(nt, std::ios::trunc);
     out << R"([{"key":"histamine","symbol":"HA"},{"key":"glutamate"}])"; }
   { std::ofstream out(rg, std::ios::trunc);
@@ -204,14 +203,14 @@ TEST_CASE("e2e: a custom neurotransmitter can be referenced by a custom region")
               {"key":"thalamus","display_name":"Thalamus","primary_transmitter":"glutamate"}])"; }
 
   // Loaded in the right order, the custom region's transmitter resolves.
-  auto ok = run("--neurotransmitters \" + nt + "\" --regions \" + rg + "\" "
+  auto ok = run("--neurotransmitters \"" + nt + "\" --regions \"" + rg + "\" "
                 "--format report --ascii --width 80 --state focused --frames 6");
   CHECK_EQ(ok.exit_code, 0);
   CHECK(contains(ok.output, "Tuberomammillary Nucleus"));
   CHECK(contains(ok.output, "Histamine"));
 
   // Loaded in the wrong order, validation fails (built-in NT catalog has no histamine).
-  auto bad = run("--regions \" + rg + "\" --neurotransmitters \" + nt + "\" --format report");
+  auto bad = run("--regions \"" + rg + "\" --neurotransmitters \"" + nt + "\" --format report");
   CHECK(bad.exit_code != 0);
   CHECK(contains(bad.output, "histamine"));
 
@@ -223,10 +222,10 @@ TEST_CASE("e2e: invalid --neurotransmitters / --states arguments are hard errors
   CHECK(run("--neurotransmitters /no/such/nt.json --format report").exit_code != 0);
   CHECK(run("--states /no/such/states.json --format report").exit_code != 0);
 
-  std::string bad = temp_dir() + "/bm_e2e_bad_cat.json";
+  std::string bad = cerebra::test::temp_path("bm_e2e_bad_cat.json");
   { std::ofstream out(bad, std::ios::trunc); out << "[]"; }  // empty catalogs are rejected
-  CHECK(run("--neurotransmitters \" + bad + "\" --format report").exit_code != 0);
-  CHECK(run("--states \" + bad + "\" --format report").exit_code != 0);
+  CHECK(run("--neurotransmitters \"" + bad + "\" --format report").exit_code != 0);
+  CHECK(run("--states \"" + bad + "\" --format report").exit_code != 0);
   std::remove(bad.c_str());
 }
 
@@ -235,21 +234,21 @@ TEST_CASE("e2e: an invalid --pathways argument is a hard error") {
   CHECK(missing.exit_code != 0);
   CHECK(contains(missing.output, "--pathways"));
 
-  std::string bad_json = temp_dir() + "/bm_e2e_bad_pathways.json";
+  std::string bad_json = cerebra::test::temp_path("bm_e2e_bad_pathways.json");
   { std::ofstream out(bad_json, std::ios::trunc); out << "not json {{{"; }
-  CHECK(run("--pathways \" + bad_json + "\" --format report").exit_code != 0);
+  CHECK(run("--pathways \"" + bad_json + "\" --format report").exit_code != 0);
   std::remove(bad_json.c_str());
 
-  std::string bad_ref = temp_dir() + "/bm_e2e_badref_pathways.json";
+  std::string bad_ref = cerebra::test::temp_path("bm_e2e_badref_pathways.json");
   { std::ofstream out(bad_ref, std::ios::trunc);
     out << R"([{"from":"amygdala","to":"the_shadow_realm"}])"; }
-  CHECK(run("--pathways \" + bad_ref + "\" --format report").exit_code != 0);
+  CHECK(run("--pathways \"" + bad_ref + "\" --format report").exit_code != 0);
   std::remove(bad_ref.c_str());
 }
 
 TEST_CASE("e2e: the shipped data/regions.json loads and round-trips") {
-  auto r = run("--regions \" + data_file("regions.json") + "\" --format report --ascii --width 80 "
-               "--input \" + data_file("sample_activity.json") + "\");
+  auto r = run("--regions \"" + data_file("regions.json") + "\" --format report --ascii --width 80 "
+               "--input \"" + data_file("sample_activity.json") + "\"");
   CHECK_EQ(r.exit_code, 0);
   CHECK(contains(r.output, "simulation report"));
   CHECK(contains(r.output, "Amygdala"));
@@ -258,7 +257,7 @@ TEST_CASE("e2e: the shipped data/regions.json loads and round-trips") {
 }
 
 TEST_CASE("e2e: --regions can fully replace the region catalog") {
-  std::string path = temp_dir() + "/bm_e2e_regions.json";
+  std::string path = cerebra::test::temp_path("bm_e2e_regions.json");
   {
     std::ofstream out(path, std::ios::trunc);
     out << "[\n"
@@ -272,8 +271,8 @@ TEST_CASE("e2e: --regions can fully replace the region catalog") {
         << "]\n";
   }
 
-  auto r = run("--regions \" + path + "\" --format report --ascii --width 80 --input \" +
-               data_file("sample_activity.json") + "\");
+  auto r = run("--regions \"" + path + "\" --format report --ascii --width 80 --input \"" +
+               data_file("sample_activity.json") + "\"");
   CHECK_EQ(r.exit_code, 0);
   CHECK(contains(r.output, "Synthetic Nucleus"));
   CHECK(contains(r.output, "Region metadata"));
@@ -282,12 +281,12 @@ TEST_CASE("e2e: --regions can fully replace the region catalog") {
   CHECK(!contains(r.output, "Occipital Lobe"));
 
   // --list-regions reflects the catalog when --regions comes first...
-  auto lr = run("--regions \" + path + "\" --list-regions");
+  auto lr = run("--regions \"" + path + "\" --list-regions");
   CHECK_EQ(lr.exit_code, 0);
   CHECK(contains(lr.output, "synthetic_nucleus"));
   CHECK(!contains(lr.output, "hippocampus"));
   // ...and shows the built-in catalog when it comes after.
-  auto lr2 = run("--list-regions --regions \" + path + "\");
+  auto lr2 = run("--list-regions --regions \"" + path + "\"");
   CHECK(contains(lr2.output, "hippocampus"));
 
   std::remove(path.c_str());
@@ -298,22 +297,22 @@ TEST_CASE("e2e: an invalid --regions argument is a hard error") {
   CHECK(missing.exit_code != 0);
   CHECK(contains(missing.output, "--regions"));
 
-  std::string path = temp_dir() + "/bm_e2e_bad_regions.json";
+  std::string path = cerebra::test::temp_path("bm_e2e_bad_regions.json");
   {
     std::ofstream out(path, std::ios::trunc);
     out << "not valid json at all {{{";
   }
-  auto bad = run("--regions \" + path + "\" --format report");
+  auto bad = run("--regions \"" + path + "\" --format report");
   CHECK(bad.exit_code != 0);
   std::remove(path.c_str());
 
   // An empty catalog array is rejected too.
-  std::string path2 = temp_dir() + "/bm_e2e_empty_regions.json";
+  std::string path2 = cerebra::test::temp_path("bm_e2e_empty_regions.json");
   {
     std::ofstream out(path2, std::ios::trunc);
     out << "[]";
   }
-  auto empty = run("--regions \" + path2 + "\" --format report");
+  auto empty = run("--regions \"" + path2 + "\" --format report");
   CHECK(empty.exit_code != 0);
   std::remove(path2.c_str());
 }

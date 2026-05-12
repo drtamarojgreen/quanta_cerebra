@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "../test_framework.hpp"
+#include "../../test_config.h"
 #include "core/state_manager.h"
 #include "ui/cli_handler.h"
 #include "core/neurochemistry.h"
@@ -203,7 +204,7 @@ TEST_CASE("--regions loads the catalog (or errors) and is recorded in the option
   CHECK(!RegionCatalog::using_custom_catalog());
 
   // A valid file is applied and remembered.
-  std::string path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_cli_regions.json";
+  std::string path = cerebra::test::temp_path("bm_cli_regions.json");
   {
     std::ofstream out(path, std::ios::trunc);
     out << R"([{ "key": "amygdala", "primary_transmitter": "norepinephrine", "region_of_interest": true },
@@ -230,7 +231,7 @@ TEST_CASE("--pathways loads the connectivity catalog and implies --show-pathways
   CHECK(contains(missing.message, "--pathways"));
   CHECK(!PathwayCatalog::using_custom_catalog());
 
-  std::string path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_cli_pathways.json";
+  std::string path = cerebra::test::temp_path("bm_cli_pathways.json");
   {
     std::ofstream out(path, std::ios::trunc);
     out << R"([{ "from": "amygdala", "to": "prefrontal_cortex", "kind": "modulatory" },
@@ -262,8 +263,8 @@ TEST_CASE("--neurotransmitters and --states load their catalogs (or error)") {
   CHECK(!Neurochemistry::using_custom_catalog());
   CHECK(!BrainStateLibrary::using_custom_catalog());
 
-  std::string nt_path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_cli_nt.json";
-  std::string st_path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_cli_st.json";
+  std::string nt_path = cerebra::test::temp_path("bm_cli_nt.json");
+  std::string st_path = cerebra::test::temp_path("bm_cli_st.json");
   {
     std::ofstream out(nt_path, std::ios::trunc);
     out << R"([{"key":"dopamine"},{"key":"acetylcholine"},{"key":"endorphin","symbol":"END"}])";

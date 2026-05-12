@@ -1,9 +1,18 @@
 #include "../src/config.h"
 #include "test_harness.h"
+#include "../test_config.h"
 #include <fstream>
 #include <filesystem>
 
-void t171() { std::filesystem::create_directories("config_presets"); std::ofstream f("config_presets/p.json"); f<<"{}"; f.close(); ASSERT_TRUE(std::filesystem::exists("config_presets/p.json"),"Preset fail"); }
+void t171() {
+    std::string dir = cerebra::test::temp_path("config_presets");
+    std::filesystem::create_directories(dir);
+    std::string path = dir + "/p.json";
+    std::ofstream f(path);
+    f<<"{}";
+    f.close();
+    ASSERT_TRUE(std::filesystem::exists(path),"Preset fail");
+}
 void test_hot_reload() { std::cout << "[UI] Hot Reload logic verified." << std::endl; }
 void test_interactive_tut() { std::cout << "[UI] Interactive Tutorial logic verified." << std::endl; }
 void test_command_palette_logic() { std::cout << "[UI] Command Palette logic verified." << std::endl; }
