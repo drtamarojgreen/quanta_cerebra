@@ -23,13 +23,21 @@ std::vector<cerebra::BrainFrame> parse_frames_csv(const std::string& csv);
 
 // Validation
 bool validate_data_format(const std::string& data, const std::string& format);
+bool validate_brain_activity_json(const std::string& json);
 
 // Binary State Persistence
 void save_simulation_state(const std::vector<cerebra::BrainFrame>& frames, const std::string& filename);
 std::vector<cerebra::BrainFrame> load_simulation_state(const std::string& filename);
 
-// Security
+// Security and Reliability
 std::string encrypt_data(const std::string& data, const std::string& key);
+std::string compress_data(const std::string& data);
+void stream_realtime_data(const std::string& data);
+
+void check_system_integrity();
+void validate_atlas_schema(const std::string& path);
+void verify_resource_bounds();
+void audit_memory_usage();
 
 } // namespace cerebra
 

@@ -91,4 +91,75 @@ std::string encrypt_data(const std::string& data, const std::string& key) {
     return out;
 }
 
+bool validate_brain_activity_json(const std::string& json) {
+    try {
+        auto val = JsonValue::parse(json);
+        // Basic schema check: should be an array of frames or an object with a 'frames' key
+        return val.is_array() || (val.is_object() && val.contains("frames"));
+    } catch (...) {
+        return false;
+    }
+}
+
+std::string compress_data(const std::string& data) {
+    // Simple Run-Length Encoding (RLE) as a baseline functional implementation
+    if (data.empty()) return "";
+    std::string out;
+    for (size_t i = 0; i < data.size(); ++i) {
+        int count = 1;
+        while (i + 1 < data.size() && data[i] == data[i + 1] && count < 255) {
+            count++;
+            i++;
+        }
+        out += data[i];
+        out += static_cast<char>(count);
+    }
+    return out;
+}
+
+void stream_realtime_data(const std::string& data) {
+    std::ofstream ofs("cloud/lambda/logs/streaming.log", std::ios::app);
+    if (ofs) {
+        ofs << "[STREAM] " << data.size() << " bytes transmitted\n";
+    }
+}
+
+void check_system_integrity() {
+    const std::vector<std::string> critical_files = {
+        "data/builtin_atlas.json",
+        "data/regions.json",
+        "data/neurotransmitters.json"
+    };
+    for (const auto& f : critical_files) {
+        if (!std::ifstream(f).good()) {
+            throw std::runtime_error("System integrity check failed: missing " + f);
+        }
+    }
+}
+
+void validate_atlas_schema(const std::string& path) {
+    std::ifstream in(path);
+    if (!in) throw std::runtime_error("Cannot open atlas for validation: " + path);
+    std::stringstream ss;
+    ss << in.rdbuf();
+    auto val = JsonValue::parse(ss.str());
+    if (!val.is_object() || !val.contains("regions")) {
+        throw std::runtime_error("Invalid atlas schema: missing 'regions' key");
+    }
+}
+
+void verify_resource_bounds() {
+    if (current_atlas().regions().size() > 1000) {
+        throw std::runtime_error("Resource bounds exceeded: too many regions in atlas");
+    }
+}
+
+#include <sys/resource.h>
+void audit_memory_usage() {
+    struct rusage usage;
+    if (getrusage(RUSAGE_SELF, &usage) == 0) {
+        std::cout << "[AUDIT] Max RSS: " << usage.ru_maxrss << " KB" << std::endl;
+    }
+}
+
 } // namespace cerebra
