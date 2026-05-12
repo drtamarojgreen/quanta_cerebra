@@ -49,7 +49,7 @@ void Simulation::set_timeline(ActivityTimeline timeline) {
         cerebra::BrainFrame f;
         f.timestamp_ms = s.timestamp_ms;
         for (const auto& kv : s.intensities) {
-            f.regions.push_back(cerebra::RegionState(kv.first, kv.second));
+            f.regions.push_back({kv.first, kv.second});
         }
         new_frames.push_back(std::move(f));
     }

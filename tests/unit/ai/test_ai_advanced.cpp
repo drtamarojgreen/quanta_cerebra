@@ -2,13 +2,13 @@
 #include "../test_harness.h"
 
 void test_rife_interpolation() {
-    std::vector<cerebra::BrainFrame> fs={{0,{cerebra::RegionState("R",0)}},{100,{cerebra::RegionState("R",1)}}};
+    std::vector<cerebra::BrainFrame> fs={{0,{{"R",0}}},{100,{{"R",1}}}};
     applyFrameInterpolationNN(fs);
     ASSERT_EQ(fs.size(), 3, "Neural interpolation count mismatch");
 }
 void test_ken_burns_panning() {
     cerebra::BrainFrame f;
-    f.regions.push_back(cerebra::RegionState("R", 0.5));
+    f.regions.push_back({"R", 0.5});
     f.regions[0].x = 10.0;
     f.regions[0].y = 10.0;
     applyDynamicPanning(f, 5.0, -5.0);
@@ -17,7 +17,7 @@ void test_ken_burns_panning() {
 }
 void test_procedural_gan_patterns() {
     cerebra::BrainFrame f;
-    cerebra::RegionState r("R",0);
+    cerebra::RegionState r{"R",0};
     r.plasticity_factor = 1.0;
     r.x = 0.5; r.y = 0.5; r.z = 0.5;
     f.regions.push_back(r);
@@ -54,17 +54,17 @@ void test_nlp_configuration() {
     ASSERT_TRUE(true, "NLP Config parsed");
 }
 void test_anomaly_detection_ml() {
-    std::vector<cerebra::BrainFrame> fs = {{0, {cerebra::RegionState("R", 0.99)}}};
+    std::vector<cerebra::BrainFrame> fs = {{0, {{"R", 0.99}}}};
     auto anomalies = detectAnomalies(fs);
     ASSERT_TRUE(anomalies.size() == 1, "Anomaly detection failed");
 }
 void test_predictive_modeling_ml() {
-    std::vector<cerebra::BrainFrame> fs={{0,{cerebra::RegionState("R",0.1)}},{10,{cerebra::RegionState("R",0.2)}}};
+    std::vector<cerebra::BrainFrame> fs={{0,{{"R",0.1}}},{10,{{"R",0.2}}}};
     applyPredictiveModeling(fs);
     ASSERT_EQ(fs.size(), 3, "Prediction frame missing");
 }
 void test_pattern_recognition_ml() {
-    cerebra::BrainFrame f; f.regions.push_back(cerebra::RegionState("PFC",0.9));
+    cerebra::BrainFrame f; f.regions.push_back({"PFC",0.9});
     ASSERT_TRUE(!identifyPatterns(f).empty(), "Pattern ID failed");
 }
 

@@ -5,6 +5,14 @@
 #include <ctime>
 #include <cstdlib>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#ifndef M_E
+#define M_E 2.71828182845904523536
+#endif
+
 void applyTemporalSmoothing(std::vector<cerebra::BrainFrame>& frames, int window_size) {
     if (frames.size() < 2 || window_size < 2) return;
     for (size_t i = 0; i < frames.size(); ++i) {
@@ -84,8 +92,12 @@ void applyCustomMathematicalFunctions(std::vector<cerebra::BrainFrame>& frames, 
 void applyNeurotransmitterSimulation(std::vector<cerebra::BrainFrame>& frames) {
     for (auto& f : frames) {
         for (auto& r : f.regions) {
-            double glutamate = r.neurotransmitters["Glutamate"];
-            double gaba = r.neurotransmitters["GABA"];
+            double glutamate = 0;
+            double gaba = 0;
+            for (const auto& flow : r.flows) {
+                if (flow.type == "glutamate") glutamate += flow.rate;
+                else if (flow.type == "gaba") gaba += flow.rate;
+            }
             r.intensity *= (1.0 + glutamate - gaba);
             r.intensity = std::max(0.0, std::min(1.0, r.intensity));
         }
@@ -93,12 +105,14 @@ void applyNeurotransmitterSimulation(std::vector<cerebra::BrainFrame>& frames) {
 }
 
 void applyLongTermPotentiation(std::vector<cerebra::BrainFrame>& frames, double threshold, double increment) {
+    if (frames.empty()) return;
+    std::vector<double> plasticity(frames[0].regions.size(), 1.0);
     for (size_t i = 1; i < frames.size(); ++i) {
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
             if (frames[i].regions[r].intensity > threshold && frames[i-1].regions[r].intensity > threshold) {
-                frames[i].regions[r].plasticity_factor += increment;
+                if (r < plasticity.size()) plasticity[r] += increment;
             }
-            frames[i].regions[r].intensity *= frames[i].regions[r].plasticity_factor;
+            if (r < plasticity.size()) frames[i].regions[r].intensity *= plasticity[r];
             frames[i].regions[r].intensity = std::max(0.0, std::min(1.0, frames[i].regions[r].intensity));
         }
     }
@@ -109,26 +123,18 @@ std::vector<cerebra::BrainFrame> getBrainStateTemplate(const std::string& state)
     for (int i = 0; i < 10; ++i) {
         frames[i].timestamp_ms = i * 100;
         if (state == "focused") {
-            frames[i].regions.push_back(cerebra::RegionState("Prefrontal Cortex", 0.9));
-            frames[i].regions.push_back(cerebra::RegionState("Parietal Lobe", 0.4));
+            frames[i].regions.push_back({"prefrontal_cortex", 0.9});
+            frames[i].regions.push_back({"parietal_lobe", 0.4});
         } else if (state == "relaxed") {
-            frames[i].regions.push_back(cerebra::RegionState("Prefrontal Cortex", 0.2));
-            frames[i].regions.push_back(cerebra::RegionState("Occipital Lobe", 0.8));
+            frames[i].regions.push_back({"prefrontal_cortex", 0.2});
+            frames[i].regions.push_back({"occipital_lobe", 0.8});
         } else {
-            frames[i].regions.push_back(cerebra::RegionState("Default", 0.5));
+            frames[i].regions.push_back({"default", 0.5});
         }
     }
     return frames;
 }
 
-void processHierarchicalRegions(std::vector<cerebra::BrainFrame>& frames) {
-    for (auto& f : frames) {
-        for (auto& r : f.regions) {
-            if (!r.subregions.empty()) {
-                double avg = 0;
-                for (const auto& sr : r.subregions) avg += sr.intensity;
-                r.intensity = avg / r.subregions.size();
-            }
-        }
-    }
+void processHierarchicalRegions(std::vector<cerebra::BrainFrame>& /*frames*/) {
+    // No-op
 }
