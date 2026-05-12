@@ -134,7 +134,7 @@ void generateStatisticsSummary(const std::vector<cerebra::BrainFrame>& frames) {
 void detectEvents(const std::vector<cerebra::BrainFrame>& frames) {
     for (const auto& f : frames) {
         for (const auto& r : f.regions) {
-            if (r.intensity > 0.98) std::cout << "[Analytics] Peak Event detected at " << f.timestamp_ms << "ms in " << r.region_name << std::endl;
+            if (r.intensity > 0.98) std::cout << "[Analytics] Peak Event detected at " << f.timestamp_ms << "ms in " << r.region << std::endl;
         }
     }
 }

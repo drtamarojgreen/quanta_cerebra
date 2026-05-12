@@ -12,9 +12,9 @@ void* qc_init_simulation(const char* config_path) {
 
 void qc_process_frame(void* handle, const char* json_data) {
     if (!handle || !json_data) return;
-    std::vector<cerebra::BrainFrame> frames = parseBrainActivityJSON(json_data);
+    std::vector<cerebra::BrainFrame> frames = cerebra::parse_frames_json(json_data);
     if(!frames.empty()) {
-        saveSimulationState(frames, "qc_last_processed.bin");
+        cerebra::save_simulation_state(frames, "qc_last_processed.bin");
     }
 }
 
