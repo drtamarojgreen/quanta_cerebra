@@ -22,6 +22,6 @@ void applyLongTermPotentiation(std::vector<cerebra::BrainFrame>& frames, double 
 std::string renderLargeText(const std::string& text);
 void applyASCIIShader(std::string& frame, const std::string& type);
 void synthesizeRealTimeSound(const cerebra::BrainFrame& frame);
-void renderRegion(std::ostringstream& oss, const BrainRegion& region, int depth, const AppConfig& config);
+void renderRegion(std::ostringstream& oss, const cerebra::RegionState& region, int depth, const AppConfig& config);
 
 #endif

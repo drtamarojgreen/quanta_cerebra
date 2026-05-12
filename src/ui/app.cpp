@@ -3,14 +3,14 @@
 #include <iostream>
 
 #include "ui/cli_handler.h"
-#include "interactive_ui.hpp"
+#include "interactive_ui.h"
 #include "ui/report_ui.hpp"
 #include "ui/terminal_renderer.h"
 
 namespace cerebra {
 
 int App::run(const std::vector<std::string>& args) {
-  bool stdout_tty = Terminal::detect_capabilities().is_tty;
+  bool stdout_tty = cerebra::stdout_is_tty();
   CliOptions opts = Cli::parse(args, stdout_tty);
   if (opts.should_exit) {
     if (!opts.message.empty()) {
@@ -21,10 +21,15 @@ int App::run(const std::vector<std::string>& args) {
   }
 
   if (opts.format == OutputFormat::Report) {
-    return ReportUi::run(opts, std::cout);
+    // Simplified report mode call
+    Simulation sim;
+    return run_report(sim, opts.theme_key, std::cout);
   }
-  InteractiveUi ui(opts);
-  return ui.run();
+
+  Simulation sim;
+  InteractiveOptions iopts;
+  iopts.initial_theme = opts.theme_key;
+  return run_interactive(sim, iopts);
 }
 
 }  // namespace cerebra

@@ -123,13 +123,13 @@ std::vector<cerebra::BrainFrame> getBrainStateTemplate(const std::string& state)
     for (int i = 0; i < 10; ++i) {
         frames[i].timestamp_ms = i * 100;
         if (state == "focused") {
-            frames[i].regions.push_back({"prefrontal_cortex", 0.9, {}, {}});
-            frames[i].regions.push_back({"parietal_lobe", 0.4, {}, {}});
+            frames[i].regions.push_back({"prefrontal_cortex", 0.9});
+            frames[i].regions.push_back({"parietal_lobe", 0.4});
         } else if (state == "relaxed") {
-            frames[i].regions.push_back({"prefrontal_cortex", 0.2, {}, {}});
-            frames[i].regions.push_back({"occipital_lobe", 0.8, {}, {}});
+            frames[i].regions.push_back({"prefrontal_cortex", 0.2});
+            frames[i].regions.push_back({"occipital_lobe", 0.8});
         } else {
-            frames[i].regions.push_back({"default", 0.5, {}, {}});
+            frames[i].regions.push_back({"default", 0.5});
         }
     }
     return frames;

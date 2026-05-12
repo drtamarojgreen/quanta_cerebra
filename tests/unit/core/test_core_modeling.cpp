@@ -5,7 +5,7 @@
 #include <vector>
 
 void test_hierarchical_regions() {
-    BrainRegion r; r.subregions.push_back({});
+    cerebra::RegionState r; r.subregions.push_back({});
     ASSERT_EQ(r.subregions.size(), 1, "Subregion count mismatch");
 }
 void test_temporal_smoothing_logic() {

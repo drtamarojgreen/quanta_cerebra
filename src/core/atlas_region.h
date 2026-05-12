@@ -6,6 +6,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <optional>
 
 namespace cerebra {
 
@@ -29,6 +30,15 @@ const std::vector<RegionDefinition>& known_regions();
 const RegionDefinition* find_region(std::string_view id);
 std::vector<NeurotransmitterFlow> default_flows_for(std::string_view region, double intensity);
 
+class RegionCatalog {
+public:
+    static const std::vector<RegionInfo>& all();
+    static std::optional<RegionInfo> find(const std::string& key);
+    static std::string normalize_key(const std::string& raw);
+    static bool is_region_of_interest(const std::string& key);
+    static void load_from_file(const std::string& path);
+};
+
 // Per-frame snapshot of a single region.
 struct RegionState {
     std::string region;
@@ -38,6 +48,19 @@ struct RegionState {
     // upstream data sources can populate this freely; the display surface
     // renders whatever is present.
     std::map<std::string, double> metrics;
+
+    // Advanced Modeling
+    std::map<std::string, double> neurotransmitters;
+    double plasticity_factor = 1.0;
+    std::vector<RegionState> subregions;
+
+    std::vector<double> intensity_history;
+    std::vector<double> synaptic_buffer;
+    std::vector<void*> synapses;
+
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
 };
 
 }

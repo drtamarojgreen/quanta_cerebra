@@ -9,7 +9,7 @@
 #include "ui/color_theme.hpp"
 #include "core/neurochemistry.h"
 #include "core/pathway_logic.h"
-#include "core/region.hpp"
+#include "core/atlas_region.h"
 
 namespace cerebra {
 namespace {
@@ -82,7 +82,7 @@ std::string list_regions() {
   os << "Modelled regions (ROI = region of interest):\n";
   for (const auto& r : RegionCatalog::all()) {
     os << "  " << r.key << " (" << r.abbreviation << ")"
-       << (r.region_of_interest ? "  [ROI]" : ") << "  primary: " << r.primary_transmitter << "\n";
+       << (r.region_of_interest ? "  [ROI]" : "") << "  primary: " << r.primary_transmitter << "\n";
   }
   return os.str();
 }

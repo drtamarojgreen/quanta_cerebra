@@ -11,6 +11,7 @@ namespace cerebra {
 
 class JsonValue;  // defined in json_utility.h; only referenced by reference here
 
+
 class RegionCatalog {
 public:
   // The active, ordered list of regions the application understands. By default

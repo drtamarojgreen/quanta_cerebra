@@ -12,8 +12,8 @@ void test_ascii_shader_blur() {
 void test_midi_output() { std::cout << "[Artistic] MIDI output verified." << std::endl; }
 void test_poetic_description() {
     cerebra::BrainFrame f;
-    BrainRegion r;
-    r.region_name = "R"; r.intensity = 0.9;
+    cerebra::RegionState r;
+    r.region = "R"; r.intensity = 0.9;
     f.regions.push_back(r);
     ASSERT_TRUE(!generatePoeticDescription(f).empty(), "Poetic generator empty");
 }
@@ -21,12 +21,12 @@ void test_big_font_rendering() { ASSERT_TRUE(!renderLargeText("A").empty(), "Lar
 void test_svg_output() { std::cout << "[Artistic] SVG output verified." << std::endl; }
 void test_pattern_style_transfer() {
     cerebra::BrainFrame f1, f2;
-    BrainRegion r1, r2;
+    cerebra::RegionState r1, r2;
 
-    r1.region_name = "R"; r1.intensity = 0;
+    r1.region = "R"; r1.intensity = 0;
     f1.regions.push_back(r1);
 
-    r2.region_name = "R"; r2.intensity = 0.7;
+    r2.region = "R"; r2.intensity = 0.7;
     f2.regions.push_back(r2);
 
     applyStyleTransfer(f1,f2);
@@ -35,8 +35,8 @@ void test_pattern_style_transfer() {
 void test_particle_render() {
     std::ostringstream oss;
     cerebra::BrainFrame f;
-    BrainRegion r;
-    r.region_name = "R"; r.intensity = 0.9;
+    cerebra::RegionState r;
+    r.region = "R"; r.intensity = 0.9;
     f.regions.push_back(r);
     renderParticles(oss, f);
     ASSERT_TRUE(oss.str().find("*")!=std::string::npos, "Particle renderer empty");

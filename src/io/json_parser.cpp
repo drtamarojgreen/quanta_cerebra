@@ -140,6 +140,38 @@ const JsonValue& JsonValue::operator[](std::size_t index) const {
 
 bool JsonValue::contains(const std::string& key) const { return is_object() && as_object().count(key); }
 
+std::string JsonValue::dump() const {
+    if (is_null()) return "null";
+    if (is_bool()) return as_bool() ? "true" : "false";
+    if (is_number()) {
+        std::ostringstream os; os << as_number(); return os.str();
+    }
+    if (is_string()) {
+        return "\"" + as_string() + "\"";
+    }
+    if (is_array()) {
+        std::string out = "[";
+        bool first = true;
+        for (const auto& v : as_array()) {
+            if (!first) out += ",";
+            first = false;
+            out += v.dump();
+        }
+        return out + "]";
+    }
+    if (is_object()) {
+        std::string out = "{";
+        bool first = true;
+        for (const auto& [k, v] : as_object()) {
+            if (!first) out += ",";
+            first = false;
+            out += "\"" + k + "\":" + v.dump();
+        }
+        return out + "}";
+    }
+    return "null";
+}
+
 // Domain Mappings
 std::vector<cerebra::BrainFrame> parse_json_frames(std::string_view json) {
     auto val = JsonValue::parse(json);

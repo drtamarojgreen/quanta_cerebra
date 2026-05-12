@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 #include "io/json_parser.h"
-#include "core/region.hpp"
+#include "core/atlas_region.h"
 #include "io/config_util.hpp"
 
 namespace cerebra {

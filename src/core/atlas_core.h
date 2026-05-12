@@ -20,7 +20,16 @@ struct AtlasFlow {
 // neurotransmitter flows it drives.
 struct RegionDefinition {
     std::string id;
+    std::string key;
     std::string display_name;
+    std::string abbreviation;
+    std::string primary_transmitter;
+    bool region_of_interest = false;
+
+    double slice_x = 0.5;
+    double slice_y = 0.5;
+    double depth = 0.5;
+    std::map<std::string, std::string> extra;
 
     int slice_row = 0;
     int slice_col = 0;

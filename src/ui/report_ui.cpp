@@ -11,7 +11,7 @@
 namespace cerebra {
 
 std::string ReportUi::build(const Simulation& sim, const CliOptions& options) {
-  int width = options.width_override.value_or(Terminal::size().columns);
+  int width = options.width_override.value_or(cerebra::terminal_size().cols);
   width = std::max(40, std::min(width, 200));
   // Reports are plain text so they paste cleanly into logs/notebooks.
   bool ascii = options.force_ascii;

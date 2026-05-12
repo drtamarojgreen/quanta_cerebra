@@ -17,7 +17,7 @@ std::string frame_to_json_line(const BrainActivitySample& s, std::int64_t timest
   for (const auto& kv : s.intensities) {
     if (!first) os << ",";
     first = false;
-    os << "{\"region\":\" << kv.first << "\",\"intensity\":" << kv.second << "}";
+    os << "{\"region\":\"" << kv.first << "\",\"intensity\":" << kv.second << "}";
   }
   os << "],\"timestamp_ms\":" << timestamp_ms << "}\n";
   return os.str();
