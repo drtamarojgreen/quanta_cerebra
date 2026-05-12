@@ -35,6 +35,8 @@ g++ -std=c++17 -Isrc -I$SDD_DIR/cpp/util \
     $SDD_DIR/cards/ResilienceAudit.cpp $BUILD_DIR/*.o -o $BUILD_DIR/resilience_audit
 g++ -std=c++17 -Isrc -I$SDD_DIR/cpp/util \
     $SDD_DIR/cards/EquipmentLearningAudit.cpp $BUILD_DIR/*.o -o $BUILD_DIR/equipment_learning_audit
+g++ -std=c++17 -Isrc -I$SDD_DIR/cpp/util \
+    $SDD_DIR/cards/StructuralAudit.cpp $BUILD_DIR/*.o -o $BUILD_DIR/structural_audit
 
 # 4. Execute Audit Suite
 echo "[3/4] Executing Full Audit Suite..."
@@ -47,6 +49,9 @@ $BUILD_DIR/resilience_audit
 
 echo ">> Running: Equipment Learning Audit"
 $BUILD_DIR/equipment_learning_audit
+
+echo ">> Running: Structural Audit"
+$BUILD_DIR/structural_audit
 
 # 5. Finalize
 echo "[4/4] Audit Complete."

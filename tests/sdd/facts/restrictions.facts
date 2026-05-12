@@ -1,0 +1,6 @@
+# Structural Restrictions for QuantaCerebra
+# Format: key=value (comma-separated for lists)
+
+forbidden_patterns=catch (...) {},TODO,assert(true),assert(false)
+required_namespacing=cerebra
+max_complexity_per_file=1000

@@ -96,6 +96,10 @@ add_executable(sdd_equipment_learning_audit tests/sdd/cards/EquipmentLearningAud
 target_link_libraries(sdd_equipment_learning_audit PRIVATE quantacerebra_lib)
 list(APPEND TEST_EXECUTABLES sdd_equipment_learning_audit)
 
+add_executable(sdd_structural_audit tests/sdd/cards/StructuralAudit.cpp)
+target_link_libraries(sdd_structural_audit PRIVATE quantacerebra_lib)
+list(APPEND TEST_EXECUTABLES sdd_structural_audit)
+
 # Enforce test binary locations
 set_target_properties(${TEST_EXECUTABLES} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/tests/bin"
