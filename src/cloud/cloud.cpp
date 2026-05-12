@@ -1,4 +1,5 @@
 #include "cloud.h"
+#include "core/brain_region.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -82,7 +83,7 @@ cerebra::BrainFrame GRPCInterface::deserialize(const std::vector<unsigned char>&
     size_t sz; std::memcpy(&sz, data.data() + sizeof(int), sizeof(size_t));
     size_t offset = sizeof(int) + sizeof(size_t);
     for(size_t i=0; i<sz && offset + sizeof(double) <= data.size(); i++) {
-        BrainRegion r; std::memcpy(&r.intensity, data.data() + offset, sizeof(double));
+        cerebra::RegionState r; std::memcpy(&r.intensity, data.data() + offset, sizeof(double));
         f.regions.push_back(r); offset += sizeof(double);
     }
     return f;

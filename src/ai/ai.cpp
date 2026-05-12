@@ -14,8 +14,8 @@ void applyFrameInterpolationNN(std::vector<cerebra::BrainFrame>& frames) {
         cerebra::BrainFrame mid;
         mid.timestamp_ms = (frames[i].timestamp_ms + frames[i+1].timestamp_ms) / 2;
         for (size_t r = 0; r < frames[i].regions.size(); ++r) {
-            BrainRegion nr;
-            nr.region_name = frames[i].regions[r].region_name;
+            cerebra::RegionState nr;
+            nr.region = frames[i].regions[r].region;
             nr.intensity = (frames[i].regions[r].intensity + frames[i+1].regions[r].intensity) / 2.0;
             mid.regions.push_back(nr);
         }
@@ -60,6 +60,7 @@ void applyStyleGAN(cerebra::BrainFrame& frame) {
 }
 
 void applyVideoDiffusion(std::vector<cerebra::BrainFrame>& frames) {
+    (void)frames;
     std::cout << "[AI] Applying Video Diffusion (Denoising Process)..." << std::endl;
 }
 
@@ -76,35 +77,38 @@ std::vector<std::string> detectAnomalies(const std::vector<cerebra::BrainFrame>&
     std::vector<std::string> anomalies;
     for(const auto& f : frames) {
         for(const auto& r : f.regions) {
-            if(r.intensity > 0.99) anomalies.push_back(r.region_name + " at " + std::to_string(f.timestamp_ms));
+            if(r.intensity > 0.99) anomalies.push_back(r.region + " at " + std::to_string(f.timestamp_ms));
         }
     }
     return anomalies;
 }
 
-void applyDynamicPanning(cerebra::BrainFrame& frame, double panX, double panY) {
-    for(auto& r : frame.regions) { r.x += panX; r.y += panY; }
+void applyDynamicPanning(cerebra::BrainFrame& /*frame*/, double /*panX*/, double /*panY*/) {
+    // Note: RegionState doesn't have x, y fields currently.
 }
 
 std::string generatePoeticDescription(const cerebra::BrainFrame& frame) {
+    if (frame.regions.empty()) return "A void of thought.";
     double avg = 0;
     for(const auto& r : frame.regions) avg += r.intensity;
-    avg /= frame.regions.size();
+    avg /= (double)frame.regions.size();
     if (avg > 0.7) return "A storm of thought cascades through the digital ether.";
     if (avg > 0.3) return "Rhythmic pulses echo the quiet hum of cognition.";
     return "The silence of a resting mind, waiting for the spark.";
 }
 
-void generateProceduralPattern(std::vector<cerebra::BrainFrame>& frames) {
+void generateProceduralPattern(cerebra::BrainFrame& frame) {
     for(int i=0; i<10; i++) {
-        cerebra::BrainFrame f; f.timestamp_ms = i*100;
-        f.regions.push_back(BrainRegion("Procedural", std::abs(std::sin(i*0.5))));
-        frames.push_back(f);
+        cerebra::RegionState rs;
+        rs.region = "Procedural_" + std::to_string(i);
+        rs.intensity = std::abs(std::sin(i*0.5));
+        frame.regions.push_back(rs);
     }
 }
 
-void identifyPatterns(const std::vector<cerebra::BrainFrame>& frames) {
-    std::cout << "[AI] Pattern recognition active on " << frames.size() << " frames." << std::endl;
+std::string identifyPatterns(const cerebra::BrainFrame& /*frame*/) {
+    std::cout << "[AI] Pattern recognition active." << std::endl;
+    return "unrecognized";
 }
 
 void applyPredictiveModeling(std::vector<cerebra::BrainFrame>& frames) {

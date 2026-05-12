@@ -12,7 +12,7 @@ namespace {
 
 RegionAtlas build_builtin() {
     try {
-        return load_atlas_file("data/builtin_atlas.json");
+        return load_json_atlas_file("data/builtin_atlas.json");
     } catch (...) {
         // Fallback to empty atlas if file missing or corrupt
         return RegionAtlas();
@@ -31,12 +31,12 @@ const RegionAtlas& RegionAtlas::builtin() {
     return atlas;
 }
 
-const cerebra::RegionDefinition* RegionAtlas::find(std::string_view id) const {
+const RegionDefinition* RegionAtlas::find(std::string_view id) const {
     for (const auto& r : regions_) if (r.id == id) return &r;
     return nullptr;
 }
 
-void RegionAtlas::add_or_replace(cerebra::RegionDefinition def) {
+void RegionAtlas::add_or_replace(RegionDefinition def) {
     for (auto& r : regions_) {
         if (r.id == def.id) { r = std::move(def); return; }
     }
@@ -45,7 +45,7 @@ void RegionAtlas::add_or_replace(cerebra::RegionDefinition def) {
 
 bool RegionAtlas::remove(std::string_view id) {
     auto it = std::find_if(regions_.begin(), regions_.end(),
-                           [&](const cerebra::RegionDefinition& r){ return r.id == id; });
+                           [&](const RegionDefinition& r){ return r.id == id; });
     if (it == regions_.end()) return false;
     regions_.erase(it);
     return true;
@@ -92,11 +92,11 @@ bool RegionAtlas::remove_template(std::string_view id) {
 }
 
 RegionAtlas RegionAtlas::from_json(std::string_view text) {
-    return parse_atlas(text);
+    return parse_json_atlas(text);
 }
 
 RegionAtlas RegionAtlas::from_file(const std::string& path) {
-    return load_atlas_file(path);
+    return load_json_atlas_file(path);
 }
 
 const RegionAtlas& current_atlas() {
