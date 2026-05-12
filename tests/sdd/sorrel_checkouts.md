@@ -1,4 +1,4 @@
-# Chai Checkout: QuantaCerebra Verified State
+# Sorrel Checkout: QuantaCerebra Verified State
 
 ## Verified Architectural Modules
 - [x] **Core**: Atlas logic, neurochemistry, simulation engine verified.
