@@ -1,4 +1,4 @@
-#include "test_harness.hpp"
+#include "../test_harness.h"
 
 #include "core/atlas_core.h"
 #include "core/atlas_region.h"

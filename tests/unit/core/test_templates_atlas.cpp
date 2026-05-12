@@ -2,7 +2,7 @@
 // the legacy enum API; this file focuses on the atlas-driven entry points and
 // the JSON pathway for adding/overriding templates without recompiling.
 
-#include "test_harness.hpp"
+#include "../test_harness.h"
 
 #include "core/atlas_core.h"
 #include "core/atlas_region.h"

@@ -19,28 +19,36 @@
 
 ### Key Features
 
-- ✅ Manual JSON parsing without external libraries
-- ✅ Real-time ASCII animation rendering
-- ✅ Configurable intensity mapping system
-- ✅ Comprehensive unit and BDD testing suite
-- ✅ Cross-platform compatibility
+- ✅ Modular Architecture (Core, AI, Analytics, Cloud, IO, UI)
+- ✅ Advanced AI: NeRF, Video Diffusion, Style Transfer, Neural CA
+- ✅ Real-time Analytics: FFT, PCA, Granger Causality, Connectivity
+- ✅ Cloud Ecosystem: AWS S3/Lambda/Kinesis sync, Vault auth
+- ✅ Multi-format Exporters: PNG, GIF, MIDI, BMP, SVG
+- ✅ Hierarchical Brain Modeling with LTP and Neurotransmitters
+- ✅ High-performance ASCII/ANSI Visualization Engine (2D/3D/Grid)
 
 ---
 
 ## 🏗️ Architecture
 
-The project is organized into `src`, `tests`, and `docs` directories, separating core logic, testing, and documentation.
+QuantaCerebra follows a modular, domain-driven architecture for maximum portability and extensibility.
 
 ```
 QuantaCerebra/
 ├── src/
-│   ├── 📄 main.cpp               # Application entry point
-│   ├── 🔧 config.h/.cpp          # Configuration management
-│   ├── 🔧 json_logic.h/.cpp     # Custom JSON parser
-│   └── 🎥 video_logic.h/.cpp     # Frame generation and visualization
+│   ├── 🧬 core/                  # Simulation engine, Atlas, Modeling
+│   ├── 🤖 ai/                    # Neural CA, Diffusion, NeRF, LLM Hub
+│   ├── 📊 analytics/             # FFT, PCA, Statistics, Connectivity
+│   ├── ☁️ cloud/                  # S3, Lambda, Kinesis, Vault, DB
+│   ├── 📁 io/                     # JSON/XML/YAML parsers, Exporters
+│   ├── 🖥️ ui/                     # Interactive TTY, CLI, Themes
+│   ├── 🎥 visualization/          # Renderers (2D/3D/Grid/Particles)
+│   └── 📄 main.cpp               # Application Entry Point
 ├── tests/
-│   ├── 🧪 test_unit.cpp          # Unit test suite
-│   └── 🧪 test_bdd.cpp           # BDD integration tests
+│   ├── 🧪 unit/                  # Modular Unit Tests
+│   ├── 🧪 bdd/                   # Feature-based Integration Tests
+│   ├── 🧪 e2e/                   # Full Workflow Verification
+│   └── 🧪 sdd/                   # Sorrel Driven Development Audits
 ├── docs/
 │   ├── 📄 enhancements.md       # Notes on future enhancements
 │   └── 📄 plan.md               # Development plan
@@ -125,18 +133,16 @@ The visualization engine maps neural activity intensities to ASCII characters:
 
 ### Build Instructions
 
-#### Compile Main Application
+#### Using CMake (Recommended)
 ```bash
-g++ src/main.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o QuantaCerebra
+mkdir build && cd build
+cmake ..
+make
 ```
 
-#### Compile Test Suites
+#### Direct Compilation (Minimal)
 ```bash
-# Unit tests
-g++ tests/test_unit.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o test_unit
-
-# BDD integration tests
-g++ tests/test_bdd.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -std=c++17 -o test_bdd
+g++ -std=c++17 src/main.cpp src/core/*.cpp src/io/*.cpp src/ui/*.cpp src/visualization/*.cpp src/ai/*.cpp src/analytics/*.cpp src/api/*.cpp src/cloud/*.cpp -Isrc -o QuantaCerebra
 ```
 
 ### Execution
@@ -156,49 +162,45 @@ g++ tests/test_bdd.cpp src/json_logic.cpp src/video_logic.cpp src/config.cpp -st
 
 ## 🧪 Testing Framework
 
-### Unit Testing (`test_unit.cpp`)
+QuantaCerebra employs a comprehensive 4-tier testing architecture:
 
-Validates core functionality:
-- ✅ JSON parsing accuracy
-- ✅ Intensity-to-character mapping
-- ✅ Error handling for malformed input
-- ✅ Data structure integrity
+### 1. Unit Testing (`tests/unit/`)
+Extensive coverage for all modules including:
+- **Core**: Atlas logic, neurochemistry, simulation engine.
+- **IO**: Multi-format parsers (JSON/XML/YAML/CSV), hardware simulation.
+- **AI/Analytics**: FFT/PCA accuracy, Diffusion/NeRF raymarching bounds.
+- **Security**: Buffer overflow and command injection mitigation.
 
-### BDD Testing (`test_bdd.cpp`)
+### 2. BDD Testing (`tests/bdd/`)
+Feature-based integration tests following **Given/When/Then** methodology:
+- `atlas.feature`: Verified region and pathway definitions.
+- `rendering.feature`: Cross-layout (Grid/3D/List) visual parity.
+- `playback.feature`: Temporal physics (decay, smoothing) verification.
 
-Follows **Given/When/Then** methodology:
-- **Given**: `sample_input.json` with test data
-- **When**: Frames are generated through the pipeline
-- **Then**: Output matches `expected_output.json`
+### 3. E2E Testing (`tests/e2e/`)
+Full workflow verification including CLI arguments, interactive TTY sessions, and serial port streaming.
+
+### 4. SDD Audits (`tests/sdd/`)
+Sorrel Driven Development audits that verify system resilience, architectural constraints, and empirical fact validation.
 
 ---
 
 ## 🔮 Future Roadmap
 
-### Phase 1: Enhanced Modeling
-- [ ] Hierarchical brain region support (nested subregions)
-- [ ] Temporal smoothing and decay models
-- [ ] Real-time data stream processing
-- [ ] Configuration file support
+### Phase 1: Deep Integration
+- [ ] Real-time hardware EEG integration
+- [ ] VR/AR Streaming support
+- [ ] Distributed simulation mode (P2P Mesh)
 
-### Phase 2: Advanced Visualization
-- [ ] Grid/matrix brain map layouts
-- [ ] ANSI color-coded terminal output
-- [ ] Export capabilities (PNG/JPEG without external libs)
-- [ ] Interactive visualization controls
+### Phase 2: High-Fidelity Rendering
+- [ ] GPU-accelerated raymarching for 3D views
+- [ ] SVG-based interactive dashboards
+- [ ] Advanced Haptic feedback drivers
 
-### Phase 3: AI Integration
-- [ ] **Frame Interpolation**: RIFE/FILM-based frame blending
-- [ ] **Dynamic Panning**: Ken Burns-style ASCII animations
-- [ ] **GAN Integration**: StyleGAN/VQGAN for enhanced visuals
-- [ ] **Neural Radiance Fields**: 3D cortex rendering (Instant-NGP)
-- [ ] **Diffusion Models**: VideoCrafter2, PixArt-α, LCM integration
-
-### Phase 4: Ecosystem Development
-- [ ] LLM-driven input generation (llama.cpp integration)
-- [ ] Natural language configuration templating
-- [ ] Feedback loop systems for adaptive visualization
-- [ ] Plugin architecture for custom renderers
+### Phase 3: Autonomous AI
+- [ ] Self-evolving neural architectures via CA
+- [ ] Adaptive neurotransmitter balance through RL
+- [ ] Natural language simulation steering
 
 ---
 
@@ -206,32 +208,33 @@ Follows **Given/When/Then** methodology:
 
 ### Core Classes
 
-#### `BrainRegion`
+#### `cerebra::RegionState`
 ```cpp
-struct BrainRegion {
-    std::string region_name;  // Brain region identifier
-    double intensity;         // Activity intensity [0.0-1.0]
+struct RegionState {
+    std::string region;                  // Brain region identifier
+    double intensity;                    // Activity intensity [0.0-1.0]
+    std::vector<NeurotransmitterFlow> flows; // Chemical signal data
+    std::map<std::string, double> metrics;   // Custom region metrics
+    std::vector<RegionState> subregions;     // Hierarchical child regions
 };
 ```
 
-#### `BrainFrame`
+#### `cerebra::BrainFrame`
 ```cpp
 struct BrainFrame {
-    int timestamp_ms;                    // Frame timestamp
-    std::vector<BrainRegion> regions;    // Region activity data
+    int64_t timestamp_ms;                // Frame timestamp
+    std::vector<RegionState> regions;    // Region activity data
 };
 ```
 
-### Key Functions
+### Key Functions (Data Hub)
 
-#### `parseBrainActivityJSON(const std::string& json)`
-- **Purpose**: Parse JSON input into structured brain frame data
-- **Parameters**: Raw JSON string
-- **Returns**: `std::vector<BrainFrame>`
+#### `cerebra::parse_json_frames(std::string_view json)`
+- **Purpose**: Parse JSON input into structured brain frame data.
+- **Returns**: `std::vector<cerebra::BrainFrame>`
 
-#### `generateFrames(const std::vector<BrainFrame>& input)`
-- **Purpose**: Convert brain frames to ASCII visualization
-- **Parameters**: Vector of brain frames
+#### `cerebra::generateFrames(const std::vector<BrainFrame>& input, const AppConfig& config)`
+- **Purpose**: Convert brain frames to ASCII/ANSI visualization based on configuration.
 - **Returns**: `std::vector<std::string>` (rendered frames)
 
 ---

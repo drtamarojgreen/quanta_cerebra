@@ -1,5 +1,5 @@
-#include "../src/config.h"
-#include "test_harness.h"
+#include "io/config.h"
+#include "../test_harness.h"
 
 void test_plugin_system_logic() {
     bool plugin_notified = true;
