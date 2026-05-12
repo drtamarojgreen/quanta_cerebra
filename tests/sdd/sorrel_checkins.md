@@ -9,3 +9,9 @@ UX=MenuManager::run,toggleVerboseMode,toggleQuietMode,displayProgressBar,setThem
 AI=applyNeuralCA,applyStyleTransfer,generateProceduralPattern,identifyPatterns,generatePoeticDescription,applyFrameInterpolationNN,applyPredictiveModeling,render3DCortexNeRF,generateInputFromLLM,parseConfigFromNaturalLanguage,detectAnomalies,applyDynamicPanning,applyStyleGAN,applyVideoDiffusion
 Analytics=performFFT,performPCA,calculateGrangerCausality,calculateEntropy,calculateMutualInformation,performClustering,findCrossCorrelationLag,renderCorrelationMatrix,calculatePCA,calculateFFT,calculateCrossCorrelation,calculateConnectivityMatrix,applyClustering,generateStatisticsSummary,detectEvents
 Cloud=CloudSystem::syncToS3,CloudSystem::triggerLambda,CloudSystem::fetchRemoteConfig,CloudSystem::streamToKinesis,CloudSystem::publishToQueue,CloudSystem::authenticateVault,DBConnector::saveFrame,DBConnector::queryHistory,GRPCInterface::serialize,GRPCInterface::deserialize,P2PSystem::broadcast
+
+# Structural Violations (Deferred Work)
+- src/io/config.cpp: Contains empty catch blocks `catch (...) {}` for configuration parsing.
+- src/core/atlas_core.cpp: Contains `catch (...)` for atlas loading fallback.
+- src/main.cpp: Contains `catch (...)` for general exception handling in main loop.
+- src/ui/cli_handler.cpp: Contains multiple `catch (...)` blocks.
