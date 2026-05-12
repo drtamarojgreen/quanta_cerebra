@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../test_framework.hpp"
+#include "../../test_config.h"
 #include "io/json_parser.h"
 #include "core/neurochemistry.h"
 #include "core/pathway_logic.h"
@@ -88,7 +89,7 @@ TEST_CASE("neurotransmitter catalog: load_from_file and validation interplay wit
   CatalogGuard guard;
   CHECK_THROWS(Neurochemistry::load_from_file("/no/such/nt-xyz.json"));
 
-  std::string path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_test_nt.json";
+  std::string path = cerebra::test::temp_path("bm_test_nt.json");
   { std::ofstream out(path, std::ios::trunc); out << "not json"; }
   CHECK_THROWS(Neurochemistry::load_from_file(path));
 

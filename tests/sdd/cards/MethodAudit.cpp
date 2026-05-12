@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <regex>
 #include "../cpp/util/fact_utils.h"
+#include "../../test_config.h"
 
 using namespace Sorrel::Sdd::Util;
 namespace fs = std::filesystem;
@@ -24,7 +25,7 @@ std::set<std::string> parse_required_methods(const std::string& raw) {
 
 int main() {
     std::string checkin_path = "tests/sdd/sorrel_checkins.md";
-    std::string checkout_path = "tests/sdd/sorrel_checkouts.md";
+    std::string checkout_path = cerebra::test::temp_path("sorrel_checkouts.md");
     
     if (!fs::exists(checkin_path)) {
         std::cerr << "error = sorrel_checkins.md not found" << std::endl;

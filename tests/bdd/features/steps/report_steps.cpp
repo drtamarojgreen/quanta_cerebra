@@ -6,10 +6,9 @@
 #include <string>
 
 #include "gherkin.hpp"
+#include "../../../test_config.h"
 
 namespace {
-
-std::string temp_dir() { return P_tmpdir ? std::string(P_tmpdir) : std::string("/tmp"); }
 
 void produce_report(bdd::World& w) {
   std::ostringstream os;
@@ -29,7 +28,7 @@ std::string report_line_starting_with(const std::string& report, const std::stri
 
 GIVEN("a temporary JSON activity file with {int} frames") {
   int n = bdd::arg_int(args, 0);
-  std::string path = temp_dir() + "/bm_bdd_report_feature.json";
+  std::string path = cerebra::test::temp_path("bm_bdd_report_feature.json");
   std::ofstream out(path, std::ios::binary | std::ios::trunc);
   out << "[";
   for (int i = 0; i < n; ++i) {

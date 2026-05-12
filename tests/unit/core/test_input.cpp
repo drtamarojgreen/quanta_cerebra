@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../test_framework.hpp"
+#include "../../test_config.h"
 #include "io/input_source.hpp"
 #include "io/json_parser.h"
 #include "core/sample.hpp"
@@ -10,9 +11,8 @@
 using namespace cerebra;
 
 namespace {
-std::string temp_dir() { return P_tmpdir ? std::string(P_tmpdir) : std::string("/tmp"); }
 std::string write_temp(const std::string& name, const std::string& contents) {
-  std::string path = temp_dir() + "/" + name;
+  std::string path = cerebra::test::temp_path(name);
   std::ofstream out(path, std::ios::binary | std::ios::trunc);
   out << contents;
   out.close();

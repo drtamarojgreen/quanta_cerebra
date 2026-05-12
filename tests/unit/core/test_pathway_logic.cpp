@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../test_framework.hpp"
+#include "../../test_config.h"
 #include "io/json_parser.h"
 #include "core/pathway_logic.h"
 #include "core/region.hpp"
@@ -128,7 +129,7 @@ TEST_CASE("pathway catalog load_from_file handles missing, malformed and valid f
   CatalogGuard guard;
   CHECK_THROWS(PathwayCatalog::load_from_file("/no/such/pathways-xyz.json"));
 
-  std::string path = std::string(P_tmpdir ? P_tmpdir : "/tmp") + "/bm_test_pathways.json";
+  std::string path = cerebra::test::temp_path("bm_test_pathways.json");
   { std::ofstream out(path, std::ios::trunc); out << "not json"; }
   CHECK_THROWS(PathwayCatalog::load_from_file(path));
 
