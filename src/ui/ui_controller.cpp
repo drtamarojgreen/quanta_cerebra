@@ -37,7 +37,7 @@ void MenuManager::transitionTo(MenuState newState) {
             std::cout << "Enter filename to load: ";
             {
                 std::string fname; std::cin >> fname;
-                loadSimulationState(fname);
+                cerebra::load_simulation_state(fname);
             }
             current_state = MenuState::MAIN_MENU;
             break;

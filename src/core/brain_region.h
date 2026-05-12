@@ -7,6 +7,5 @@
 // Bring types into global scope if needed for legacy compatibility, 
 // but preferred to use cerebra::
 using BrainRegion = cerebra::RegionState;
-using cerebra::BrainFrame = cerebra::BrainFrame;
 
 #endif

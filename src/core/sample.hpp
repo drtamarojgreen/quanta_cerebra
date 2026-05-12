@@ -10,6 +10,8 @@
 
 namespace cerebra {
 
+class JsonValue;
+
 // One observation of brain activity at a point in time. Intensities are keyed
 // by canonical region key and clamped into [0,1].
 struct BrainActivitySample {

@@ -1,6 +1,7 @@
 #include "core/atlas_region.h"
 
 #include "core/atlas_core.h"
+#include <algorithm>
 
 namespace cerebra {
 
@@ -27,5 +28,28 @@ std::vector<NeurotransmitterFlow> default_flows_for(std::string_view region,
     out.push_back({"glutamate", 0.5 * intensity});
     return out;
 }
+
+const std::vector<RegionInfo>& RegionCatalog::all() {
+    return current_atlas().regions();
+}
+
+std::optional<RegionInfo> RegionCatalog::find(const std::string& key) {
+    const auto* def = current_atlas().find(key);
+    if (def) return *def;
+    return std::nullopt;
+}
+
+std::string RegionCatalog::normalize_key(const std::string& raw) {
+    std::string out = raw;
+    std::transform(out.begin(), out.end(), out.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    return out;
+}
+
+bool RegionCatalog::is_region_of_interest(const std::string& /* key */) {
+    return false;
+}
+
+void RegionCatalog::load_from_file(const std::string& /* path */) {}
 
 }

@@ -74,4 +74,52 @@ cerebra::BrainFrame template_frame(BrainTemplate t, std::int64_t timestamp_ms) {
     return template_frame(template_name(t), timestamp_ms);
 }
 
+const std::vector<BrainStateTemplate>& BrainStateLibrary::all() {
+    static std::vector<BrainStateTemplate> cache;
+    cache.clear();
+    for (const auto& t : current_atlas().templates()) {
+        BrainStateTemplate bst;
+        bst.key = t.id;
+        bst.display_name = t.display_name;
+        bst.region_intensities = t.intensities;
+        cache.push_back(bst);
+    }
+    return cache;
+}
+
+const BrainStateTemplate* BrainStateLibrary::find(const std::string& key) {
+    std::string id = resolve_template_id(key);
+    if (id.empty()) return nullptr;
+    const TemplateDefinition* def = current_atlas().find_template(id);
+    if (!def) return nullptr;
+    static BrainStateTemplate static_bst;
+    static_bst.key = def->id;
+    static_bst.display_name = def->display_name;
+    static_bst.region_intensities = def->intensities;
+    return &static_bst;
+}
+
+ActivityTimeline BrainStateLibrary::synthesize_timeline(const BrainStateTemplate& tmpl, int frames, std::int64_t step_ms) {
+    std::vector<BrainActivitySample> samples;
+    if (frames <= 0) frames = 1;
+    for (int i = 0; i < frames; ++i) {
+        BrainActivitySample s;
+        s.timestamp_ms = i * step_ms;
+        s.intensities = tmpl.region_intensities;
+        samples.push_back(std::move(s));
+    }
+    return ActivityTimeline(std::move(samples));
+}
+
+void BrainStateLibrary::load_from_file(const std::string& /* path */) {}
+void BrainStateLibrary::load_from_json(const JsonValue& /* root */) {}
+void BrainStateLibrary::reset_to_defaults() { reset_current_atlas_to_builtin(); }
+bool BrainStateLibrary::using_custom_catalog() { return false; }
+
+std::vector<std::string> BrainStateLibrary::keys() {
+    std::vector<std::string> k;
+    for (const auto& t : current_atlas().templates()) k.push_back(t.id);
+    return k;
+}
+
 }

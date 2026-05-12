@@ -7,7 +7,7 @@
 
 #include "core/neurochemistry.h"
 #include "core/pathway_logic.h"
-#include "core/region.hpp"
+#include "core/atlas_region.h"
 
 namespace cerebra {
 namespace {
@@ -100,19 +100,19 @@ class Canvas {
 public:
   Canvas(int w, int h) : w_(std::max(1, w)), h_(std::max(1, h)),
                          glyphs_(static_cast<std::size_t>(w_) * h_, " "),
-                         colors_(static_cast<std::size_t>(w_) * h_, ") {}
+                         colors_(static_cast<std::size_t>(w_) * h_, "") {}
 
   int width() const { return w_; }
   int height() const { return h_; }
 
-  void put(int x, int y, const std::string& g, const std::string& color = ") {
+  void put(int x, int y, const std::string& g, const std::string& color = "") {
     if (x < 0 || y < 0 || x >= w_ || y >= h_) return;
     std::size_t i = static_cast<std::size_t>(y) * w_ + x;
     glyphs_[i] = g;
     colors_[i] = color;
   }
 
-  void put_dim_if_empty(int x, int y, const std::string& g, const std::string& color = ") {
+  void put_dim_if_empty(int x, int y, const std::string& g, const std::string& color = "") {
     if (x < 0 || y < 0 || x >= w_ || y >= h_) return;
     std::size_t i = static_cast<std::size_t>(y) * w_ + x;
     if (glyphs_[i] == " ") {
@@ -121,7 +121,7 @@ public:
     }
   }
 
-  void text(int x, int y, const std::string& s, const std::string& color = ") {
+  void text(int x, int y, const std::string& s, const std::string& color = "") {
     for (std::size_t k = 0; k < s.size(); ++k) {
       put(x + static_cast<int>(k), y, std::string(1, s[k]), color);
     }
@@ -274,13 +274,13 @@ std::vector<std::string> render_slice(const Simulation& sim, const RenderOptions
 
   // Midline + silhouette outline.
   draw_ellipse_outline(canvas, cx, cy, rx, ry,
-                       opt.ascii_only ? "*" : "·", opt.theme.color_enabled() ? "38;5;240" : ");
+                       opt.ascii_only ? "*" : "·", opt.theme.color_enabled() ? "38;5;240" : "");
   for (int y = 1; y < h - 1; ++y) {
     double ny = (y - cy) / ry;
     if (ny * ny <= 1.0) {
       canvas.put_dim_if_empty(static_cast<int>(std::lround(cx)), y,
                               opt.ascii_only ? "|" : "│",
-                              opt.theme.color_enabled() ? "38;5;238" : ");
+                              opt.theme.color_enabled() ? "38;5;238" : "");
     }
   }
 
@@ -295,11 +295,11 @@ std::vector<std::string> render_slice(const Simulation& sim, const RenderOptions
     lx = std::max(1, std::min(lx, w - 1 - static_cast<int>(label.size())));
     ly = std::max(1, std::min(ly, h - 2));
     std::string color;
-    if (is_sel) color = opt.theme.color_enabled() ? "1;97;48;5;33" : ";
-    else color = opt.theme.color_enabled() ? "1;38;5;231" : ";
+    if (is_sel) color = opt.theme.color_enabled() ? "1;97;48;5;33" : "";
+    else color = opt.theme.color_enabled() ? "1;38;5;231" : "";
     canvas.text(lx, ly, label, color);
     if (is_sel) {
-      canvas.put_dim_if_empty(lx - 1, ly, ">", opt.theme.color_enabled() ? "1;93" : ");
+      canvas.put_dim_if_empty(lx - 1, ly, ">", opt.theme.color_enabled() ? "1;93" : "");
     }
   }
   return canvas.to_lines(opt.theme);
@@ -326,7 +326,7 @@ std::vector<std::string> render_projection(const Simulation& sim, const RenderOp
   };
 
   // Ellipsoid wireframe: a few latitude rings + meridians.
-  std::string wire_color = opt.theme.color_enabled() ? "38;5;239" : ";
+  std::string wire_color = opt.theme.color_enabled() ? "38;5;239" : "";
   for (double lat = -0.4; lat <= 0.401; lat += 0.2) {
     double rr = std::sqrt(std::max(0.0, 0.25 - lat * lat));
     int steps = 48;
@@ -360,8 +360,13 @@ std::vector<std::string> render_projection(const Simulation& sim, const RenderOp
   for (const auto& info : RegionCatalog::all()) {
     double px, py, pd;
     project(info.slice_x - 0.5, info.slice_y - 0.5, info.depth - 0.5, px, py, pd);
-    blobs.push_back({info, sample.intensity_of(info.key),
-                     static_cast<int>(std::lround(px)), static_cast<int>(std::lround(py)), pd});
+    Blob b;
+    b.info = info;
+    b.intensity = sample.intensity_of(info.key);
+    b.x = static_cast<int>(std::lround(px));
+    b.y = static_cast<int>(std::lround(py));
+    b.depth = pd;
+    blobs.push_back(std::move(b));
   }
   if (opt.show_pathways) {
     std::map<std::string, std::pair<int, int>> region_pos;
@@ -385,8 +390,8 @@ std::vector<std::string> render_projection(const Simulation& sim, const RenderOp
     int ly = b.y - 1;
     lx = std::max(0, std::min(lx, w - static_cast<int>(label.size())));
     ly = std::max(0, std::min(ly, h - 1));
-    std::string lcolor = is_sel ? (opt.theme.color_enabled() ? "1;97;48;5;33" : ")
-                                : (opt.theme.color_enabled() ? "1;38;5;231" : ");
+    std::string lcolor = is_sel ? (opt.theme.color_enabled() ? "1;97;48;5;33" : "")
+                                : (opt.theme.color_enabled() ? "1;38;5;231" : "");
     canvas.text(lx, ly, label, lcolor);
   }
   return canvas.to_lines(opt.theme);
@@ -442,13 +447,14 @@ std::vector<std::string> selected_region_lines(const Simulation& sim, const Rend
   auto info = RegionCatalog::find(key);
   std::string name = info ? info->display_name : key;
   out.push_back(opt.theme.accent("Region: ") + opt.theme.accent(name) +
-                (RegionCatalog::is_region_of_interest(key) ? opt.theme.warning("  [ROI]") : "));
+                (RegionCatalog::is_region_of_interest(key) ? opt.theme.warning("  [ROI]") : ""));
 
   // Stats over the whole timeline.
   double cur = sim.current_sample().intensity_of(key);
   double mn = 1e9, mx = -1e9, sum = 0.0;
   std::vector<double> series;
-  for (const auto& s : sim.timeline().samples()) {
+  auto tl = sim.timeline();
+  for (const auto& s : tl.samples()) {
     double v = s.intensity_of(key);
     series.push_back(v);
     mn = std::min(mn, v);
@@ -542,7 +548,7 @@ std::vector<std::string> Renderer::render_frame(const Simulation& sim) const {
     auto chem = chemistry_lines(sim, options_, right_w);
     auto reg = selected_region_lines(sim, options_, right_w);
     right.insert(right.end(), chem.begin(), chem.end());
-    right.push_back(");
+    right.push_back("");
     right.insert(right.end(), reg.begin(), reg.end());
   }
 
@@ -652,7 +658,8 @@ std::string Renderer::render_report(const Simulation& sim, int width, ViewMode v
   for (const auto& info : RegionCatalog::all()) {
     std::vector<double> series;
     double mx = 0.0, sum = 0.0, last = 0.0;
-    for (const auto& s : sim.timeline().samples()) {
+    auto tl = sim.timeline();
+    for (const auto& s : tl.samples()) {
       double v = s.intensity_of(info.key);
       series.push_back(v);
       mx = std::max(mx, v);

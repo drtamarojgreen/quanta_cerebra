@@ -1,11 +1,12 @@
 #include "analytics/analytics.h"
+#include "ai/ai.h"
 #include "core/data_parsing_hub.h"
 #include "../test_harness.h"
 #include <sstream>
 #include <cmath>
 
 void test_forecasting_logic_check() {
-    std::vector<cerebra::BrainFrame> fs = {{0,{BrainRegion("R",0.1)}}, {10,{BrainRegion("R",0.2)}}};
+    std::vector<cerebra::BrainFrame> fs = {{0,{cerebra::RegionState("R",0.1)}}, {10,{cerebra::RegionState("R",0.2)}}};
     applyPredictiveModeling(fs);
     ASSERT_EQ(fs.size(), 3, "Prediction failed");
 }
@@ -16,16 +17,16 @@ void test_zscore_logic_check() {
 }
 
 // Redefining some from previous file to ensure 10 tests
-void t101() { cerebra::BrainFrame f; BrainRegion r; r.region_name="R1"; r.intensity=0.9; f.regions.push_back(r); r.region_name="R2"; r.intensity=0.1; f.regions.push_back(r); std::ostringstream oss; renderCorrelationMatrix(oss,f); ASSERT_TRUE(oss.str().find("Matrix")!=std::string::npos, "Corr fail"); }
+void t101() { cerebra::BrainFrame f; cerebra::RegionState r; r.region="R1"; r.intensity=0.9; f.regions.push_back(r); r.region="R2"; r.intensity=0.1; f.regions.push_back(r); std::ostringstream oss; renderCorrelationMatrix(oss,f); ASSERT_TRUE(oss.str().find("Matrix")!=std::string::npos, "Corr fail"); }
 void t102() { std::vector<std::vector<double>> d={{1,0},{1.1,0.1},{0.9,-0.1}}; std::vector<double> pc; performPCA(d,pc); ASSERT_EQ(pc.size(), 2, "PCA fail"); }
 void t103() { std::vector<double> s={1,0,1,0,1,0,1,0}; std::vector<double> m; performFFT(s,m); ASSERT_TRUE(m[4]>1.0, "FFT fail"); }
-void t104() { std::vector<double> x,y; for(int i=0;i<20;i++){x.push_back(sin(i));y.push_back(sin(i-1));} ASSERT_TRUE(calculateGrangerCausality(x,y)>0, "Granger fail"); }
+void t104() { std::vector<double> x,y; double s; for(int i=0;i<20;i++){x.push_back(sin(i));y.push_back(sin(i-1));} calculateGrangerCausality(x,y,s); ASSERT_TRUE(s>0, "Granger fail"); }
 void t105() { std::vector<double> x={0.5,0.5,0.5,0.5}; ASSERT_TRUE(calculateEntropy(x)<0.1, "Entropy fail"); }
 void t106() {
-    std::vector<BrainRegion> rs;
-    BrainRegion r1, r2;
-    r1.region_name = "R1"; r1.intensity = 0.1;
-    r2.region_name = "R2"; r2.intensity = 0.8;
+    std::vector<cerebra::RegionState> rs;
+    cerebra::RegionState r1, r2;
+    r1.region = "R1"; r1.intensity = 0.1;
+    r2.region = "R2"; r2.intensity = 0.8;
     rs.push_back(r1); rs.push_back(r2);
     performClustering(rs);
     ASSERT_TRUE(true, "Clust pass");

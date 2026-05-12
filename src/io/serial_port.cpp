@@ -4,9 +4,9 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "core/region.hpp"
+#include "core/atlas_region.h"
 
-#if defined(BRAIN_MODELER_PLATFORM_WINDOWS)
+#if defined(_WIN32)
 #  define WIN32_LEAN_AND_MEAN
 #  include <windows.h>
 #else
@@ -55,7 +55,7 @@ std::string MemorySerialPort::take_sent() {
 // Native serial port implementations
 // ---------------------------------------------------------------------------
 
-#if defined(BRAIN_MODELER_PLATFORM_WINDOWS)
+#if defined(_WIN32)
 
 class WindowsSerialPort : public SerialPort {
 public:
@@ -219,7 +219,7 @@ private:
 #endif
 
 std::unique_ptr<SerialPort> SerialPort::create_native() {
-#if defined(BRAIN_MODELER_PLATFORM_WINDOWS)
+#if defined(_WIN32)
   return std::make_unique<WindowsSerialPort>();
 #else
   return std::make_unique<PosixSerialPort>();

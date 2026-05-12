@@ -50,7 +50,7 @@ std::string intensityToSymbol(double intensity, const std::string& map_type) {
 }
 
 std::string intensityToColor(double intensity, const std::string& theme) {
-    if (theme == "monochrome") return ";
+    if (theme == "monochrome") return "";
     if (theme == "dynamic") {
         int code = 16 + (int)(intensity * 216);
         return "\033[38;5;" + std::to_string(code) + "m";
@@ -70,9 +70,9 @@ std::string intensityToColor(double intensity, const std::string& theme) {
     return "\033[38;5;" + std::to_string(colorCode) + "m";
 }
 
-void renderRegion(std::ostringstream& oss, const BrainRegion& region, int depth, const AppConfig& config) {
+void renderRegion(std::ostringstream& oss, const cerebra::RegionState& region, int depth, const AppConfig& config) {
     for (int i = 0; i < depth; ++i) oss << "  ";
-    oss << "[" << region.region_name << "] ";
+    oss << "[" << region.region << "] ";
     if (config.enable_color) oss << intensityToColor(region.intensity, config.theme);
     struct winsize w; int max_width = 20;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) max_width = std::max(10, w.ws_col / 4);
@@ -90,7 +90,7 @@ void renderRegion(std::ostringstream& oss, const BrainRegion& region, int depth,
 
     }
     oss << "\n";
-    for (const BrainRegion& subregion : region.subregions) renderRegion(oss, subregion, depth + 1, config);
+    for (const cerebra::RegionState& subregion : region.subregions) renderRegion(oss, subregion, depth + 1, config);
 }
 
 void renderGrid(std::ostringstream& oss, const cerebra::BrainFrame& frame, const AppConfig& config) {
@@ -161,7 +161,7 @@ std::vector<std::string> generateFrames(const std::vector<cerebra::BrainFrame>& 
         if (config.layout_mode == "grid") renderGrid(oss, frame, config);
         else if (config.layout_mode == "3d") render3D(oss, frame, config);
         else if (config.layout_mode == "particles") renderParticles(oss, frame);
-        else for (const BrainRegion& region : frame.regions) renderRegion(oss, region, 0, config);
+        else for (const cerebra::RegionState& region : frame.regions) renderRegion(oss, region, 0, config);
         result.push_back(oss.str());
     }
     return result;

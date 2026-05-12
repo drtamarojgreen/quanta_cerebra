@@ -43,4 +43,38 @@ void Simulation::set_speed(int s) {
     speed_ = s;
 }
 
+void Simulation::set_timeline(ActivityTimeline timeline) {
+    std::vector<cerebra::BrainFrame> new_frames;
+    for (const auto& s : timeline.samples()) {
+        cerebra::BrainFrame f;
+        f.timestamp_ms = s.timestamp_ms;
+        for (const auto& kv : s.intensities) {
+            f.regions.push_back(cerebra::RegionState(kv.first, kv.second));
+        }
+        new_frames.push_back(std::move(f));
+    }
+    set_frames(std::move(new_frames));
+}
+
+ActivityTimeline Simulation::timeline() const {
+    std::vector<BrainActivitySample> samples;
+    for (const auto& f : frames_) {
+        BrainActivitySample s;
+        s.timestamp_ms = f.timestamp_ms;
+        for (const auto& r : f.regions) s.intensities[r.region] = r.intensity;
+        samples.push_back(std::move(s));
+    }
+    return ActivityTimeline(std::move(samples));
+}
+
+std::optional<std::string> Simulation::selected_region() const { return {}; }
+void Simulation::select_region(const std::string& /* region */) {}
+
+void Simulation::jump_to_end() {
+    if (!frames_.empty()) index_ = frames_.size() - 1;
+}
+
+std::map<std::string, double> Simulation::chemical_state() const { return {}; }
+std::vector<Simulation::Flow> Simulation::current_flows() const { return {}; }
+
 }

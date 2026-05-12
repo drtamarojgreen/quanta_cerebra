@@ -24,7 +24,6 @@ set(LIB_SOURCES
     src/io/yaml_parser.cpp
     src/io/xml_parser.cpp
     src/io/csv_parser.cpp
-    src/io/serial_interface.cpp
     src/io/serial_port.cpp
     src/io/input_source.cpp
     src/io/simulated_device.cpp

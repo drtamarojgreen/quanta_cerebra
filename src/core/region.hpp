@@ -12,6 +12,7 @@ class JsonValue;  // defined in json_utility.h; only referenced by reference her
 
 // A static description of an anatomical region the model knows how to draw.
 struct RegionInfo {
+  std::string id;             // identifier
   std::string key;            // canonical identifier used in input data
   std::string display_name;   // human friendly label
   std::string abbreviation;   // short label used in tight layouts

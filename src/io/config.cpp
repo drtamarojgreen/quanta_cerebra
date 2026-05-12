@@ -8,7 +8,7 @@
 
 // Helper function to trim whitespace from the start and end of a string
 static std::string trim_string(const std::string& s) {
-    return trim(s);
+    return cerebra::trim(s);
 }
 
 // Implementation of the configuration loader
@@ -87,12 +87,12 @@ AppConfig loadConfigJSON(const std::string& filename) {
     std::string content((std::istreambuf_iterator<char>(configFile)), std::istreambuf_iterator<char>());
 
     auto parse_bool = [&](const std::string& key, bool& val) {
-        if (content.find("\" + key + "\": true") != std::string::npos) val = true;
-        else if (content.find("\" + key + "\": false") != std::string::npos) val = false;
+        if (content.find("\"" + key + "\": true") != std::string::npos) val = true;
+        else if (content.find("\"" + key + "\": false") != std::string::npos) val = false;
     };
 
     auto parse_int = [&](const std::string& key, int& val) {
-        size_t pos = content.find("\" + key + "\");
+        size_t pos = content.find("\"" + key + "\"");
         if (pos != std::string::npos) {
             size_t colon = content.find(":", pos);
             size_t comma = content.find_first_of(",}", colon);
@@ -101,7 +101,7 @@ AppConfig loadConfigJSON(const std::string& filename) {
     };
 
     auto parse_double = [&](const std::string& key, double& val) {
-        size_t pos = content.find("\" + key + "\");
+        size_t pos = content.find("\"" + key + "\"");
         if (pos != std::string::npos) {
             size_t colon = content.find(":", pos);
             size_t comma = content.find_first_of(",}", colon);
@@ -110,11 +110,11 @@ AppConfig loadConfigJSON(const std::string& filename) {
     };
 
     auto parse_string = [&](const std::string& key, std::string& val) {
-        size_t pos = content.find("\" + key + "\");
+        size_t pos = content.find("\"" + key + "\"");
         if (pos != std::string::npos) {
             size_t colon = content.find(":", pos);
-            size_t q1 = content.find("\", colon);
-            size_t q2 = content.find("\", q1 + 1);
+            size_t q1 = content.find("\"", colon);
+            size_t q2 = content.find("\"", q1 + 1);
             val = content.substr(q1 + 1, q2 - q1 - 1);
         }
     };

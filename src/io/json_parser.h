@@ -12,6 +12,8 @@
 
 namespace cerebra {
 
+struct BrainFrame;
+
 /**
  * A general-purpose JSON value container. 
  */

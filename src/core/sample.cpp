@@ -5,7 +5,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "core/region.hpp"
+#include "core/atlas_region.h"
 
 namespace cerebra {
 namespace {

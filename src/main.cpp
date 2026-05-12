@@ -6,7 +6,6 @@
 #include "ui/visual_themes.h"
 #include "ui/guided_tour.h"
 #include "io/json_parser.h"
-#include "io/serial_interface.h"
 #include "io/config.h"
 
 #include <iostream>

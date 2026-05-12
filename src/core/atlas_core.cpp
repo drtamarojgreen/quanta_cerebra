@@ -12,7 +12,7 @@ namespace {
 
 RegionAtlas build_builtin() {
     try {
-        return load_atlas_file("data/builtin_atlas.json");
+        return load_json_atlas_file("data/builtin_atlas.json");
     } catch (...) {
         // Fallback to empty atlas if file missing or corrupt
         return RegionAtlas();
@@ -92,11 +92,11 @@ bool RegionAtlas::remove_template(std::string_view id) {
 }
 
 RegionAtlas RegionAtlas::from_json(std::string_view text) {
-    return parse_atlas(text);
+    return parse_json_atlas(text);
 }
 
 RegionAtlas RegionAtlas::from_file(const std::string& path) {
-    return load_atlas_file(path);
+    return load_json_atlas_file(path);
 }
 
 const RegionAtlas& current_atlas() {
