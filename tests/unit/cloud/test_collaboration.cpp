@@ -1,5 +1,5 @@
-#include "../src/cloud.h"
-#include "test_harness.h"
+#include "cloud/cloud.h"
+#include "../test_harness.h"
 #include <fstream>
 #include <filesystem>
 

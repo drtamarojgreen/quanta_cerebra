@@ -1,4 +1,4 @@
-#include "test_harness.hpp"
+#include "../test_harness.h"
 #include "core/simulation_engine.h"
 
 static cerebra::BrainFrame make_frame(std::int64_t ts) {

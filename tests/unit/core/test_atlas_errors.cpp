@@ -3,7 +3,7 @@
 // systematically walks every uncovered throw and every uncommon escape branch
 // in the embedded MiniJson parser.
 
-#include "test_harness.hpp"
+#include "../test_harness.h"
 
 #include "core/atlas_core.h"
 

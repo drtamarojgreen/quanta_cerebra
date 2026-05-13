@@ -5,6 +5,9 @@
 #include <vector>
 #include <exception>
 #include <sstream>
+#include "../test_config.h"
+
+using cerebra::test::temp_path;
 
 struct TestFailure : public std::exception {
     std::string message;

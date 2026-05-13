@@ -1,4 +1,4 @@
-#include "test_harness.hpp"
+#include "../test_harness.h"
 #include "core/state_manager.h"
 
 #include <string>
