@@ -154,12 +154,19 @@ void verify_resource_bounds() {
     }
 }
 
+#ifndef _WIN32
 #include <sys/resource.h>
+#endif
+
 void audit_memory_usage() {
+#ifndef _WIN32
     struct rusage usage;
     if (getrusage(RUSAGE_SELF, &usage) == 0) {
         std::cout << "[AUDIT] Max RSS: " << usage.ru_maxrss << " KB" << std::endl;
     }
+#else
+    // audit_memory_usage is not implemented on Windows.
+#endif
 }
 
 } // namespace cerebra

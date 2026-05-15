@@ -8,8 +8,11 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#ifndef _WIN32
 #include <sys/ioctl.h>
 #include <unistd.h>
+#endif
+#include "ui/terminal_renderer.h"
 
 static const char* INTENSITY_CHARS = " .:+X@";
 static const char* BINARY_CHARS = "01";
@@ -74,8 +77,8 @@ void renderRegion(std::ostringstream& oss, const cerebra::RegionState& region, i
     for (int i = 0; i < depth; ++i) oss << "  ";
     oss << "[" << region.region << "] ";
     if (config.enable_color) oss << intensityToColor(region.intensity, config.theme);
-    struct winsize w; int max_width = 20;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) max_width = std::max(10, w.ws_col / 4);
+    int max_width = cerebra::terminal_size().cols / 4;
+    if (max_width < 10) max_width = 10;
     int barWidth = static_cast<int>(region.intensity * max_width);
     for (int i = 0; i < barWidth; ++i) oss << intensityToSymbol(region.intensity, config.intensity_map);
     if (config.enable_color) oss << "\033[0m";
